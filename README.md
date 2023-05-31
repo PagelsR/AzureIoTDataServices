@@ -1,5 +1,5 @@
 
-# Azure IoT-Pi-Day Workshop
+# Azure IoT Data Services Workshop
 
 This is an exclusive workshop to help developers get hands-on with Azure and IoT devices.
 
