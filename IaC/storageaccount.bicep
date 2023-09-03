@@ -143,3 +143,17 @@ resource dataStorageName_default_boston_hubway_data 'Microsoft.Storage/storageAc
   }
 
 }
+
+// output Storage Account Access Keys
+//output storageAccountKey1 dataStorageName_resource.listKeys().keys[0].value
+var storageAccountKey1 = dataStorageName_resource.listKeys().keys[0].value
+output out_storageAccountKey1 string = storageAccountKey1
+
+// var configStoreConnectionString = dataStorageName_resource.listKeys().keys[0].connectionString
+// output out_configStoreConnectionString string = configStoreConnectionString
+
+// Save primary connections string
+var storageAccountconnectionString = dataStorageName_resource.listKeys().keys[1].value
+
+// Pass as output and saved in Key Vault
+output out_storageAccountconnectionString string = storageAccountconnectionString

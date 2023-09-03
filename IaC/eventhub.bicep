@@ -86,3 +86,4 @@ resource eventHubName_hubwaytelemetry_hubwaycg 'Microsoft.EventHub/namespaces/ev
   }
 
 }
+

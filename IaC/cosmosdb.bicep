@@ -5,10 +5,11 @@ param defaultTags object
 resource cosmosDBName_resource 'Microsoft.DocumentDB/databaseAccounts@2023-04-15' = {
   name: cosmosDBName
   location: location
-  tags: {
-    defaultExperience: 'Core (SQL)'
-    'hidden-cosmos-mmspecial': ''
-  }
+  tags: defaultTags
+  // tags: {
+  //   defaultExperience: 'Core (SQL)'
+  //   'hidden-cosmos-mmspecial': ''
+  // }
   kind: 'GlobalDocumentDB'
   identity: {
     type: 'None'
@@ -39,7 +40,6 @@ resource cosmosDBName_resource 'Microsoft.DocumentDB/databaseAccounts@2023-04-15
     locations: [
       {
         locationName: 'East US'
-        provisioningState: 'Succeeded'
         failoverPriority: 0
         isZoneRedundant: false
       }
@@ -62,8 +62,6 @@ resource cosmosDBName_resource 'Microsoft.DocumentDB/databaseAccounts@2023-04-15
     networkAclBypassResourceIds: []
     capacity: {
       totalThroughputLimit: 4000
-    }
-    keysMetadata: {
     }
   }
 }
@@ -159,8 +157,5 @@ resource cosmosDBName_Hubway_Tripdata 'Microsoft.DocumentDB/databaseAccounts/sql
       }
     }
   }
-  dependsOn: [
 
-    cosmosDBName_resource
-  ]
 }

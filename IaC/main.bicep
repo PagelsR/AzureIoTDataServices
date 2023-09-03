@@ -49,6 +49,9 @@ module iotHubmod './iothub.bicep' = {
     iotHub_connectionString: 'TBD'
     iotHub_containerName: iotContainerName
   }
+  dependsOn:  [
+    storageaccountmod
+  ]
 }
 
 // Create Event Hub Namespace
