@@ -21,6 +21,17 @@ permissions:
   packages: write
       
 jobs:
+  Build_Application:
+    runs-on: windows-latest #ubuntu-latest
+    name: Build Application
+    steps:
+
+    - name: Upload Infrastucture Files
+      uses: actions/upload-artifact@v3
+      with:
+        name: IaC
+        path: ${{ github.workspace }}/IaC/*.*
+  
   Deploy_Infrastructure:
     runs-on: ubuntu-latest
     name: Deploy Infrastructure
