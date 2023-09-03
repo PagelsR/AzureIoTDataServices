@@ -62,9 +62,9 @@ module iotHubmod './iothub2.bicep' = {
       defaultTags: defaultTags
       resourceGroupName: resourceGroupName
     }
-    dependsOn:  [
-      storageaccountmod
-    ]
+    // dependsOn:  [
+    //   storageaccountmod
+    // ]
   }
 
 // Create Event Hub Namespace
