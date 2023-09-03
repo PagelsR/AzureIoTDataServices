@@ -39,20 +39,33 @@ var defaultTags = {
 }
 
 // Create IoT Hub
-module iotHubmod './iothub.bicep' = {
-  name: 'iothubdeploy'
-  params: {
-    location: location
-    iotHubName: iotHubName
-    defaultTags: defaultTags
-    resourceGroupName: resourceGroupName
-    iotHub_connectionString: 'TBD'
-    iotHub_containerName: iotContainerName
+// module iotHubmod './iothub.bicep' = {
+//   name: 'iothubdeploy'
+//   params: {
+//     location: location
+//     iotHubName: iotHubName
+//     defaultTags: defaultTags
+//     resourceGroupName: resourceGroupName
+//     iotHub_connectionString: 'TBD'
+//     iotHub_containerName: iotContainerName
+//   }
+//   dependsOn:  [
+//     storageaccountmod
+//   ]
+// }
+
+module iotHubmod './iothub2.bicep' = {
+    name: 'iothubdeploy'
+    params: {
+      location: location
+      iotHubName: iotHubName
+      defaultTags: defaultTags
+      resourceGroupName: resourceGroupName
+    }
+    dependsOn:  [
+      storageaccountmod
+    ]
   }
-  dependsOn:  [
-    storageaccountmod
-  ]
-}
 
 // Create Event Hub Namespace
 module eventhubmod './eventhub.bicep' = {
