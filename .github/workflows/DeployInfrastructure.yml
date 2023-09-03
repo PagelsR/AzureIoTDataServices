@@ -25,7 +25,8 @@ jobs:
     runs-on: windows-latest #ubuntu-latest
     name: Build Application
     steps:
-
+    - uses: actions/checkout@v3
+    
     - name: Upload Infrastucture Files
       uses: actions/upload-artifact@v3
       with:
