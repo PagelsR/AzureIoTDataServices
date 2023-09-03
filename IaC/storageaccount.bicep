@@ -27,7 +27,7 @@ resource dataStorageName_resource 'Microsoft.Storage/storageAccounts@2023-01-01'
     }
     supportsHttpsTrafficOnly: true
     encryption: {
-      requireInfrastructureEncryption: false
+      //requireInfrastructureEncryption: false
       services: {
         file: {
           keyType: 'Account'
