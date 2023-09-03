@@ -5,10 +5,10 @@ name: Build_and_Deploy
 # Controls when the workflow will run
 on:
   # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+#   push:
+#     branches: [ "main" ]
+#   pull_request:
+#     branches: [ "main" ]
 
   workflow_dispatch:
 
@@ -26,7 +26,7 @@ jobs:
     name: Build Application
     steps:
     - uses: actions/checkout@v3
-    
+
     - name: Upload Infrastucture Files
       uses: actions/upload-artifact@v3
       with:

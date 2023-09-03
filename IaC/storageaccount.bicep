@@ -1,9 +1,9 @@
 param location string = resourceGroup().location
-param dataStorageName string
+param storageaccountName string
 param defaultTags object
 
 resource dataStorageName_resource 'Microsoft.Storage/storageAccounts@2023-01-01' = {
-  name: dataStorageName
+  name: storageaccountName
   location: location
   tags: defaultTags
   sku: {

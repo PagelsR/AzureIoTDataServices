@@ -18,7 +18,7 @@ var keyvaultName = 'kv-${uniqueString(resourceGroup().id)}'
 
 var iotHubName = 'iot-${uniqueString(resourceGroup().id)}'
 var iotContainerName = 'iotcontainer-${uniqueString(resourceGroup().id)}'
-var dataStorageName = 'stor-${uniqueString(resourceGroup().id)}'
+var storageaccountName = 'stor${uniqueString(resourceGroup().id)}'
 var eventHubName = 'evh-${uniqueString(resourceGroup().id)}'
 var eventHubNamespaceName = 'evhns-${uniqueString(resourceGroup().id)}'
 var cosmosDBName = 'cosmos-${uniqueString(resourceGroup().id)}'
@@ -76,7 +76,7 @@ module storageaccountmod './storageaccount.bicep' = {
   params: {
     location: location
     defaultTags: defaultTags
-    dataStorageName: dataStorageName
+    storageaccountName: storageaccountName
   }
 }
 
