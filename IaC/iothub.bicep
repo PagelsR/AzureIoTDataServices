@@ -14,7 +14,7 @@ resource iotHubName_resource 'Microsoft.Devices/IotHubs@2022-04-30-preview' = {
   location: location
   tags: defaultTags
   sku: {
-    name: 'S1'
+    name: 'B1'
     //tier: 'Free'
     capacity: 1
   }
