@@ -6,6 +6,7 @@ param location string = resourceGroup().location
 param functionAppName string
 param functionAppServicePlanName string
 param defaultTags object
+param storageAccountName string
 
 // param location string = resourceGroup().location
 // param functionAppName string
@@ -13,7 +14,7 @@ param defaultTags object
 // param defaultTags object
 
 // remove dashes for storage account name
-var storageAccountName = 'sta${uniqueString(resourceGroup().id)}'
+//var storageAccountName = 'sta${uniqueString(resourceGroup().id)}'
 
 // Storage Account
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-09-01' = {
