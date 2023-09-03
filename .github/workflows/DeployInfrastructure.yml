@@ -36,6 +36,7 @@ jobs:
   Deploy_Infrastructure:
     runs-on: ubuntu-latest
     name: Deploy Infrastructure
+    needs: Build_Application
       
     steps:
     - name: Login to Azure
