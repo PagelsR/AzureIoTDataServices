@@ -90,14 +90,14 @@ module cosmosdbmod './cosmosdb.bicep' = {
 }
 
 // Create Storage Account
-module storageaccountmod './storageaccount.bicep' = {
-  name: 'storageaccountdeploy'
-  params: {
-    location: location
-    defaultTags: defaultTags
-    storageAccountName: storageAccountName
-  }
-}
+// module storageaccountmod './storageaccount.bicep' = {
+//   name: 'storageaccountdeploy'
+//   params: {
+//     location: location
+//     defaultTags: defaultTags
+//     storageAccountName: storageAccountName
+//   }
+// }
 
 // Create Application Insights
 module appinsightsmod 'appinsights.bicep' = {
