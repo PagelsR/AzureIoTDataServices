@@ -1,5 +1,8 @@
 param keyvaultName string
 param azuremapname string
+// param eventHubName string
+// param iotHubName string
+
 //param functionAppName string
 // param secret_AzureWebJobsStorageName string
 // param secret_WebsiteContentAzureFileConnectionStringName string
@@ -113,4 +116,50 @@ resource secret2 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
     value: AzureMapsSubscriptionKeyString
   }
 }
+
+// resource existing_iotHubName_resource 'Microsoft.Devices/IotHubs@2022-04-30-preview' existing = {
+
+// {
+
+// Add a route to IoT Hub to existing Event Hub Namespace 
+
+
+
+
+// resource iothub_addroute 'Microsoft.Devices/IoTHubs' = {
+//   name: 'HubwayTelemetryRoute'
+//   parent: existing_iotHubName_resource
+//   properties: {
+//     condition: 'Hubway'
+//     endpointNames: [
+//       'HubwayTelemetry'
+//     ]
+//   }
+// }
+
+
+// Reference Existing resource
+// resource existing_eventHubName 'Microsoft.EventHub/namespaces@2022-10-01-preview' existing = {
+//   name: eventHubName
+// }
+
+
+// Setup Events Hubs Namespace?
+
+// Setup Events Hubs Consumer Group?
+
+// Setup IoT Hub Built In End Points
+// Point to Event Hub
+// Event Hub compatible endpoint
+
+
+// Setup IoT Hub Message Routing
+// Event Hubs Endpoint: HubwayTelemetryRoute
+// Routing Query
+// RoutingProperty = 'Hubway'
+
+// 1. Add a Route
+// 2. Endpoint Type = "Event Hubs"
+// 3. Event Hub Namespaces = evh-3kqatjsvwshvq or eventHubName
+
 

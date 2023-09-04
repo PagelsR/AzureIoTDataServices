@@ -9,7 +9,7 @@ param iotHub_connectionString string
 @secure()
 param iotHub_containerName string
 
-resource iotHubName_resource 'Microsoft.Devices/IotHubs@2022-04-30-preview' = {
+resource iotHubName_resource 'Microsoft.Devices/IotHubs@2022-11-15-preview' = {
   name: iotHubName
   location: location
   tags: defaultTags
@@ -95,5 +95,16 @@ resource iotHubName_resource 'Microsoft.Devices/IotHubs@2022-04-30-preview' = {
     disableLocalAuth: false
     allowedFqdnList: []
     enableDataResidency: false
+  }
+}
+
+resource iothub_addroute 'microsoft.devices/iothubs/routes@2021-03-31' = {
+  name: 'HubwayTelemetryRoutev2'
+  parent: iotHubName_resource
+  properties: {
+    condition: 'Hubway'
+    endpointNames: [
+      'HubwayTelemetry'
+    ]
   }
 }

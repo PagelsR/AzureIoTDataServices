@@ -1,5 +1,5 @@
 param location string
-param resourceGroupName string
+//param resourceGroupName string
 param iotHubName string
 param defaultTags object
 
@@ -24,7 +24,7 @@ var iotHubKeyName = 'deviceupdateservice'
 var iotHubKeyIndex = 5
 var consumerGroupName = 'adum'
 
-resource iotHub 'Microsoft.Devices/iotHubs@2021-03-31' = {
+resource iotHub 'Microsoft.Devices/IotHubs@2022-11-15-preview' = {
   name: iotHubName
   location: location
   tags: defaultTags

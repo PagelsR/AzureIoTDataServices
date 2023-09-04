@@ -17,7 +17,7 @@ var functionAppServicePlanName = 'funcplan-${uniqueString(resourceGroup().id)}'
 var keyvaultName = 'kv-${uniqueString(resourceGroup().id)}'
 
 var iotHubName = 'iot-${uniqueString(resourceGroup().id)}'
-var iotContainerName = 'iotcontainer-${uniqueString(resourceGroup().id)}'
+//var iotContainerName = 'iotcontainer-${uniqueString(resourceGroup().id)}'
 //var storageaccountName = 'stor${uniqueString(resourceGroup().id)}'
 var eventHubName = 'evh-${uniqueString(resourceGroup().id)}'
 var eventHubNamespaceName = 'evhns-${uniqueString(resourceGroup().id)}'
@@ -39,33 +39,31 @@ var defaultTags = {
 }
 
 // Create IoT Hub
-// module iotHubmod './iothub.bicep' = {
-//   name: 'iothubdeploy'
-//   params: {
-//     location: location
-//     iotHubName: iotHubName
-//     defaultTags: defaultTags
-//     resourceGroupName: resourceGroupName
-//     iotHub_connectionString: 'TBD'
-//     iotHub_containerName: iotContainerName
-//   }
-//   dependsOn:  [
-//     storageaccountmod
-//   ]
-// }
-
-module iotHubmod './iothub2.bicep' = {
-    name: 'iothubdeploy'
-    params: {
-      location: location
-      iotHubName: iotHubName
-      defaultTags: defaultTags
-      resourceGroupName: resourceGroupName
-    }
-    // dependsOn:  [
-    //   storageaccountmod
-    // ]
+module iotHubmod './iothub4.bicep' = {
+  name: 'iothubdeploy'
+  params: {
+    location: location
+    iotHubName: iotHubName
+    defaultTags: defaultTags
   }
+  dependsOn:  [
+    eventhubmod
+  ]
+}
+
+// module iotHubmod './iothub2.bicep' = {
+//     name: 'iothubdeploy'
+//     params: {
+//       location: location
+//       iotHubName: iotHubName
+//       defaultTags: defaultTags
+//       resourceGroupName: resourceGroupName
+//     }
+//     dependsOn:  [
+//       storageaccountmod
+//       eventhubmod
+//     ]
+//   }
 
 // Create Event Hub Namespace
 module eventhubmod './eventhub.bicep' = {
