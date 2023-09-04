@@ -13,7 +13,7 @@ on:
   workflow_dispatch:
 
 env:
-  Azure_Resource_GroupName: 'rg-PagelsR-IoTDataServices-v2'
+  Azure_Resource_GroupName: 'rg-PagelsR-IoTDataServices-v3'
   Azure_Resource_GroupLocation: 'eastus'
   
 permissions:
