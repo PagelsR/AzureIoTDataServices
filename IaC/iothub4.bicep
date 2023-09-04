@@ -77,7 +77,7 @@ resource container 'Microsoft.Storage/storageAccounts/blobServices/containers@20
   parent: storageAccountBlob_resource
   name: 'default'
   properties: {
-    publicAccess: 'Blob'
+    publicAccess: 'None'
   }
 }
 
