@@ -167,6 +167,7 @@ module configsettingsmod './configsettings.bicep' = {
     dependsOn:  [
      keyvaultmod
      functionappmod
+     azuremapsmod
    ]
  }
 
