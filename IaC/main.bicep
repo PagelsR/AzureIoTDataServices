@@ -156,7 +156,6 @@ module configsettingsmod './configsettings.bicep' = {
     KeyVault_MapsClientIdValue: azuremapsmod.outputs.out_AzureMapsClientId
     KeyVault_MapsClientIdName: KeyVault_MapsClientIdName
     tenant: subscription().tenantId
-    azuremapname: azuremapname
     KeyVault_MapsSubscriptionKeyName: KeyVault_MapsSubscriptionKeyName
     KeyVault_MapsSubscriptionKeyValue: azuremapsmod.outputs.out_AzureMapsprimaryKey
     funcAppServiceprincipalId: functionappmod.outputs.out_funcAppServiceprincipalId

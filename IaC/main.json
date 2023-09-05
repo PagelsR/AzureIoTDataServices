@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.17.1.54307",
-      "templateHash": "14861957470361811731"
+      "version": "0.20.4.51522",
+      "templateHash": "18365402210471741600"
     }
   },
   "parameters": {
@@ -87,8 +87,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.17.1.54307",
-              "templateHash": "14159398767282648936"
+              "version": "0.20.4.51522",
+              "templateHash": "14183927717155949806"
             }
           },
           "parameters": {
@@ -179,8 +179,51 @@
               ]
             },
             {
+              "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+              "apiVersion": "2023-01-01",
+              "name": "[format('{0}/{1}/{2}', variables('storageAccountName'), 'default', 'default')]",
+              "properties": {
+                "publicAccess": "None"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', variables('storageAccountName'), 'default')]"
+              ]
+            },
+            {
+              "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+              "apiVersion": "2023-01-01",
+              "name": "[format('{0}/{1}/{2}', variables('storageAccountName'), 'default', '$web')]",
+              "properties": {
+                "defaultEncryptionScope": "$account-encryption-key",
+                "denyEncryptionScopeOverride": false,
+                "publicAccess": "None",
+                "immutableStorageWithVersioning": {
+                  "enabled": false
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', variables('storageAccountName'), 'default')]"
+              ]
+            },
+            {
+              "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+              "apiVersion": "2023-01-01",
+              "name": "[format('{0}/{1}/{2}', variables('storageAccountName'), 'default', 'boston-hubway-data')]",
+              "properties": {
+                "defaultEncryptionScope": "$account-encryption-key",
+                "denyEncryptionScopeOverride": false,
+                "publicAccess": "None",
+                "immutableStorageWithVersioning": {
+                  "enabled": false
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', variables('storageAccountName'), 'default')]"
+              ]
+            },
+            {
               "type": "Microsoft.Devices/IotHubs",
-              "apiVersion": "2022-11-15-preview",
+              "apiVersion": "2022-04-30-preview",
               "name": "[parameters('iotHubName')]",
               "location": "[parameters('location')]",
               "tags": "[parameters('defaultTags')]",
@@ -288,8 +331,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.17.1.54307",
-              "templateHash": "6205921390968778861"
+              "version": "0.20.4.51522",
+              "templateHash": "1262990715425535934"
             }
           },
           "parameters": {
@@ -437,8 +480,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.17.1.54307",
-              "templateHash": "13263943282440692955"
+              "version": "0.20.4.51522",
+              "templateHash": "11553325755792538041"
             }
           },
           "parameters": {
@@ -656,8 +699,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.17.1.54307",
-              "templateHash": "16325267988747007147"
+              "version": "0.20.4.51522",
+              "templateHash": "12313205287974433338"
             }
           },
           "parameters": {
@@ -809,8 +852,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.17.1.54307",
-              "templateHash": "9242232042130024162"
+              "version": "0.20.4.51522",
+              "templateHash": "4176247305482136453"
             }
           },
           "parameters": {
@@ -1062,8 +1105,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.17.1.54307",
-              "templateHash": "12361028335080550444"
+              "version": "0.20.4.51522",
+              "templateHash": "7171268585005515296"
             }
           },
           "parameters": {
@@ -1149,8 +1192,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.17.1.54307",
-              "templateHash": "14174688017597101275"
+              "version": "0.20.4.51522",
+              "templateHash": "18094757682642652253"
             }
           },
           "parameters": {
@@ -1188,9 +1231,9 @@
             }
           ],
           "outputs": {
-            "out_AzureMapsAppKey": {
+            "out_AzureMapsprimaryKey": {
               "type": "string",
-              "value": "[resourceId('Microsoft.Maps/accounts', parameters('azuremapname'))]"
+              "value": "[listKeys(resourceId('Microsoft.Maps/accounts', parameters('azuremapname')), '2021-12-01-preview').primaryKey]"
             },
             "out_AzureMapsClientId": {
               "type": "string",
@@ -1222,11 +1265,11 @@
           "tenant": {
             "value": "[subscription().tenantId]"
           },
-          "azuremapname": {
-            "value": "[variables('azuremapname')]"
-          },
           "KeyVault_MapsSubscriptionKeyName": {
             "value": "[parameters('KeyVault_MapsSubscriptionKeyName')]"
+          },
+          "KeyVault_MapsSubscriptionKeyValue": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('azuremapname')), '2022-09-01').outputs.out_AzureMapsprimaryKey.value]"
           },
           "funcAppServiceprincipalId": {
             "value": "[reference(resourceId('Microsoft.Resources/deployments', 'functionappdeploy'), '2022-09-01').outputs.out_funcAppServiceprincipalId.value]"
@@ -1250,15 +1293,12 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.17.1.54307",
-              "templateHash": "15031580825615132524"
+              "version": "0.20.4.51522",
+              "templateHash": "16606232020096386304"
             }
           },
           "parameters": {
             "keyvaultName": {
-              "type": "string"
-            },
-            "azuremapname": {
               "type": "string"
             },
             "appInsightsInstrumentationKey": {
@@ -1275,6 +1315,9 @@
             },
             "KeyVault_MapsSubscriptionKeyName": {
               "type": "string"
+            },
+            "KeyVault_MapsSubscriptionKeyValue": {
+              "type": "securestring"
             },
             "AzObjectIdPagels": {
               "type": "securestring"
@@ -1345,22 +1388,6 @@
               "name": "[format('{0}/{1}', parameters('keyvaultName'), 'add')]",
               "properties": {
                 "accessPolicies": "[parameters('accessPolicies')]"
-              }
-            },
-            {
-              "type": "Microsoft.KeyVault/vaults/secrets",
-              "apiVersion": "2022-07-01",
-              "name": "[format('{0}/{1}', parameters('keyvaultName'), parameters('KeyVault_MapsClientIdName'))]",
-              "properties": {
-                "value": "[parameters('KeyVault_MapsClientIdValue')]"
-              }
-            },
-            {
-              "type": "Microsoft.KeyVault/vaults/secrets",
-              "apiVersion": "2022-07-01",
-              "name": "[format('{0}/{1}', parameters('keyvaultName'), parameters('KeyVault_MapsSubscriptionKeyName'))]",
-              "properties": {
-                "value": "[listKeys(resourceId('Microsoft.Maps/accounts', parameters('azuremapname')), '2021-12-01-preview').primaryKey]"
               }
             }
           ]
