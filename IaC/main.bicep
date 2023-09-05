@@ -27,7 +27,7 @@ var cosmosDBName = 'cosmos-${uniqueString(resourceGroup().id)}'
 //var storageAccountName = 'sta${uniqueString(resourceGroup().id)}'
 
 // KeyVault Secret Names
-// Note: Names cannot contain underscores
+// Note: Underscores Not allowed in KeyVault
 param KeyVault_MapsClientIdName string = 'MapsClientId'
 param KeyVault_MapsSubscriptionKeyName string = 'MapsSubscriptionKey'
 param KeyVault_AzureWebJobsStorageName string = 'AzureWebJobsStorage'
