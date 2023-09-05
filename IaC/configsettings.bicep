@@ -85,13 +85,13 @@ resource existing_keyvault 'Microsoft.KeyVault/vaults@2022-07-01' existing = {
 }
 
 // Create KeyVault accessPolicies
-// resource keyvaultaccessmod 'Microsoft.KeyVault/vaults/accessPolicies@2022-07-01' = {
-//   name: 'add'
-//   parent: existing_keyvault
-//   properties: {
-//     accessPolicies: accessPolicies
-//   }
-// }
+resource keyvaultaccessmod 'Microsoft.KeyVault/vaults/accessPolicies@2022-07-01' = {
+  name: 'add'
+  parent: existing_keyvault
+  properties: {
+    accessPolicies: accessPolicies
+  }
+}
 
 // // Create KeyVault Secrets
 // resource secret1 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
