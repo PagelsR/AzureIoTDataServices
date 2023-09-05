@@ -61,7 +61,7 @@ resource eventHubName_default 'Microsoft.EventHub/namespaces/networkrulesets@202
   }
 }
 
-resource eventHubName_hubwaytelemetry_iothubroutes_rg_PagelsR_IoTDataServices_iothub 'Microsoft.EventHub/namespaces/eventhubs/authorizationrules@2022-10-01-preview' = {
+resource eventHubName_hubwaytelemetry_eventHubNamespaceName 'Microsoft.EventHub/namespaces/eventhubs/authorizationrules@2022-10-01-preview' = {
   parent: eventHubName_hubwaytelemetry
   name: eventHubNamespaceName
   properties: {
@@ -87,11 +87,14 @@ resource eventHubName_hubwaytelemetry_hubwaycg 'Microsoft.EventHub/namespaces/ev
 
 }
 
+//output rootManageConnectionString string = eventHubName_hubwaytelemetry_eventHubNamespaceName.properties.primaryConnectionString
+
+
 // Find endpoint of policy
-var serviceBusEndpoint = '${eventHubName_resource.id}/AuthorizationRules/MSaaSDataPolicy'
+var eventHubEndpoint = '${eventHubName_resource.id}/AuthorizationRules/${eventHubName_hubwaytelemetry_eventHubNamespaceName.name}'
 
 // Save primary connections string
-var serviceBusConnectionString = listKeys(serviceBusEndpoint, eventHubName_resource.apiVersion).primaryConnectionString
+var serviceBusConnectionString = listKeys(eventHubEndpoint, eventHubName_resource.apiVersion).primaryConnectionString
 
 // Pass as output and saved in Key Vault
 output out_servicebusConnectionString string = serviceBusConnectionString

@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "7073144787504306930"
+      "templateHash": "14318958533585162742"
     }
   },
   "parameters": {
@@ -253,7 +253,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "4375255361586467644"
+              "templateHash": "9022246821000075181"
             }
           },
           "parameters": {
@@ -272,7 +272,7 @@
             }
           },
           "variables": {
-            "serviceBusEndpoint": "[format('{0}/AuthorizationRules/MSaaSDataPolicy', resourceId('Microsoft.EventHub/namespaces', parameters('eventHubName')))]"
+            "eventHubEndpoint": "[format('{0}/AuthorizationRules/{1}', resourceId('Microsoft.EventHub/namespaces', parameters('eventHubName')), parameters('eventHubNamespaceName'))]"
           },
           "resources": [
             {
@@ -378,7 +378,7 @@
           "outputs": {
             "out_servicebusConnectionString": {
               "type": "string",
-              "value": "[listKeys(variables('serviceBusEndpoint'), '2022-10-01-preview').primaryConnectionString]"
+              "value": "[listKeys(variables('eventHubEndpoint'), '2022-10-01-preview').primaryConnectionString]"
             }
           }
         }
