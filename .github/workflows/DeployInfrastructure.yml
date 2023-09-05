@@ -38,7 +38,7 @@ jobs:
       # Run dotnet build and publish
     - name: dotnet build unit test and publish
       run: |
-        dotnet build IoTDataServices.FuncApp/FuncApp.csproj --configuration ${{ env.buildConfiguration }} -output './functionapp'
+        dotnet build IoTDataServices.FuncApp/FuncApp.csproj --configuration ${{ env.buildConfiguration }} --output './functionapp'
 
     - name: Upload Build Artifacts-FunctionApp
       uses: actions/upload-artifact@v2
