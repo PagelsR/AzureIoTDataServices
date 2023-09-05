@@ -73,41 +73,41 @@ resource storageAccountBlob_resource 'Microsoft.Storage/storageAccounts/blobServ
   }
 }
 
-// resource container 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-01-01' = {
-//   parent: storageAccountBlob_resource
-//   name: 'default'
-//   properties: {
-//     publicAccess: 'None'
-//   }
-// }
+resource container 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-01-01' = {
+  parent: storageAccountBlob_resource
+  name: 'default'
+  properties: {
+    publicAccess: 'None'
+  }
+}
 
-// resource dataStorageName_default_web 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-01-01' = {
-//   parent: storageAccountBlob_resource
-//   name: '$web'
-//   properties: {
-//     defaultEncryptionScope: '$account-encryption-key'
-//     denyEncryptionScopeOverride: false
-//     publicAccess: 'None'
-//     immutableStorageWithVersioning: {
-//       enabled: false
-//     }
-//   }
+resource dataStorageName_default_web 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-01-01' = {
+  parent: storageAccountBlob_resource
+  name: '$web'
+  properties: {
+    defaultEncryptionScope: '$account-encryption-key'
+    denyEncryptionScopeOverride: false
+    publicAccess: 'None'
+    immutableStorageWithVersioning: {
+      enabled: false
+    }
+  }
 
-// }
+}
 
-// resource dataStorageName_default_boston_hubway_data 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-01-01' = {
-//   parent: storageAccountBlob_resource
-//   name: 'boston-hubway-data'
-//   properties: {
-//     defaultEncryptionScope: '$account-encryption-key'
-//     denyEncryptionScopeOverride: false
-//     publicAccess: 'None'
-//     immutableStorageWithVersioning: {
-//       enabled: false
-//     }
-//   }
+resource dataStorageName_default_boston_hubway_data 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-01-01' = {
+  parent: storageAccountBlob_resource
+  name: 'boston-hubway-data'
+  properties: {
+    defaultEncryptionScope: '$account-encryption-key'
+    denyEncryptionScopeOverride: false
+    publicAccess: 'None'
+    immutableStorageWithVersioning: {
+      enabled: false
+    }
+  }
 
-// }
+}
 
 resource IoTHub 'Microsoft.Devices/IotHubs@2022-04-30-preview' = {
   name: iotHubName
