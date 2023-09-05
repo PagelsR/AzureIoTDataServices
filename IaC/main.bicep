@@ -27,12 +27,12 @@ var cosmosDBName = 'cosmos-${uniqueString(resourceGroup().id)}'
 //var storageAccountName = 'sta${uniqueString(resourceGroup().id)}'
 
 // KeyVault Secret Names
-//param secret_AzureWebJobsStorageName string = 'AzureWebJobsStorage'
+// Note: Names cannot contain underscores
 param KeyVault_MapsClientIdName string = 'MapsClientId'
 param KeyVault_MapsSubscriptionKeyName string = 'MapsSubscriptionKey'
 param KeyVault_AzureWebJobsStorageName string = 'AzureWebJobsStorage'
-param KeyVault_Shared_Access_Key_EVENTHUBName string = 'Shared_Access_Key_EVENTHUB'
-param KeyVault_Shared_Access_Key_DOCUMENTDBName string = 'Shared_Access_Key_DOCUMENTDB'
+param KeyVault_Shared_Access_Key_EVENTHUBName string = 'SharedAccessKeyEVENTHUB'
+param KeyVault_Shared_Access_Key_DOCUMENTDBName string = 'SharedAccessKeyDOCUMENTDB'
 
 // Tags
 var defaultTags = {

@@ -148,23 +148,23 @@ resource secret3 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
   }
 }
 // create secret for Func App
-// resource secret4 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
-//   name: KeyVault_Shared_Access_Key_EVENTHUBName
-//   parent: existing_keyvault
-//   properties: {
-//     contentType: 'text/plain'
-//     value: KeyVault_Shared_Access_Key_EVENTHUBValue
-//   }
-// }
+resource secret4 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
+  name: KeyVault_Shared_Access_Key_EVENTHUBName
+  parent: existing_keyvault
+  properties: {
+    contentType: 'text/plain'
+    value: KeyVault_Shared_Access_Key_EVENTHUBValue
+  }
+}
 // create secret for Func App
-// resource secret5 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
-//   name: KeyVault_Shared_Access_Key_DOCUMENTDBName
-//   parent: existing_keyvault
-//   properties: {
-//     contentType: 'text/plain'
-//     value: KeyVault_Shared_Access_Key_DOCUMENTDBValue
-//   }
-// }
+resource secret5 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
+  name: KeyVault_Shared_Access_Key_DOCUMENTDBName
+  parent: existing_keyvault
+  properties: {
+    contentType: 'text/plain'
+    value: KeyVault_Shared_Access_Key_DOCUMENTDBValue
+  }
+}
 
 // Reference Existing resource
 resource existing_funcAppService 'Microsoft.Web/sites@2022-09-01' existing = {
