@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "10382699771101184570"
+      "templateHash": "8470582206659098273"
     }
   },
   "parameters": {
@@ -88,7 +88,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "787266334589868311"
+              "templateHash": "2930891248874243982"
             }
           },
           "parameters": {
@@ -113,10 +113,11 @@
               "apiVersion": "2021-08-01",
               "name": "[variables('storageAccountName')]",
               "location": "[parameters('location')]",
+              "tags": "[parameters('defaultTags')]",
               "sku": {
                 "name": "Standard_LRS"
               },
-              "kind": "Storage"
+              "kind": "StorageV2"
             },
             {
               "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
@@ -134,6 +135,7 @@
               "apiVersion": "2021-07-02",
               "name": "[parameters('iotHubName')]",
               "location": "[parameters('location')]",
+              "tags": "[parameters('defaultTags')]",
               "sku": {
                 "name": "S1",
                 "capacity": 1
@@ -161,9 +163,9 @@
                   },
                   "routes": [
                     {
-                      "name": "ContosoStorageRoute",
+                      "name": "BostonHubwayTelemetryRoute",
                       "source": "DeviceMessages",
-                      "condition": "level=\"storage\"",
+                      "condition": "RoutingProperty = 'Hubway'",
                       "endpointNames": [
                         "[variables('storageEndpoint')]"
                       ],

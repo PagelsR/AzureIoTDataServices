@@ -26,6 +26,10 @@ resource container_resource 'Microsoft.Storage/storageAccounts/blobServices/cont
   ]
 }
 
+// resource existing_eventHubName_resource 'Microsoft.EventHub/namespaces@2022-10-01-preview' existing =  {
+// name: eventHubNamespaceName
+// }
+
 resource IoTHub 'Microsoft.Devices/IotHubs@2021-07-02' = {
   name: iotHubName
   location: location
@@ -43,6 +47,17 @@ resource IoTHub 'Microsoft.Devices/IotHubs@2021-07-02' = {
     }
     routing: {
       endpoints: {
+        // eventHubs: [
+        //   {
+        //     connectionString: 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount_resource.listKeys().keys[0].value}'
+        //     containerName: storageContainerName
+        //     fileNameFormat: '{iothub}/{partition}/{YYYY}/{MM}/{DD}/{HH}/{mm}'
+        //     batchFrequencyInSeconds: 100
+        //     maxChunkSizeInBytes: 104857600
+        //     encoding: 'JSON'
+        //     name: storageEndpoint
+        //   }
+        // ]
         storageContainers: [
           {
             connectionString: 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount_resource.listKeys().keys[0].value}'
