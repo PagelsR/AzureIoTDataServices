@@ -39,17 +39,17 @@ var defaultTags = {
 }
 
 // Create IoT Hub
-// module iotHubmod './iothub4.bicep' = {
-//   name: 'iothubdeploy'
-//   params: {
-//     location: location
-//     iotHubName: iotHubName
-//     defaultTags: defaultTags
-//   }
-//   dependsOn:  [
-//     eventhubmod
-//   ]
-// }
+module iotHubmod './iothub4.bicep' = {
+  name: 'iothubdeploy'
+  params: {
+    location: location
+    iotHubName: iotHubName
+    defaultTags: defaultTags
+  }
+  dependsOn:  [
+    eventhubmod
+  ]
+}
 
 // module iotHubmod './iothub2.bicep' = {
 //     name: 'iothubdeploy'
