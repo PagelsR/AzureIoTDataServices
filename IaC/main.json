@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "18365402210471741600"
+      "templateHash": "7239338178765875406"
     }
   },
   "parameters": {
@@ -88,7 +88,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "14183927717155949806"
+              "templateHash": "787266334589868311"
             }
           },
           "parameters": {
@@ -110,125 +110,32 @@
           "resources": [
             {
               "type": "Microsoft.Storage/storageAccounts",
-              "apiVersion": "2023-01-01",
+              "apiVersion": "2021-08-01",
               "name": "[variables('storageAccountName')]",
-              "tags": "[parameters('defaultTags')]",
               "location": "[parameters('location')]",
               "sku": {
                 "name": "Standard_LRS"
               },
-              "kind": "StorageV2",
-              "properties": {
-                "dnsEndpointType": "Standard",
-                "defaultToOAuthAuthentication": false,
-                "publicNetworkAccess": "Enabled",
-                "allowCrossTenantReplication": false,
-                "minimumTlsVersion": "TLS1_2",
-                "allowBlobPublicAccess": false,
-                "allowSharedKeyAccess": true,
-                "networkAcls": {
-                  "bypass": "AzureServices",
-                  "virtualNetworkRules": [],
-                  "ipRules": [],
-                  "defaultAction": "Allow"
-                },
-                "supportsHttpsTrafficOnly": true,
-                "encryption": {
-                  "services": {
-                    "file": {
-                      "keyType": "Account",
-                      "enabled": true
-                    },
-                    "blob": {
-                      "keyType": "Account",
-                      "enabled": true
-                    }
-                  },
-                  "keySource": "Microsoft.Storage"
-                },
-                "accessTier": "Hot"
-              }
+              "kind": "Storage"
             },
             {
-              "type": "Microsoft.Storage/storageAccounts/blobServices",
-              "apiVersion": "2023-01-01",
-              "name": "[format('{0}/{1}', variables('storageAccountName'), 'default')]",
+              "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+              "apiVersion": "2021-08-01",
+              "name": "[format('{0}/default/{1}', variables('storageAccountName'), variables('storageContainerName'))]",
               "properties": {
-                "changeFeed": {
-                  "enabled": false
-                },
-                "restorePolicy": {
-                  "enabled": false
-                },
-                "containerDeleteRetentionPolicy": {
-                  "enabled": true,
-                  "days": 7
-                },
-                "cors": {
-                  "corsRules": []
-                },
-                "deleteRetentionPolicy": {
-                  "allowPermanentDelete": false,
-                  "enabled": true,
-                  "days": 7
-                },
-                "isVersioningEnabled": false
+                "publicAccess": "None"
               },
               "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
               ]
             },
             {
-              "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
-              "apiVersion": "2023-01-01",
-              "name": "[format('{0}/{1}/{2}', variables('storageAccountName'), 'default', 'default')]",
-              "properties": {
-                "publicAccess": "None"
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', variables('storageAccountName'), 'default')]"
-              ]
-            },
-            {
-              "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
-              "apiVersion": "2023-01-01",
-              "name": "[format('{0}/{1}/{2}', variables('storageAccountName'), 'default', '$web')]",
-              "properties": {
-                "defaultEncryptionScope": "$account-encryption-key",
-                "denyEncryptionScopeOverride": false,
-                "publicAccess": "None",
-                "immutableStorageWithVersioning": {
-                  "enabled": false
-                }
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', variables('storageAccountName'), 'default')]"
-              ]
-            },
-            {
-              "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
-              "apiVersion": "2023-01-01",
-              "name": "[format('{0}/{1}/{2}', variables('storageAccountName'), 'default', 'boston-hubway-data')]",
-              "properties": {
-                "defaultEncryptionScope": "$account-encryption-key",
-                "denyEncryptionScopeOverride": false,
-                "publicAccess": "None",
-                "immutableStorageWithVersioning": {
-                  "enabled": false
-                }
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', variables('storageAccountName'), 'default')]"
-              ]
-            },
-            {
               "type": "Microsoft.Devices/IotHubs",
-              "apiVersion": "2022-04-30-preview",
+              "apiVersion": "2021-07-02",
               "name": "[parameters('iotHubName')]",
               "location": "[parameters('location')]",
-              "tags": "[parameters('defaultTags')]",
               "sku": {
-                "name": "B1",
+                "name": "S1",
                 "capacity": 1
               },
               "properties": {
@@ -242,7 +149,7 @@
                   "endpoints": {
                     "storageContainers": [
                       {
-                        "connectionString": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', variables('storageAccountName'), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2023-01-01').keys[0].value)]",
+                        "connectionString": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', variables('storageAccountName'), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2021-08-01').keys[0].value)]",
                         "containerName": "[variables('storageContainerName')]",
                         "fileNameFormat": "{iothub}/{partition}/{YYYY}/{MM}/{DD}/{HH}/{mm}",
                         "batchFrequencyInSeconds": 100,
@@ -254,9 +161,9 @@
                   },
                   "routes": [
                     {
-                      "name": "BostonHubwayTelemetryRoute",
+                      "name": "ContosoStorageRoute",
                       "source": "DeviceMessages",
-                      "condition": "RoutingProperty = 'Hubway'",
+                      "condition": "level=\"storage\"",
                       "endpointNames": [
                         "[variables('storageEndpoint')]"
                       ],
@@ -1294,7 +1201,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "16606232020096386304"
+              "templateHash": "17401847858045076105"
             }
           },
           "parameters": {
@@ -1388,6 +1295,22 @@
               "name": "[format('{0}/{1}', parameters('keyvaultName'), 'add')]",
               "properties": {
                 "accessPolicies": "[parameters('accessPolicies')]"
+              }
+            },
+            {
+              "type": "Microsoft.KeyVault/vaults/secrets",
+              "apiVersion": "2022-07-01",
+              "name": "[format('{0}/{1}', parameters('keyvaultName'), parameters('KeyVault_MapsClientIdName'))]",
+              "properties": {
+                "value": "[parameters('KeyVault_MapsClientIdValue')]"
+              }
+            },
+            {
+              "type": "Microsoft.KeyVault/vaults/secrets",
+              "apiVersion": "2022-07-01",
+              "name": "[format('{0}/{1}', parameters('keyvaultName'), parameters('KeyVault_MapsSubscriptionKeyName'))]",
+              "properties": {
+                "value": "[parameters('KeyVault_MapsSubscriptionKeyValue')]"
               }
             }
           ]
