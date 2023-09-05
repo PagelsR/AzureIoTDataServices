@@ -31,8 +31,8 @@ var cosmosDBName = 'cosmos-${uniqueString(resourceGroup().id)}'
 param KeyVault_MapsClientIdName string = 'MapsClientId'
 param KeyVault_MapsSubscriptionKeyName string = 'MapsSubscriptionKey'
 param KeyVault_AzureWebJobsStorageName string = 'AzureWebJobsStorage'
-param KeyVault_Shared_Access_Key_EVENTHUBName string = 'AzureWebJobsStorage'
-param KeyVault_Shared_Access_Key_DOCUMENTDBName string = 'AzureWebJobsStorage'
+param KeyVault_Shared_Access_Key_EVENTHUBName string = 'Shared_Access_Key_EVENTHUB'
+param KeyVault_Shared_Access_Key_DOCUMENTDBName string = 'Shared_Access_Key_DOCUMENTDB'
 
 // Tags
 var defaultTags = {
@@ -165,7 +165,7 @@ module configsettingsmod './configsettings.bicep' = {
     KeyVault_Shared_Access_Key_EVENTHUBValue: eventhubmod.outputs.out_eventHubEndpointPrimary
     KeyVault_Shared_Access_Key_DOCUMENTDBName: KeyVault_Shared_Access_Key_DOCUMENTDBName
     KeyVault_Shared_Access_Key_DOCUMENTDBValue: cosmosdbmod.outputs.out_CosmosDBConnectionString
-    KeyVault_AzureWebJobsStorageName: functionappmod.outputs.out_AzureWebJobsStorage
+    KeyVault_AzureWebJobsStorageName: KeyVault_AzureWebJobsStorageName
     KeyVault_AzureWebJobsStorageValue: functionappmod.outputs.out_AzureWebJobsStorage
     azuremapname: azuremapname
     funcAppServiceprincipalId: functionappmod.outputs.out_funcAppServiceprincipalId
