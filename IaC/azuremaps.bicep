@@ -25,5 +25,5 @@ resource azuremaps 'Microsoft.Maps/accounts@2021-12-01-preview' = {
 
 var AzureMapsprimaryKey = azuremaps.listKeys().primaryKey
 
-output out_AzureMapsprimaryKey string = AzureMapsprimaryKey //azuremaps.id
+output out_AzureMapsprimaryKey string = AzureMapsprimaryKey
 output out_AzureMapsClientId string = azuremaps.properties.uniqueId

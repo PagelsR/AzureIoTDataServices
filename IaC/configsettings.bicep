@@ -17,7 +17,7 @@ param KeyVault_MapsClientIdValue string
 param KeyVault_MapsSubscriptionKeyName string
 
 @secure()
-param KeyVault_KeyVault_MapsSubscriptionKeyValue string
+param KeyVault_MapsSubscriptionKeyValue string
 
 @secure()
 param AzObjectIdPagels string
@@ -110,7 +110,7 @@ resource secret2 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
   name: KeyVault_MapsSubscriptionKeyName
   parent: existing_keyvault
   properties: {
-    value: KeyVault_KeyVault_MapsSubscriptionKeyValue
+    value: KeyVault_MapsSubscriptionKeyValue
   }
 }
 
