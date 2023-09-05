@@ -1,5 +1,5 @@
 param location string
-param resourceGroupName string
+//param resourceGroupName string
 param iotHubName string
 param defaultTags object
 
