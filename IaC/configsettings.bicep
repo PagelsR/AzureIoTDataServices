@@ -103,13 +103,13 @@ resource secret1 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
 }
 
 // Create KeyVault Secrets
-// resource secret2 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
-//   name: KeyVault_MapsSubscriptionKeyName
-//   parent: existing_keyvault
-//   properties: {
-//     value: KeyVault_MapsSubscriptionKeyValue
-//   }
-// }
+resource secret2 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
+  name: KeyVault_MapsSubscriptionKeyName
+  parent: existing_keyvault
+  properties: {
+    value: KeyVault_MapsSubscriptionKeyValue
+  }
+}
 
 // resource existing_iotHubName_resource 'Microsoft.Devices/IotHubs@2022-04-30-preview' existing = {
 
