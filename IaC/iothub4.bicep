@@ -9,10 +9,11 @@ var storageContainerName = '${toLower('stor')}results'
 resource storageAccount_resource 'Microsoft.Storage/storageAccounts@2021-08-01' = {
   name: storageAccountName
   location: location
+  tags: defaultTags
   sku: {
     name: 'Standard_LRS'
   }
-  kind: 'Storage'
+  kind: 'StorageV2'
 }
 
 resource container_resource 'Microsoft.Storage/storageAccounts/blobServices/containers@2021-08-01' = {
@@ -28,6 +29,7 @@ resource container_resource 'Microsoft.Storage/storageAccounts/blobServices/cont
 resource IoTHub 'Microsoft.Devices/IotHubs@2021-07-02' = {
   name: iotHubName
   location: location
+  tags: defaultTags
   sku: {
     name: 'S1'
     capacity: 1
