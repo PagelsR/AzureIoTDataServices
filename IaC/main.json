@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "7239338178765875406"
+      "templateHash": "10382699771101184570"
     }
   },
   "parameters": {
@@ -31,7 +31,7 @@
     },
     "KeyVault_MapsSubscriptionKeyName": {
       "type": "string",
-      "defaultValue": "<apsSubscriptionKey"
+      "defaultValue": "MapsSubscriptionKey"
     },
     "AzObjectIdPagels": {
       "type": "string",
@@ -1100,7 +1100,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "18094757682642652253"
+              "templateHash": "8999806012812134388"
             }
           },
           "parameters": {
@@ -1138,9 +1138,9 @@
             }
           ],
           "outputs": {
-            "out_AzureMapsprimaryKey": {
+            "out_AzureMapsAppKey": {
               "type": "string",
-              "value": "[listKeys(resourceId('Microsoft.Maps/accounts', parameters('azuremapname')), '2021-12-01-preview').primaryKey]"
+              "value": "[resourceId('Microsoft.Maps/accounts', parameters('azuremapname'))]"
             },
             "out_AzureMapsClientId": {
               "type": "string",
@@ -1163,20 +1163,20 @@
           "keyvaultName": {
             "value": "[variables('keyvaultName')]"
           },
-          "KeyVault_MapsClientIdValue": {
-            "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('azuremapname')), '2022-09-01').outputs.out_AzureMapsClientId.value]"
-          },
-          "KeyVault_MapsClientIdName": {
-            "value": "[parameters('KeyVault_MapsClientIdName')]"
-          },
           "tenant": {
             "value": "[subscription().tenantId]"
           },
           "KeyVault_MapsSubscriptionKeyName": {
             "value": "[parameters('KeyVault_MapsSubscriptionKeyName')]"
           },
-          "KeyVault_MapsSubscriptionKeyValue": {
-            "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('azuremapname')), '2022-09-01').outputs.out_AzureMapsprimaryKey.value]"
+          "KeyVault_ClientIdName": {
+            "value": "[parameters('KeyVault_MapsClientIdName')]"
+          },
+          "KeyVault_ClientIdValue": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('azuremapname')), '2022-09-01').outputs.out_AzureMapsClientId.value]"
+          },
+          "azuremapname": {
+            "value": "[variables('azuremapname')]"
           },
           "funcAppServiceprincipalId": {
             "value": "[reference(resourceId('Microsoft.Resources/deployments', 'functionappdeploy'), '2022-09-01').outputs.out_funcAppServiceprincipalId.value]"
@@ -1201,11 +1201,14 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "17401847858045076105"
+              "templateHash": "2421078399005255585"
             }
           },
           "parameters": {
             "keyvaultName": {
+              "type": "string"
+            },
+            "azuremapname": {
               "type": "string"
             },
             "appInsightsInstrumentationKey": {
@@ -1214,17 +1217,14 @@
             "appInsightsConnectionString": {
               "type": "string"
             },
-            "KeyVault_MapsClientIdName": {
+            "KeyVault_ClientIdName": {
               "type": "string"
             },
-            "KeyVault_MapsClientIdValue": {
+            "KeyVault_ClientIdValue": {
               "type": "securestring"
             },
             "KeyVault_MapsSubscriptionKeyName": {
               "type": "string"
-            },
-            "KeyVault_MapsSubscriptionKeyValue": {
-              "type": "securestring"
             },
             "AzObjectIdPagels": {
               "type": "securestring"
@@ -1300,9 +1300,9 @@
             {
               "type": "Microsoft.KeyVault/vaults/secrets",
               "apiVersion": "2022-07-01",
-              "name": "[format('{0}/{1}', parameters('keyvaultName'), parameters('KeyVault_MapsClientIdName'))]",
+              "name": "[format('{0}/{1}', parameters('keyvaultName'), parameters('KeyVault_ClientIdName'))]",
               "properties": {
-                "value": "[parameters('KeyVault_MapsClientIdValue')]"
+                "value": "[parameters('KeyVault_ClientIdValue')]"
               }
             },
             {
@@ -1310,7 +1310,7 @@
               "apiVersion": "2022-07-01",
               "name": "[format('{0}/{1}', parameters('keyvaultName'), parameters('KeyVault_MapsSubscriptionKeyName'))]",
               "properties": {
-                "value": "[parameters('KeyVault_MapsSubscriptionKeyValue')]"
+                "value": "[listKeys(resourceId('Microsoft.Maps/accounts', parameters('azuremapname')), '2021-12-01-preview').primaryKey]"
               }
             }
           ]

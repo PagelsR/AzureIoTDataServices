@@ -1,4 +1,5 @@
 param keyvaultName string
+param azuremapname string
 
 //param functionAppName string
 // param secret_AzureWebJobsStorageName string
@@ -6,15 +7,22 @@ param keyvaultName string
 param appInsightsInstrumentationKey string
 param appInsightsConnectionString string
 
-param KeyVault_MapsClientIdName string
+// param KeyVault_MapsClientIdName string
+
+// @secure()
+// param KeyVault_MapsClientIdValue string
+
+// param KeyVault_MapsSubscriptionKeyName string
+
+// @secure()
+// param KeyVault_MapsSubscriptionKeyValue string
+
+param KeyVault_ClientIdName string
 
 @secure()
-param KeyVault_MapsClientIdValue string
+param KeyVault_ClientIdValue string
 
 param KeyVault_MapsSubscriptionKeyName string
-
-@secure()
-param KeyVault_MapsSubscriptionKeyValue string
 
 @secure()
 param AzObjectIdPagels string
@@ -93,12 +101,18 @@ resource keyvaultaccessmod 'Microsoft.KeyVault/vaults/accessPolicies@2022-07-01'
   }
 }
 
-// // Create KeyVault Secrets
+// Reference Existing resource
+resource existing_azuremaps 'Microsoft.Maps/accounts@2021-12-01-preview' existing = {
+  name: azuremapname
+}
+var AzureMapsSubscriptionKeyString = existing_azuremaps.listKeys().primaryKey
+
+// Create KeyVault Secrets
 resource secret1 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
-  name: KeyVault_MapsClientIdName
+  name: KeyVault_ClientIdName
   parent: existing_keyvault
   properties: {
-    value: KeyVault_MapsClientIdValue
+    value: KeyVault_ClientIdValue
   }
 }
 
@@ -107,9 +121,27 @@ resource secret2 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
   name: KeyVault_MapsSubscriptionKeyName
   parent: existing_keyvault
   properties: {
-    value: KeyVault_MapsSubscriptionKeyValue
+    value: AzureMapsSubscriptionKeyString
   }
 }
+
+// // Create KeyVault Secrets
+// resource secret1 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
+//   name: KeyVault_MapsClientIdName
+//   parent: existing_keyvault
+//   properties: {
+//     value: KeyVault_MapsClientIdValue
+//   }
+// }
+
+// Create KeyVault Secrets
+// resource secret2 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
+//   name: KeyVault_MapsSubscriptionKeyName
+//   parent: existing_keyvault
+//   properties: {
+//     value: KeyVault_MapsSubscriptionKeyValue
+//   }
+// }
 
 // resource existing_iotHubName_resource 'Microsoft.Devices/IotHubs@2022-04-30-preview' existing = {
 
