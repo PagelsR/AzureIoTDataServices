@@ -30,6 +30,9 @@ var cosmosDBName = 'cosmos-${uniqueString(resourceGroup().id)}'
 //param secret_AzureWebJobsStorageName string = 'AzureWebJobsStorage'
 param KeyVault_MapsClientIdName string = 'MapsClientId'
 param KeyVault_MapsSubscriptionKeyName string = 'MapsSubscriptionKey'
+param KeyVault_AzureWebJobsStorageName string = 'AzureWebJobsStorage'
+param KeyVault_Shared_Access_Key_EVENTHUBName string = 'AzureWebJobsStorage'
+param KeyVault_Shared_Access_Key_DOCUMENTDBName string = 'AzureWebJobsStorage'
 
 // Tags
 var defaultTags = {
@@ -153,14 +156,17 @@ module configsettingsmod './configsettings.bicep' = {
   name: 'configSettings'
   params: {
     keyvaultName: keyvaultName
-    // KeyVault_MapsClientIdValue: azuremapsmod.outputs.out_AzureMapsClientId
-    // KeyVault_MapsClientIdName: KeyVault_MapsClientIdName
+    functionAppName: functionAppName
     tenant: subscription().tenantId
     KeyVault_MapsSubscriptionKeyName: KeyVault_MapsSubscriptionKeyName
-    //KeyVault_MapsSubscriptionKeyName: KeyVault_MapsSubscriptionKeyName
-    //KeyVault_MapsSubscriptionKeyValue: azuremapsmod.outputs.out_AzureMapsprimaryKey
     KeyVault_ClientIdName: KeyVault_MapsClientIdName
     KeyVault_ClientIdValue: azuremapsmod.outputs.out_AzureMapsClientId
+    KeyVault_Shared_Access_Key_EVENTHUBName: KeyVault_Shared_Access_Key_EVENTHUBName
+    KeyVault_Shared_Access_Key_EVENTHUBValue: eventhubmod.outputs.out_servicebusConnectionString
+    KeyVault_Shared_Access_Key_DOCUMENTDBName: KeyVault_Shared_Access_Key_DOCUMENTDBName
+    KeyVault_Shared_Access_Key_DOCUMENTDBValue: cosmosdbmod.outputs.out_CosmosDBConnectionString
+    KeyVault_AzureWebJobsStorageName: functionappmod.outputs.out_AzureWebJobsStorage
+    KeyVault_AzureWebJobsStorageValue: functionappmod.outputs.out_AzureWebJobsStorage
     azuremapname: azuremapname
     funcAppServiceprincipalId: functionappmod.outputs.out_funcAppServiceprincipalId
     appInsightsInstrumentationKey: appinsightsmod.outputs.out_appInsightsInstrumentationKey

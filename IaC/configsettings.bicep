@@ -1,5 +1,18 @@
 param keyvaultName string
 param azuremapname string
+param functionAppName string
+param KeyVault_AzureWebJobsStorageName string
+param KeyVault_Shared_Access_Key_EVENTHUBName string
+param KeyVault_Shared_Access_Key_DOCUMENTDBName string
+
+@secure()
+param KeyVault_AzureWebJobsStorageValue string
+
+@secure()
+param KeyVault_Shared_Access_Key_EVENTHUBValue string
+
+@secure()
+param KeyVault_Shared_Access_Key_DOCUMENTDBValue string
 
 //param functionAppName string
 // param secret_AzureWebJobsStorageName string
@@ -123,6 +136,60 @@ resource secret2 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
   properties: {
     value: AzureMapsSubscriptionKeyString
   }
+}
+
+//create secret for Func App
+resource secret3 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
+  name: KeyVault_AzureWebJobsStorageName
+  parent: existing_keyvault
+  properties: {
+    contentType: 'text/plain'
+    value: KeyVault_AzureWebJobsStorageValue
+  }
+}
+// create secret for Func App
+resource secret4 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
+  name: KeyVault_Shared_Access_Key_EVENTHUBName
+  parent: existing_keyvault
+  properties: {
+    contentType: 'text/plain'
+    value: KeyVault_Shared_Access_Key_EVENTHUBValue
+  }
+}
+// create secret for Func App
+resource secret5 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
+  name: KeyVault_Shared_Access_Key_EVENTHUBName
+  parent: existing_keyvault
+  properties: {
+    contentType: 'text/plain'
+    value: KeyVault_Shared_Access_Key_DOCUMENTDBValue
+  }
+}
+
+// Reference Existing resource
+resource existing_funcAppService 'Microsoft.Web/sites@2022-03-01' existing = {
+  name: functionAppName
+}
+// Create Web sites/config 'appsettings' - Function App
+resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2022-03-01' = {
+  name: 'appsettings'
+  kind: 'string'
+  parent: existing_funcAppService
+  properties: {
+    AzureWebJobsStorage: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_AzureWebJobsStorageName})'
+    //WebsiteContentAzureFileConnectionString: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_WebsiteContentAzureFileConnectionStringName})'
+    Shared_Access_Key_EVENTHUB: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_Shared_Access_Key_EVENTHUBName})'
+    Shared_Access_Key_DOCUMENTDB: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_Shared_Access_Key_DOCUMENTDBName})'
+    APPINSIGHTS_INSTRUMENTATIONKEY: appInsightsInstrumentationKey
+    APPLICATIONINSIGHTS_CONNECTION_STRING: appInsightsConnectionString
+    FUNCTIONS_WORKER_RUNTIME: 'dotnet'
+    FUNCTIONS_EXTENSION_VERSION: '~4'
+  }
+  dependsOn: [
+    secret3
+    secret4
+    secret5
+  ]
 }
 
 // // Create KeyVault Secrets

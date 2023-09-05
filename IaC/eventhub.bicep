@@ -87,3 +87,11 @@ resource eventHubName_hubwaytelemetry_hubwaycg 'Microsoft.EventHub/namespaces/ev
 
 }
 
+// Find endpoint of policy
+var serviceBusEndpoint = '${eventHubName_resource.id}/AuthorizationRules/MSaaSDataPolicy'
+
+// Save primary connections string
+var serviceBusConnectionString = listKeys(serviceBusEndpoint, eventHubName_resource.apiVersion).primaryConnectionString
+
+// Pass as output and saved in Key Vault
+output out_servicebusConnectionString string = serviceBusConnectionString

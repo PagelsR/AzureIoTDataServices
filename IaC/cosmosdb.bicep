@@ -159,3 +159,11 @@ resource cosmosDBName_Hubway_Tripdata 'Microsoft.DocumentDB/databaseAccounts/sql
   }
 
 }
+
+var documentEndpoint = cosmosDBName_resource.properties.documentEndpoint
+var primaryKey = cosmosDBName_resource.listKeys().primaryMasterKey
+var CosmosDBConnectionString = cosmosDBName_resource.listConnectionStrings().connectionStrings[0].connectionString
+
+output out_CosmosDB_URI string = documentEndpoint
+output out_CosmosPrimaryKey string = primaryKey
+output out_CosmosDBConnectionString string = CosmosDBConnectionString
