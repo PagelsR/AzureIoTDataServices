@@ -57,9 +57,9 @@ resource IoTHub 'Microsoft.Devices/IotHubs@2021-07-02' = {
       }
       routes: [
         {
-          name: 'ContosoStorageRoute'
+          name: 'BostonHubwayTelemetryRoute'
           source: 'DeviceMessages'
-          condition: 'level="storage"'
+          condition: 'RoutingProperty = \'Hubway\'' //'level="storage"'
           endpointNames: [
             storageEndpoint
           ]
