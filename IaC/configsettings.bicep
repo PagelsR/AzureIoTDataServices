@@ -188,7 +188,7 @@ resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2022-09-01' = {
   dependsOn: [
     secret3
     secret4
-    secret5
+    //secret5
   ]
 }
 
