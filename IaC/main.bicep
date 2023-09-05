@@ -24,12 +24,12 @@ var eventHubNamespaceName = 'evhns-${uniqueString(resourceGroup().id)}'
 var cosmosDBName = 'cosmos-${uniqueString(resourceGroup().id)}'
 
 // remove dashes for storage account name
-var storageAccountName = 'sta${uniqueString(resourceGroup().id)}'
+//var storageAccountName = 'sta${uniqueString(resourceGroup().id)}'
 
 // KeyVault Secret Names
 //param secret_AzureWebJobsStorageName string = 'AzureWebJobsStorage'
-param KeyVault_ClientIdName string = 'ClientId'
-param KeyVault_SubscriptionKeyName string = 'SubscriptionKey'
+param KeyVault_MapsClientIdName string = 'MapsClientId'
+param KeyVault_MapsSubscriptionKeyName string = '<apsSubscriptionKey'
 
 // Tags
 var defaultTags = {
@@ -117,7 +117,7 @@ module functionappmod 'funcapp.bicep' = {
     functionAppServicePlanName: functionAppServicePlanName
     functionAppName: functionAppName
     defaultTags: defaultTags
-    storageAccountName: storageAccountName
+    //storageAccountName: storageAccountName
   }
   dependsOn:  [
     appinsightsmod
@@ -153,11 +153,11 @@ module configsettingsmod './configsettings.bicep' = {
   name: 'configSettings'
   params: {
     keyvaultName: keyvaultName
-    KeyVault_ClientIdValue: azuremapsmod.outputs.out_AzureMapsClientId
-    KeyVault_ClientIdName: KeyVault_ClientIdName
+    KeyVault_MapsClientIdValue: azuremapsmod.outputs.out_AzureMapsClientId
+    KeyVault_MapsClientIdName: KeyVault_MapsClientIdName
     tenant: subscription().tenantId
     azuremapname: azuremapname
-    KeyVault_SubscriptionKeyName: KeyVault_SubscriptionKeyName
+    KeyVault_MapsSubscriptionKeyName: KeyVault_MapsSubscriptionKeyName
     funcAppServiceprincipalId: functionappmod.outputs.out_funcAppServiceprincipalId
     appInsightsInstrumentationKey: appinsightsmod.outputs.out_appInsightsInstrumentationKey
     appInsightsConnectionString: appinsightsmod.outputs.out_appInsightsConnectionString

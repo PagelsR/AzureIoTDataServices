@@ -9,12 +9,12 @@ param azuremapname string
 param appInsightsInstrumentationKey string
 param appInsightsConnectionString string
 
-param KeyVault_ClientIdName string
+param KeyVault_MapsClientIdName string
 
 @secure()
-param KeyVault_ClientIdValue string
+param KeyVault_MapsClientIdValue string
 
-param KeyVault_SubscriptionKeyName string
+param KeyVault_MapsSubscriptionKeyName string
 
 @secure()
 param AzObjectIdPagels string
@@ -95,10 +95,10 @@ resource keyvaultaccessmod 'Microsoft.KeyVault/vaults/accessPolicies@2022-07-01'
 
 // Create KeyVault Secrets
 resource secret1 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
-  name: KeyVault_ClientIdName
+  name: KeyVault_MapsClientIdName
   parent: existing_keyvault
   properties: {
-    value: KeyVault_ClientIdValue
+    value: KeyVault_MapsClientIdValue
   }
 }
 
@@ -110,7 +110,7 @@ var AzureMapsSubscriptionKeyString = existing_azuremaps.listKeys().primaryKey
 
 // Create KeyVault Secrets
 resource secret2 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
-  name: KeyVault_SubscriptionKeyName
+  name: KeyVault_MapsSubscriptionKeyName
   parent: existing_keyvault
   properties: {
     value: AzureMapsSubscriptionKeyString
