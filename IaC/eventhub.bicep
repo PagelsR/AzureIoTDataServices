@@ -91,10 +91,15 @@ resource eventHubName_hubwaytelemetry_hubwaycg 'Microsoft.EventHub/namespaces/ev
 
 
 // Find endpoint of policy
-var eventHubEndpoint = '${eventHubName_resource.id}/AuthorizationRules/${eventHubName_hubwaytelemetry_eventHubNamespaceName.name}'
+//var eventHubEndpoint = '${eventHubName_resource.id}/AuthorizationRules/${eventHubName_hubwaytelemetry_eventHubNamespaceName.name}'
 
 // Save primary connections string
-var serviceBusConnectionString = listKeys(eventHubEndpoint, eventHubName_resource.apiVersion).primaryConnectionString
+//var serviceBusConnectionString = listKeys(eventHubEndpoint, eventHubName_resource.apiVersion).primaryConnectionString
 
 // Pass as output and saved in Key Vault
-output out_servicebusConnectionString string = serviceBusConnectionString
+//output out_servicebusConnectionString string = serviceBusConnectionString
+
+// Find endpoint of policy
+var eventHubEndpointPrimary = eventHubName_hubwaytelemetry_eventHubNamespaceName.listKeys().primaryConnectionString
+
+output out_eventHubEndpointPrimary string = eventHubEndpointPrimary
