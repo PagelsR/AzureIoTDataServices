@@ -13,6 +13,9 @@ on:
   workflow_dispatch:
 
 env:
+  buildConfiguration: 'Release'
+  buildPlatform: 'Any CPU'
+  dotnet_version: '6.x.x'
   Azure_Resource_GroupName: 'rg-PagelsR-IoTDataServices-v3'
   Azure_Resource_GroupLocation: 'eastus'
   
@@ -26,6 +29,24 @@ jobs:
     name: Build Application
     steps:
     - uses: actions/checkout@v3
+
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: ${{ env.dotnet_version }}
+
+      # Run dotnet build and publish
+    - name: dotnet build unit test and publish
+      run: |
+        dotnet restore
+        dotnet build IoTDataServices.FuncApp/FuncApp.csproj --configuration ${{ env.buildConfiguration }} --no-restore
+        dotnet publish IoTDataServices.FuncApp/FuncApp.csproj --configuration ${{ env.buildConfiguration }} -o './functionapp'
+
+    - name: Upload Build Artifacts-FunctionApp
+      uses: actions/upload-artifact@v2
+      with:
+        name: MercuryHealth.FunctionApp
+        path: ${{ github.workspace }}/functionapp
 
     - name: Upload Infrastucture Files
       uses: actions/upload-artifact@v3
