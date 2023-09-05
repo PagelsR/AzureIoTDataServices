@@ -109,7 +109,7 @@ resource storageAccountBlob_resource 'Microsoft.Storage/storageAccounts/blobServ
 
 // }
 
-resource IoTHub 'Microsoft.Devices/IotHubs@2022-11-15-preview' = {
+resource IoTHub 'Microsoft.Devices/IotHubs@2022-04-30-preview' = {
   name: iotHubName
   location: location
   tags: defaultTags

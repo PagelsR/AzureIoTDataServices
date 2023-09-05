@@ -17,6 +17,9 @@ param KeyVault_MapsClientIdValue string
 param KeyVault_MapsSubscriptionKeyName string
 
 @secure()
+param KeyVault_KeyVault_MapsSubscriptionKeyValue string
+
+@secure()
 param AzObjectIdPagels string
 
 @secure()
@@ -102,18 +105,12 @@ resource secret1 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
   }
 }
 
-// Reference Existing resource
-resource existing_azuremaps 'Microsoft.Maps/accounts@2021-12-01-preview' existing = {
-  name: azuremapname
-}
-var AzureMapsSubscriptionKeyString = existing_azuremaps.listKeys().primaryKey
-
 // Create KeyVault Secrets
 resource secret2 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
   name: KeyVault_MapsSubscriptionKeyName
   parent: existing_keyvault
   properties: {
-    value: AzureMapsSubscriptionKeyString
+    value: KeyVault_KeyVault_MapsSubscriptionKeyValue
   }
 }
 
