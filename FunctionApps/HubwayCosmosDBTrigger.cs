@@ -3,7 +3,6 @@ using Microsoft.Azure.Documents;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
-
 using System.Threading.Tasks;
 using System.Net.Http;
 using System.Runtime.Serialization;
@@ -15,6 +14,8 @@ using System.Reflection.Metadata;
 
 namespace FunctionApps
 {
+    private static string AzureMapsSubscriptionKey = System.Environment.GetEnvironmentVariable("Azure_Maps_Subscription_Key");
+
     public static class HubwayCosmosDBTrigger
     {
         [FunctionName("HubwayCosmosDBTrigger")]
@@ -45,7 +46,7 @@ namespace FunctionApps
                     {
 
                         //var http = new HttpClient();
-                        var url = string.Format("https://atlas.microsoft.com/search/address/reverse/json?subscription-key=<Subscription Key>&api-version=1.0&query=" + lat + "," + lon);
+                        var url = string.Format("https://atlas.microsoft.com/search/address/reverse/json?subscription-key=" + AzureMapsSubscriptionKey = "&api-version=1.0&query=" + lat + "," + lon);
 
                         log.LogInformation("Formatted Map URL: " + url);
 
