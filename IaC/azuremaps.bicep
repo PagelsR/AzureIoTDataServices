@@ -23,10 +23,8 @@ resource azuremaps 'Microsoft.Maps/accounts@2021-12-01-preview' = {
   }
 }
 
+var AzureMapsSubscriptionKeyString = azuremaps.listKeys().primaryKey
+
+output out_AzureMapsSubscriptionKeyString string = AzureMapsSubscriptionKeyString
 output out_AzureMapsAppKey string = azuremaps.id
 output out_AzureMapsClientId string = azuremaps.properties.uniqueId
-
-// var AzureMapsprimaryKey = azuremaps.listKeys().primaryKey
-
-// output out_AzureMapsprimaryKey string = AzureMapsprimaryKey
-// output out_AzureMapsClientId string = azuremaps.properties.uniqueId

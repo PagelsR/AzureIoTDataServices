@@ -4,6 +4,7 @@ param functionAppName string
 param KeyVault_AzureWebJobsStorageName string
 param KeyVault_Shared_Access_Key_EVENTHUBName string
 param KeyVault_Shared_Access_Key_DOCUMENTDBName string
+param KeyVault_Azure_Maps_Subscription_KeyName string
 
 @secure()
 param KeyVault_AzureWebJobsStorageValue string
@@ -13,6 +14,9 @@ param KeyVault_Shared_Access_Key_EVENTHUBValue string
 
 @secure()
 param KeyVault_Shared_Access_Key_DOCUMENTDBValue string
+
+@secure()
+param KeyVault_Azure_Maps_Subscription_KeyValue string
 
 //param functionAppName string
 // param secret_AzureWebJobsStorageName string
@@ -165,6 +169,15 @@ resource secret5 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
     value: KeyVault_Shared_Access_Key_DOCUMENTDBValue
   }
 }
+// create secret for Func App
+resource secret6 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
+  name: KeyVault_Azure_Maps_Subscription_KeyName
+  parent: existing_keyvault
+  properties: {
+    contentType: 'text/plain'
+    value: KeyVault_Azure_Maps_Subscription_KeyValue
+  }
+}
 
 // Reference Existing resource
 resource existing_funcAppService 'Microsoft.Web/sites@2022-09-01' existing = {
@@ -177,9 +190,9 @@ resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2022-09-01' = {
   parent: existing_funcAppService
   properties: {
     AzureWebJobsStorage: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_AzureWebJobsStorageName})'
-    //WebsiteContentAzureFileConnectionString: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_WebsiteContentAzureFileConnectionStringName})'
     Shared_Access_Key_EVENTHUB: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_Shared_Access_Key_EVENTHUBName})'
     Shared_Access_Key_DOCUMENTDB: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_Shared_Access_Key_DOCUMENTDBName})'
+    Azure_Maps_Subscription_Key: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_Azure_Maps_Subscription_KeyName})'
     APPINSIGHTS_INSTRUMENTATIONKEY: appInsightsInstrumentationKey
     APPLICATIONINSIGHTS_CONNECTION_STRING: appInsightsConnectionString
     FUNCTIONS_WORKER_RUNTIME: 'dotnet'
@@ -187,36 +200,17 @@ resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2022-09-01' = {
   }
   dependsOn: [
     secret3
-    //secret4
-    //secret5
+    secret4
+    secret5
+    secret6
   ]
 }
-
-// // Create KeyVault Secrets
-// resource secret1 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
-//   name: KeyVault_MapsClientIdName
-//   parent: existing_keyvault
-//   properties: {
-//     value: KeyVault_MapsClientIdValue
-//   }
-// }
-
-// Create KeyVault Secrets
-// resource secret2 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
-//   name: KeyVault_MapsSubscriptionKeyName
-//   parent: existing_keyvault
-//   properties: {
-//     value: KeyVault_MapsSubscriptionKeyValue
-//   }
-// }
 
 // resource existing_iotHubName_resource 'Microsoft.Devices/IotHubs@2022-04-30-preview' existing = {
 
 // {
 
 // Add a route to IoT Hub to existing Event Hub Namespace 
-
-
 
 
 // resource iothub_addroute 'Microsoft.Devices/IoTHubs' = {

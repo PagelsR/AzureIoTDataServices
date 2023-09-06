@@ -33,6 +33,7 @@ param KeyVault_MapsSubscriptionKeyName string = 'MapsSubscriptionKey'
 param KeyVault_AzureWebJobsStorageName string = 'AzureWebJobsStorage'
 param KeyVault_Shared_Access_Key_EVENTHUBName string = 'SharedAccessKeyEVENTHUB'
 param KeyVault_Shared_Access_Key_DOCUMENTDBName string = 'SharedAccessKeyDOCUMENTDB'
+param KeyVault_Azure_Maps_Subscription_KeyName string = 'AzureMapsSubscriptionKey'
 
 // Tags
 var defaultTags = {
@@ -167,6 +168,8 @@ module configsettingsmod './configsettings.bicep' = {
     KeyVault_Shared_Access_Key_DOCUMENTDBValue: cosmosdbmod.outputs.out_CosmosDBConnectionString
     KeyVault_AzureWebJobsStorageName: KeyVault_AzureWebJobsStorageName
     KeyVault_AzureWebJobsStorageValue: functionappmod.outputs.out_AzureWebJobsStorage
+    KeyVault_Azure_Maps_Subscription_KeyName: KeyVault_Azure_Maps_Subscription_KeyName
+    KeyVault_Azure_Maps_Subscription_KeyValue: azuremapsmod.outputs.out_AzureMapsSubscriptionKeyString
     azuremapname: azuremapname
     funcAppServiceprincipalId: functionappmod.outputs.out_funcAppServiceprincipalId
     appInsightsInstrumentationKey: appinsightsmod.outputs.out_appInsightsInstrumentationKey
@@ -184,3 +187,4 @@ module configsettingsmod './configsettings.bicep' = {
 // Output Params used for IaC deployment in pipeline
 output out_azuremapname string = azuremapname
 output out_functionAppName string = functionAppName
+output out_iotHubName string = iotHubName

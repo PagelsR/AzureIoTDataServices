@@ -38,7 +38,7 @@ jobs:
       # Run dotnet build and publish
     - name: dotnet build unit test and publish
       run: |
-        dotnet build IoTDataServices.FuncApp/FuncApp.csproj --configuration ${{ env.buildConfiguration }} --output './functionapp'
+        dotnet build FunctionApps/FunctionApps.csproj --configuration ${{ env.buildConfiguration }} --output './FunctionApps'
 
     - name: Upload Build Artifacts-FunctionApp
       uses: actions/upload-artifact@v2
@@ -58,7 +58,8 @@ jobs:
     needs: Build_Application
     outputs:
       output_functionAppName: ${{ steps.Infra.outputs.out_functionAppName }}
-      
+      output_iotHubName: ${{ steps.Infra.outputs.out_iotHubName }}
+
     steps:
     - name: Login to Azure
       uses: azure/login@v1
@@ -101,8 +102,15 @@ jobs:
         deploymentMode: Incremental
         failOnStdErr: false
 
+    # Create a device
+    - name: Create a device
+      uses: Azure/CLI@v1
+      continue-on-error: true
+      with:
+        inlineScript: |
+          az iot hub device-identity create --device-id 'raspberrypi-detroit-002' --hub-name ${{ steps.Infra.outputs.output_iotHubName }}
+
     - name: Ensure Resource Group is Locked
-      #if: contains(github.event_name, 'push')
       uses: Azure/CLI@v1
       continue-on-error: true
       with:
@@ -138,8 +146,8 @@ jobs:
       uses: actions/download-artifact@v2
       continue-on-error: false
       with:
-        name: IoTDataServices.FuncApp
-        path: ${{ github.workspace }}/IoTDataServices.FuncApp
+        name: FunctionApps
+        path: ${{ github.workspace }}/FunctionApps
 
     # Deploy Function Application
     - name: 'Deploy Function Application'
@@ -147,7 +155,7 @@ jobs:
       with:
         app-name: ${{ needs.Deploy_Infrastructure.outputs.output_functionAppName }}
         slot-name: 'production'
-        package: './IoTDataServices.FuncApp'
+        package: './FunctionApps'
       
     - name: Ensure Resource Group is Locked
       uses: Azure/CLI@v1
