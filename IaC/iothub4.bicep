@@ -1,13 +1,19 @@
 param location string
 param iotHubName string
 param defaultTags object
+//param AzureWebJobsStorageName string
 
-var storageAccountName = '${toLower('storiot')}${uniqueString(resourceGroup().id)}'
+var storageAccountForIoTName = '${toLower('storiot')}${uniqueString(resourceGroup().id)}'
 var storageEndpoint = 'HubwayTelemetryRoute'
-var storageContainerName = '${toLower('stor')}results'
+var storageContainerName = '${toLower('storiot')}results'
+
+// Storage Account
+// resource storageAccount 'Microsoft.Storage/storageAccounts@2021-09-01' existing = {
+//   name: storageAccountName
+// }
 
 resource storageAccount_resource 'Microsoft.Storage/storageAccounts@2021-08-01' = {
-  name: storageAccountName
+  name: storageAccountForIoTName
   location: location
   tags: defaultTags
   sku: {
@@ -17,7 +23,7 @@ resource storageAccount_resource 'Microsoft.Storage/storageAccounts@2021-08-01' 
 }
 
 resource container_resource 'Microsoft.Storage/storageAccounts/blobServices/containers@2021-08-01' = {
-  name: '${storageAccountName}/default/${storageContainerName}'
+  name: '${storageAccountForIoTName}/default/${storageContainerName}'
   properties: {
     publicAccess: 'None'
   }
@@ -60,7 +66,7 @@ resource IoTHub 'Microsoft.Devices/IotHubs@2021-07-02' = {
         // ]
         storageContainers: [
           {
-            connectionString: 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount_resource.listKeys().keys[0].value}'
+            connectionString: 'DefaultEndpointsProtocol=https;AccountName=${storageAccountForIoTName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount_resource.listKeys().keys[0].value}'
             containerName: storageContainerName
             fileNameFormat: '{iothub}/{partition}/{YYYY}/{MM}/{DD}/{HH}/{mm}'
             batchFrequencyInSeconds: 100
