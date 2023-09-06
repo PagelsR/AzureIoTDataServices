@@ -102,7 +102,15 @@ jobs:
         deploymentMode: Incremental
         failOnStdErr: false
 
-    # Create a device
+    # Install Azure IoT Extension
+    - name: Create a device
+      uses: Azure/CLI@v1
+      continue-on-error: true
+      with:
+        inlineScript: |
+          az extension add --name azure-iot
+
+    # Create an IoT device
     - name: Create a device
       uses: Azure/CLI@v1
       continue-on-error: true
@@ -110,12 +118,13 @@ jobs:
         inlineScript: |
           az iot hub device-identity create -n ${{ steps.Infra.outputs.output_iotHubName }} -d 'raspberrypi-detroit-002' --ee
 
-  # az iot hub device-identity connection-string show --device-id
-  # [--auth-type {key, login}]
-  # [--hub-name]
-  # [--key-type {primary, secondary}]
-  # [--login]
-  # [--resource-group]
+    # Store the connection string of IoT device
+    # az iot hub device-identity connection-string show --device-id
+    # [--auth-type {key, login}]
+    # [--hub-name]
+    # [--key-type {primary, secondary}]
+    # [--login]
+    # [--resource-group]
 
     - name: Ensure Resource Group is Locked
       uses: Azure/CLI@v1
