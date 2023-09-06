@@ -2,7 +2,7 @@ param location string
 param iotHubName string
 param defaultTags object
 
-var storageAccountName = '${toLower('stor')}${uniqueString(resourceGroup().id)}'
+var storageAccountName = '${toLower('storiot')}${uniqueString(resourceGroup().id)}'
 var storageEndpoint = 'HubwayTelemetryRoute'
 var storageContainerName = '${toLower('stor')}results'
 
