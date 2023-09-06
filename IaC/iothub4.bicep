@@ -111,6 +111,12 @@ resource IoTHub 'Microsoft.Devices/IotHubs@2021-07-02' = {
   }
 }
 
+// resource iotDevice 'Microsoft.Devices/IotHubs@2022-11-15-preview' = {
+//   parent: IoTHub
+//   name: 'myIoTDevice'
+// }
+
+
 // resource storageAccount_resource 'Microsoft.Storage/storageAccounts@2021-08-01' = {
 //   name: storageAccountName
 //   tags: defaultTags
