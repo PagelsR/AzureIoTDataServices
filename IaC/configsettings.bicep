@@ -5,6 +5,7 @@ param KeyVault_AzureWebJobsStorageName string
 param KeyVault_Shared_Access_Key_EVENTHUBName string
 param KeyVault_Shared_Access_Key_DOCUMENTDBName string
 param KeyVault_Azure_Maps_Subscription_KeyName string
+param KeyVault_WebsiteContentAzureFileConnectionStringName string
 
 @secure()
 param KeyVault_AzureWebJobsStorageValue string
@@ -153,6 +154,15 @@ resource secret3 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
 }
 // create secret for Func App
 resource secret4 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
+  name: KeyVault_WebsiteContentAzureFileConnectionStringName
+  parent: existing_keyvault
+  properties: {
+    contentType: 'text/plain'
+    value: KeyVault_AzureWebJobsStorageValue
+  }
+}
+// create secret for Func App
+resource secret5 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
   name: KeyVault_Shared_Access_Key_EVENTHUBName
   parent: existing_keyvault
   properties: {
@@ -161,7 +171,7 @@ resource secret4 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
   }
 }
 // create secret for Func App
-resource secret5 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
+resource secret6 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
   name: KeyVault_Shared_Access_Key_DOCUMENTDBName
   parent: existing_keyvault
   properties: {
@@ -170,7 +180,7 @@ resource secret5 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
   }
 }
 // create secret for Func App
-resource secret6 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
+resource secret7 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
   name: KeyVault_Azure_Maps_Subscription_KeyName
   parent: existing_keyvault
   properties: {
@@ -190,6 +200,7 @@ resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2022-09-01' = {
   parent: existing_funcAppService
   properties: {
     AzureWebJobsStorage: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_AzureWebJobsStorageName})'
+    WebsiteContentAzureFileConnectionString: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_WebsiteContentAzureFileConnectionStringName})'
     Shared_Access_Key_EVENTHUB: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_Shared_Access_Key_EVENTHUBName})'
     Shared_Access_Key_DOCUMENTDB: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_Shared_Access_Key_DOCUMENTDBName})'
     Azure_Maps_Subscription_Key: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_Azure_Maps_Subscription_KeyName})'
@@ -200,9 +211,9 @@ resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2022-09-01' = {
   }
   dependsOn: [
     secret3
-    secret4
     secret5
     secret6
+    secret7
   ]
 }
 

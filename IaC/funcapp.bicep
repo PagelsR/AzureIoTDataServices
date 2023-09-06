@@ -14,7 +14,7 @@ param defaultTags object
 // param defaultTags object
 
 // remove dashes for storage account name
-var storageAccountName = '${toLower('storfunc')}${uniqueString(resourceGroup().id)}'
+var storageAccountName = 'sta${uniqueString(resourceGroup().id)}'
 
 // Storage Account
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-09-01' = {
