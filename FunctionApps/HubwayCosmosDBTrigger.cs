@@ -14,10 +14,10 @@ using System.Reflection.Metadata;
 
 namespace FunctionApps
 {
-    private static string AzureMapsSubscriptionKey = System.Environment.GetEnvironmentVariable("Azure_Maps_Subscription_Key");
-
     public static class HubwayCosmosDBTrigger
     {
+        private static string AzureMapsSubscriptionKey = System.Environment.GetEnvironmentVariable("Azure_Maps_Subscription_Key");
+
         [FunctionName("HubwayCosmosDBTrigger")]
         public static async Task Run([CosmosDBTrigger(
             databaseName: "Hubway",

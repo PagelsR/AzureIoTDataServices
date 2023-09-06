@@ -43,8 +43,8 @@ jobs:
     - name: Upload Build Artifacts-FunctionApp
       uses: actions/upload-artifact@v2
       with:
-        name: IoTDataServices.FuncApp
-        path: ${{ github.workspace }}/functionapp
+        name: FunctionApps
+        path: ${{ github.workspace }}/FunctionApps
 
     - name: Upload Infrastucture Files
       uses: actions/upload-artifact@v3
