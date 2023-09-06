@@ -1,13 +1,11 @@
 ﻿using System;
 using Microsoft.Azure.Devices.Client;
-using Newtonsoft.Json;
 using System.Text;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 using System.IO;
-using System.Globalization;
+using Microsoft.Extensions.Configuration;
 using ChoETL;
-//using Sense.RTIMU;
+using System.Reflection;
 
 namespace simulated_device
 {
@@ -15,8 +13,23 @@ namespace simulated_device
     {
         private static DeviceClient s_deviceClient;
 
-        // The device connection string to authenticate the device with your IoT hub.
-        private readonly static string s_connectionString = "<Your IoT Hub Connnection String>";
+        private static void Main(string[] args)
+        {
+            Console.WriteLine("Boston Hubway Data - Simulated device. Ctrl-C to exit.\n");
+
+            IConfigurationRoot configuration = new ConfigurationBuilder()
+                .SetBasePath(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location))
+                .AddJsonFile("local.settings.json", optional: true, reloadOnChange: true)
+                .Build();
+
+            // Access the connection string
+            string s_connectionString = configuration.GetConnectionString("Shared_IoT_Hub_ConnnectionString");
+
+            // Connect to the IoT hub using the MQTT protocol
+            s_deviceClient = DeviceClient.CreateFromConnectionString(s_connectionString, TransportType.Mqtt);
+            SendDeviceToCloudMessagesAsync();
+            Console.ReadLine();
+        }
 
         // Async method to send simulated telemetry
         private static async void SendDeviceToCloudMessagesAsync()
@@ -32,7 +45,6 @@ namespace simulated_device
             while ((rec = reader.Read()) != null)
             {
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(rec);
-                //Console.WriteLine(json);
 
                 var message = new Message(Encoding.ASCII.GetBytes(json));
 
@@ -44,18 +56,9 @@ namespace simulated_device
                 await s_deviceClient.SendEventAsync(message);
                 Console.WriteLine("{0} > Sending message: {1}", DateTime.Now, json);                
 
-                await Task.Delay(1000);
+                await Task.Delay(500);
             }
         }
 
-        private static void Main(string[] args)
-        {
-            Console.WriteLine("Boston Hubway Data - Simulated device. Ctrl-C to exit.\n");
-
-            // Connect to the IoT hub using the MQTT protocol
-            s_deviceClient = DeviceClient.CreateFromConnectionString(s_connectionString, TransportType.Mqtt);
-            SendDeviceToCloudMessagesAsync();
-            Console.ReadLine();
-        }
     }
 }

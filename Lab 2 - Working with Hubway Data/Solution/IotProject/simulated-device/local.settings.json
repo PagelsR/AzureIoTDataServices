@@ -1,0 +1,5 @@
+{
+  "ConnectionStrings": {
+    "Shared_IoT_Hub_ConnnectionString": "HostName=rg-PagelsR-IoTDataServices-iothub.azure-devices.net;DeviceId=raspberrypi-detroit-001;SharedAccessKey=4ect89Z2kQKMpFxuA+p3srkJUp1GK/L7ir0Y5h72nvY="
+  }
+}

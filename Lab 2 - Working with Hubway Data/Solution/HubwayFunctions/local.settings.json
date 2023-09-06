@@ -1,10 +1,10 @@
 {
   "IsEncrypted": false,
   "Values": {
-    "AzureWebJobsStorage": "DefaultEndpointsProtocol=https;AccountName=<Account Name>;AccountKey=<Account Key>",
+    "AzureWebJobsStorage": "DefaultEndpointsProtocol=https;AccountName=pagelsrdatastorage;AccountKey=XDoMnlupVkSGVKuEvR86w7vaC/EYOBVc9Ov/T4ETehl2VySJIWb8r9zwfxhYE3HsbODPxsIhGoJ7+AStU5aSaQ==;EndpointSuffix=core.windows.net",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet",
-    "Shared_Access_Key_EVENTHUB": "Endpoint=<Endpoint>;SharedAccessKeyName=<Shared Access Key Name>;SharedAccessKey=<Shared Access Key>",
-    "Shared_Access_Key_DOCUMENTDB": "AccountEndpoint=<End Point>;AccountKey=<Account Key>",
+    "Shared_Access_Key_EVENTHUB": "Endpoint=sb://rg-pagelsr-iotdataservices-eventhub.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=KGyrVp/KOAoLXqpfCJrXectKGdutucQuA+AEhK+yvf0=",
+    "Shared_Access_Key_DOCUMENTDB": "AccountEndpoint=https://pagelsr-iotdataservices-cosmosdb.documents.azure.com:443/;AccountKey=HmxVItGYnOVUd408fKhM7GVe27xx4DqPcSQNhjLcEaS8m3hVZxfnC3icJG8JDqUQJ8P9CTVeZSNpACDb8uBi7Q==;",
     "service": "<Connection String>"
   }
 }
