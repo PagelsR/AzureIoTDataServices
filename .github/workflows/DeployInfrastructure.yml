@@ -108,7 +108,14 @@ jobs:
       continue-on-error: true
       with:
         inlineScript: |
-          az iot hub device-identity create -n ${{ steps.Infra.outputs.output_iotHubName }} -d 'raspberrypi-detroit-002'
+          az iot hub device-identity create -n ${{ steps.Infra.outputs.output_iotHubName }} -d 'raspberrypi-detroit-002' --ee
+
+  # az iot hub device-identity connection-string show --device-id
+  # [--auth-type {key, login}]
+  # [--hub-name]
+  # [--key-type {primary, secondary}]
+  # [--login]
+  # [--resource-group]
 
     - name: Ensure Resource Group is Locked
       uses: Azure/CLI@v1
