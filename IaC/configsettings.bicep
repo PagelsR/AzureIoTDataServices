@@ -200,7 +200,7 @@ resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2022-09-01' = {
   parent: existing_funcAppService
   properties: {
     AzureWebJobsStorage: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_AzureWebJobsStorageName})'
-    WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_WebsiteContentAzureFileConnectionStringName})'
+    WebsiteContentAzureFileConnectionString: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_WebsiteContentAzureFileConnectionStringName})'
     // AzureWebJobsStorage: KeyVault_AzureWebJobsStorageValue
     // WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: KeyVault_AzureWebJobsStorageValue
     Shared_Access_Key_EVENTHUB: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_Shared_Access_Key_EVENTHUBName})'
