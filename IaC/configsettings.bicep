@@ -199,10 +199,10 @@ resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2022-09-01' = {
   kind: 'string'
   parent: existing_funcAppService
   properties: {
-    // AzureWebJobsStorage: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_AzureWebJobsStorageName})'
-    // WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_WebsiteContentAzureFileConnectionStringName})'
-    AzureWebJobsStorage: KeyVault_AzureWebJobsStorageValue
-    WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: KeyVault_AzureWebJobsStorageValue
+    AzureWebJobsStorage: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_AzureWebJobsStorageName})'
+    WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_WebsiteContentAzureFileConnectionStringName})'
+    // AzureWebJobsStorage: KeyVault_AzureWebJobsStorageValue
+    // WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: KeyVault_AzureWebJobsStorageValue
     Shared_Access_Key_EVENTHUB: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_Shared_Access_Key_EVENTHUBName})'
     Shared_Access_Key_DOCUMENTDB: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_Shared_Access_Key_DOCUMENTDBName})'
     Azure_Maps_Subscription_Key: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_Azure_Maps_Subscription_KeyName})'
