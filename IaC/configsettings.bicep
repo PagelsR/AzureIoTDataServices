@@ -209,6 +209,8 @@ resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2022-09-01' = {
     APPLICATIONINSIGHTS_CONNECTION_STRING: appInsightsConnectionString
     FUNCTIONS_WORKER_RUNTIME: 'dotnet'
     FUNCTIONS_EXTENSION_VERSION: '~4'
+    // WEBSITE_CONTENTAZUREFILECONNECTIONSTRING
+    // WEBSITE_CONTENTSHARE
   }
   dependsOn: [
     secret3
