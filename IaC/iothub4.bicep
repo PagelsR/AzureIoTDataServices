@@ -117,6 +117,22 @@ resource IoTHub 'Microsoft.Devices/IotHubs@2021-07-02' = {
   }
 }
 
+var deviceId = 'raspberrypi-detroit-001'
+
+resource iotDevice 'Microsoft.Devices/IotHubs/devices@2021-03-22' = {
+  name: deviceId
+  properties: {
+    deviceId: deviceId
+  }
+  dependsOn: [
+    IoTHub
+  ]
+}
+
+//var deviceConnectionString = listKeys(iotDevice.id, IoTHub.id, IoTHub.apiVersion).primaryConnectionString
+var deviceConnectionString = iotDevice.listConnectionStrings().connectionStrings[0].connectionString
+output out_deviceConnectionString string = deviceConnectionString
+
 // resource iotDevice 'Microsoft.Devices/IotHubs@2022-11-15-preview' = {
 //   parent: IoTHub
 //   name: 'myIoTDevice'
