@@ -79,7 +79,6 @@ module eventhubmod './eventhub.bicep' = {
     defaultTags: defaultTags
     eventHubName: eventHubName
     eventHubNamespaceName: eventHubNamespaceName
-
   }
 }
 
@@ -101,6 +100,9 @@ module storageaccountmod './storageaccount.bicep' = {
     //defaultTags: defaultTags
     storageAccountName: storageAccountName
   }
+  dependsOn:  [
+    iotHubmod
+  ]
 }
 
 // Create Application Insights
@@ -184,6 +186,7 @@ module configsettingsmod './configsettings.bicep' = {
      keyvaultmod
      functionappmod
      azuremapsmod
+     storageaccountmod
    ]
  }
 

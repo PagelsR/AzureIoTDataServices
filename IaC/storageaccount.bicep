@@ -46,7 +46,7 @@ resource existing_storage_account 'Microsoft.Storage/storageAccounts@2023-01-01'
 //   }
 // }
 
-resource dataStorageName_default 'Microsoft.Storage/storageAccounts/blobServices@2023-01-01' = {
+resource dataStorage_Blob 'Microsoft.Storage/storageAccounts/blobServices@2023-01-01' = {
   parent: existing_storage_account //dataStorageName_resource
   name: 'default'
   properties: {
@@ -72,7 +72,7 @@ resource dataStorageName_default 'Microsoft.Storage/storageAccounts/blobServices
   }
 }
 
-resource Microsoft_Storage_storageAccounts_fileServices_dataStorageName_default 'Microsoft.Storage/storageAccounts/fileServices@2023-01-01' = {
+resource fileServices_dataStorage_Blob 'Microsoft.Storage/storageAccounts/fileServices@2023-01-01' = {
   parent: existing_storage_account //dataStorageName_resource
   name: 'default'
   properties: {
@@ -90,7 +90,7 @@ resource Microsoft_Storage_storageAccounts_fileServices_dataStorageName_default 
   }
 }
 
-resource Microsoft_Storage_storageAccounts_queueServices_dataStorageName_default 'Microsoft.Storage/storageAccounts/queueServices@2023-01-01' = {
+resource queueServices_dataStorage_Blob 'Microsoft.Storage/storageAccounts/queueServices@2023-01-01' = {
   parent: existing_storage_account //dataStorageName_resource
   name: 'default'
   properties: {
@@ -100,7 +100,7 @@ resource Microsoft_Storage_storageAccounts_queueServices_dataStorageName_default
   }
 }
 
-resource Microsoft_Storage_storageAccounts_tableServices_dataStorageName_default 'Microsoft.Storage/storageAccounts/tableServices@2023-01-01' = {
+resource tableServices_dataStorage_Blob 'Microsoft.Storage/storageAccounts/tableServices@2023-01-01' = {
   parent: existing_storage_account //dataStorageName_resource
   name: 'default'
   properties: {
@@ -110,8 +110,8 @@ resource Microsoft_Storage_storageAccounts_tableServices_dataStorageName_default
   }
 }
 
-resource dataStorageName_default_web 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-01-01' = {
-  parent: dataStorageName_default
+resource dataStorage_Blob_web 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-01-01' = {
+  parent: dataStorage_Blob
   name: '$web'
   properties: {
     defaultEncryptionScope: '$account-encryption-key'
@@ -124,8 +124,8 @@ resource dataStorageName_default_web 'Microsoft.Storage/storageAccounts/blobServ
 
 }
 
-resource dataStorageName_default_boston_hubway_data 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-01-01' = {
-  parent: dataStorageName_default
+resource dataStorage_Blob_boston_hubway_data 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-01-01' = {
+  parent: dataStorage_Blob
   name: 'boston-hubway-data'
   properties: {
     defaultEncryptionScope: '$account-encryption-key'
@@ -139,15 +139,11 @@ resource dataStorageName_default_boston_hubway_data 'Microsoft.Storage/storageAc
 }
 
 // output Storage Account Access Keys
-//output storageAccountKey1 dataStorageName_resource.listKeys().keys[0].value
-var storageAccountKey1 = existing_storage_account.listKeys().keys[0].value //dataStorageName_resource.listKeys().keys[0].value
+var storageAccountKey1 = existing_storage_account.listKeys().keys[0].value
 output out_storageAccountKey1 string = storageAccountKey1
 
-// var configStoreConnectionString = dataStorageName_resource.listKeys().keys[0].connectionString
-// output out_configStoreConnectionString string = configStoreConnectionString
-
 // Save primary connections string
-var storageAccountconnectionString = existing_storage_account.listKeys().keys[1].value //dataStorageName_resource.listKeys().keys[1].value
+var storageAccountconnectionString = existing_storage_account.listKeys().keys[1].value
 
 // Pass as output and saved in Key Vault
 output out_storageAccountconnectionString string = storageAccountconnectionString
