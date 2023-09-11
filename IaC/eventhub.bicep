@@ -101,6 +101,17 @@ resource eventHubName_hubwaytelemetry_hubwaycg 'Microsoft.EventHub/namespaces/ev
 
 // Find endpoint of policy
 //var eventHubEndpointPrimary = eventHubName_hubwaytelemetry_eventHubNamespaceName.listKeys().primaryConnectionString
-var eventHubEndpointPrimary = eventHubName_resource.listKeys().primaryConnectionString
 
-output out_eventHubEndpointPrimary string = eventHubEndpointPrimary
+// Save primary connections string of RootManageSharedAccessKey
+
+var eventHubNamespaceConnectionString = listKeys(eventHubName_RootManageSharedAccessKey.id, eventHubName_RootManageSharedAccessKey.apiVersion).primaryConnectionString
+
+// Output our variables
+
+output eventHubNamespaceConnectionString string = eventHubNamespaceConnectionString
+
+// var eventHubEndpointPrimary = eventHubName_resource.listKeys().primaryConnectionString
+
+// var randy = eventHubName_resource.listKeys(eventHubName_resource.id, 'RootManageSharedAccessKey').primaryConnectionString
+
+output out_eventHubEndpointPrimary string = eventHubNamespaceConnectionString
