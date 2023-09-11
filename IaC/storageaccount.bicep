@@ -47,7 +47,7 @@ resource existing_storage_account 'Microsoft.Storage/storageAccounts@2023-01-01'
 // }
 
 resource dataStorage_Blob 'Microsoft.Storage/storageAccounts/blobServices@2023-01-01' = {
-  parent: existing_storage_account //dataStorageName_resource
+  parent: existing_storage_account
   name: 'default'
   properties: {
     changeFeed: {
@@ -73,7 +73,7 @@ resource dataStorage_Blob 'Microsoft.Storage/storageAccounts/blobServices@2023-0
 }
 
 resource fileServices_dataStorage_Blob 'Microsoft.Storage/storageAccounts/fileServices@2023-01-01' = {
-  parent: existing_storage_account //dataStorageName_resource
+  parent: existing_storage_account
   name: 'default'
   properties: {
     protocolSettings: {
@@ -91,7 +91,7 @@ resource fileServices_dataStorage_Blob 'Microsoft.Storage/storageAccounts/fileSe
 }
 
 resource queueServices_dataStorage_Blob 'Microsoft.Storage/storageAccounts/queueServices@2023-01-01' = {
-  parent: existing_storage_account //dataStorageName_resource
+  parent: existing_storage_account
   name: 'default'
   properties: {
     cors: {
@@ -101,7 +101,7 @@ resource queueServices_dataStorage_Blob 'Microsoft.Storage/storageAccounts/queue
 }
 
 resource tableServices_dataStorage_Blob 'Microsoft.Storage/storageAccounts/tableServices@2023-01-01' = {
-  parent: existing_storage_account //dataStorageName_resource
+  parent: existing_storage_account
   name: 'default'
   properties: {
     cors: {

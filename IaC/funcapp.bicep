@@ -15,9 +15,39 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-01-01' = {
   }
   tags: defaultTags
   kind: 'StorageV2'
+  // properties: {
+  //   supportsHttpsTrafficOnly: true
+  //   allowBlobPublicAccess: false
+  //   accessTier: 'Hot'
+  // }
   properties: {
-    supportsHttpsTrafficOnly: true
+    dnsEndpointType: 'Standard'
+    defaultToOAuthAuthentication: false
+    publicNetworkAccess: 'Enabled'
+    allowCrossTenantReplication: false
+    minimumTlsVersion: 'TLS1_2'
     allowBlobPublicAccess: false
+    allowSharedKeyAccess: true
+    networkAcls: {
+      bypass: 'AzureServices'
+      virtualNetworkRules: []
+      ipRules: []
+      defaultAction: 'Allow'
+    }
+    supportsHttpsTrafficOnly: true
+    encryption: {
+      services: {
+        file: {
+          keyType: 'Account'
+          enabled: true
+        }
+        blob: {
+          keyType: 'Account'
+          enabled: true
+        }
+      }
+      keySource: 'Microsoft.Storage'
+    }
     accessTier: 'Hot'
   }
 }
