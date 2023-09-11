@@ -1,20 +1,10 @@
 // The following will create an Azure Function app on
 // a consumption plan, along with a storage account
-// The following will create an Azure Function app on
-// a consumption plan, along with a storage account
 param location string = resourceGroup().location
 param functionAppName string
 param functionAppServicePlanName string
 param defaultTags object
 param storageAccountName string
-
-// param location string = resourceGroup().location
-// param functionAppName string
-// param functionAppServiceName string
-// param defaultTags object
-
-// remove dashes for storage account name
-// var storageAccountName = 'stafunc${uniqueString(resourceGroup().id)}'
 
 // Storage Account
 resource storageAccount 'Microsoft.Storage/storageAccounts@2023-01-01' = {
