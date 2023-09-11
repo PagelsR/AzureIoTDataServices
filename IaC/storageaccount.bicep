@@ -72,23 +72,23 @@ resource dataStorage_Blob 'Microsoft.Storage/storageAccounts/blobServices@2023-0
   }
 }
 
-resource fileServices_dataStorage_Blob 'Microsoft.Storage/storageAccounts/fileServices@2023-01-01' = {
-  parent: existing_storage_account
-  name: 'default'
-  properties: {
-    protocolSettings: {
-      smb: {
-      }
-    }
-    cors: {
-      corsRules: []
-    }
-    shareDeleteRetentionPolicy: {
-      enabled: true
-      days: 7
-    }
-  }
-}
+// resource fileServices_dataStorage_Blob 'Microsoft.Storage/storageAccounts/fileServices@2023-01-01' = {
+//   parent: existing_storage_account
+//   name: 'default'
+//   properties: {
+//     protocolSettings: {
+//       smb: {
+//       }
+//     }
+//     cors: {
+//       corsRules: []
+//     }
+//     shareDeleteRetentionPolicy: {
+//       enabled: true
+//       days: 7
+//     }
+//   }
+// }
 
 resource queueServices_dataStorage_Blob 'Microsoft.Storage/storageAccounts/queueServices@2023-01-01' = {
   parent: existing_storage_account
