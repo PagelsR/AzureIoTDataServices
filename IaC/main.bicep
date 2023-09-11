@@ -25,7 +25,7 @@ var cosmosDBName = 'cosmos-${uniqueString(resourceGroup().id)}'
 
 // remove dashes for storage account name
 //var storageAccountName = 'sta${uniqueString(resourceGroup().id)}'
-var storageAccountName = 'stafunc${uniqueString(resourceGroup().id)}'
+var storageAccountName = 'sta${uniqueString(resourceGroup().id)}'
 
 // KeyVault Secret Names
 // Note: Underscores Not allowed in KeyVault
@@ -94,14 +94,14 @@ module cosmosdbmod './cosmosdb.bicep' = {
 }
 
 // Create Storage Account
-// module storageaccountmod './storageaccount.bicep' = {
-//   name: 'storageaccountdeploy'
-//   params: {
-//     location: location
-//     defaultTags: defaultTags
-//     storageAccountName: storageAccountName
-//   }
-// }
+module storageaccountmod './storageaccount.bicep' = {
+  name: 'storageaccountdeploy'
+  params: {
+    //location: location
+    //defaultTags: defaultTags
+    storageAccountName: storageAccountName
+  }
+}
 
 // Create Application Insights
 module appinsightsmod 'appinsights.bicep' = {

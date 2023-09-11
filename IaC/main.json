@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.20.4.51522",
-      "templateHash": "17279029697799593472"
+      "templateHash": "6524989194586542673"
     }
   },
   "parameters": {
@@ -74,6 +74,7 @@
     "eventHubName": "[format('evh-{0}', uniqueString(resourceGroup().id))]",
     "eventHubNamespaceName": "[format('evhns-{0}', uniqueString(resourceGroup().id))]",
     "cosmosDBName": "[format('cosmos-{0}', uniqueString(resourceGroup().id))]",
+    "storageAccountName": "[format('sta{0}', uniqueString(resourceGroup().id))]",
     "defaultTags": {
       "App": "Azure IoT Data Services",
       "CostCenter": "[parameters('costCenter')]",
@@ -108,7 +109,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "4874127294653799872"
+              "templateHash": "8960589227654764443"
             }
           },
           "parameters": {
@@ -125,7 +126,8 @@
           "variables": {
             "storageAccountForIoTName": "[format('{0}{1}', toLower('storiot'), uniqueString(resourceGroup().id))]",
             "storageEndpoint": "HubwayTelemetryRoute",
-            "storageContainerName": "[format('{0}results', toLower('storiot'))]"
+            "storageContainerName": "[format('{0}results', toLower('storiot'))]",
+            "deviceId": "raspberrypi-detroit-005"
           },
           "resources": [
             {
@@ -223,8 +225,25 @@
               "dependsOn": [
                 "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountForIoTName'))]"
               ]
+            },
+            {
+              "type": "Microsoft.Devices/IotHubs/devices",
+              "apiVersion": "2021-03-22",
+              "name": "[variables('deviceId')]",
+              "properties": {
+                "deviceId": "[variables('deviceId')]"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Devices/IotHubs', parameters('iotHubName'))]"
+              ]
             }
-          ]
+          ],
+          "outputs": {
+            "out_deviceConnectionString": {
+              "type": "string",
+              "value": "[listConnectionStrings(resourceId('Microsoft.Devices/IotHubs/devices', split(variables('deviceId'), '/')[0], split(variables('deviceId'), '/')[1]), '2021-03-22').connectionStrings[0].connectionString]"
+            }
+          }
         }
       },
       "dependsOn": [
@@ -619,6 +638,145 @@
     {
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2022-09-01",
+      "name": "storageaccountdeploy",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "storageAccountName": {
+            "value": "[variables('storageAccountName')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.20.4.51522",
+              "templateHash": "5048438025776095578"
+            }
+          },
+          "parameters": {
+            "storageAccountName": {
+              "type": "string"
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Storage/storageAccounts/blobServices",
+              "apiVersion": "2023-01-01",
+              "name": "[format('{0}/{1}', parameters('storageAccountName'), 'default')]",
+              "properties": {
+                "changeFeed": {
+                  "enabled": false
+                },
+                "restorePolicy": {
+                  "enabled": false
+                },
+                "containerDeleteRetentionPolicy": {
+                  "enabled": true,
+                  "days": 7
+                },
+                "cors": {
+                  "corsRules": []
+                },
+                "deleteRetentionPolicy": {
+                  "allowPermanentDelete": false,
+                  "enabled": true,
+                  "days": 7
+                },
+                "isVersioningEnabled": false
+              }
+            },
+            {
+              "type": "Microsoft.Storage/storageAccounts/fileServices",
+              "apiVersion": "2023-01-01",
+              "name": "[format('{0}/{1}', parameters('storageAccountName'), 'default')]",
+              "properties": {
+                "protocolSettings": {
+                  "smb": {}
+                },
+                "cors": {
+                  "corsRules": []
+                },
+                "shareDeleteRetentionPolicy": {
+                  "enabled": true,
+                  "days": 7
+                }
+              }
+            },
+            {
+              "type": "Microsoft.Storage/storageAccounts/queueServices",
+              "apiVersion": "2023-01-01",
+              "name": "[format('{0}/{1}', parameters('storageAccountName'), 'default')]",
+              "properties": {
+                "cors": {
+                  "corsRules": []
+                }
+              }
+            },
+            {
+              "type": "Microsoft.Storage/storageAccounts/tableServices",
+              "apiVersion": "2023-01-01",
+              "name": "[format('{0}/{1}', parameters('storageAccountName'), 'default')]",
+              "properties": {
+                "cors": {
+                  "corsRules": []
+                }
+              }
+            },
+            {
+              "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+              "apiVersion": "2023-01-01",
+              "name": "[format('{0}/{1}/{2}', parameters('storageAccountName'), 'default', '$web')]",
+              "properties": {
+                "defaultEncryptionScope": "$account-encryption-key",
+                "denyEncryptionScopeOverride": false,
+                "publicAccess": "None",
+                "immutableStorageWithVersioning": {
+                  "enabled": false
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccountName'), 'default')]"
+              ]
+            },
+            {
+              "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+              "apiVersion": "2023-01-01",
+              "name": "[format('{0}/{1}/{2}', parameters('storageAccountName'), 'default', 'boston-hubway-data')]",
+              "properties": {
+                "defaultEncryptionScope": "$account-encryption-key",
+                "denyEncryptionScopeOverride": false,
+                "publicAccess": "None",
+                "immutableStorageWithVersioning": {
+                  "enabled": false
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccountName'), 'default')]"
+              ]
+            }
+          ],
+          "outputs": {
+            "out_storageAccountKey1": {
+              "type": "string",
+              "value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2023-01-01').keys[0].value]"
+            },
+            "out_storageAccountconnectionString": {
+              "type": "string",
+              "value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2023-01-01').keys[1].value]"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2022-09-01",
       "name": "appinsightsdeploy",
       "properties": {
         "expressionEvaluationOptions": {
@@ -793,6 +951,9 @@
           },
           "defaultTags": {
             "value": "[variables('defaultTags')]"
+          },
+          "storageAccountName": {
+            "value": "[variables('storageAccountName')]"
           }
         },
         "template": {
@@ -802,7 +963,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "11069922468239120247"
+              "templateHash": "4821266870672726068"
             }
           },
           "parameters": {
@@ -818,16 +979,16 @@
             },
             "defaultTags": {
               "type": "object"
+            },
+            "storageAccountName": {
+              "type": "string"
             }
-          },
-          "variables": {
-            "storageAccountName": "[format('sta{0}', uniqueString(resourceGroup().id))]"
           },
           "resources": [
             {
               "type": "Microsoft.Storage/storageAccounts",
-              "apiVersion": "2021-09-01",
-              "name": "[variables('storageAccountName')]",
+              "apiVersion": "2023-01-01",
+              "name": "[parameters('storageAccountName')]",
               "location": "[parameters('location')]",
               "sku": {
                 "name": "Standard_LRS"
@@ -843,7 +1004,7 @@
             {
               "type": "Microsoft.Storage/storageAccounts/blobServices",
               "apiVersion": "2021-09-01",
-              "name": "[format('{0}/{1}', variables('storageAccountName'), 'default')]",
+              "name": "[format('{0}/{1}', parameters('storageAccountName'), 'default')]",
               "properties": {
                 "cors": {
                   "corsRules": []
@@ -854,12 +1015,12 @@
                 }
               },
               "dependsOn": [
-                "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName'))]"
               ]
             },
             {
               "type": "Microsoft.Web/serverfarms",
-              "apiVersion": "2021-03-01",
+              "apiVersion": "2022-09-01",
               "name": "[parameters('functionAppServicePlanName')]",
               "location": "[parameters('location')]",
               "kind": "functionapp",
@@ -884,7 +1045,7 @@
             },
             {
               "type": "Microsoft.Web/sites",
-              "apiVersion": "2021-03-01",
+              "apiVersion": "2022-09-01",
               "name": "[parameters('functionAppName')]",
               "location": "[parameters('location')]",
               "kind": "functionapp",
@@ -925,7 +1086,7 @@
             },
             {
               "type": "Microsoft.Web/sites/config",
-              "apiVersion": "2021-03-01",
+              "apiVersion": "2022-09-01",
               "name": "[format('{0}/{1}', parameters('functionAppName'), 'web')]",
               "properties": {
                 "numberOfWorkers": -1,
@@ -1004,7 +1165,7 @@
             },
             {
               "type": "Microsoft.Web/sites/hostNameBindings",
-              "apiVersion": "2021-03-01",
+              "apiVersion": "2022-09-01",
               "name": "[format('{0}/{1}', parameters('functionAppName'), format('{0}.azurewebsites.net', parameters('functionAppName')))]",
               "properties": {
                 "siteName": "[parameters('functionAppName')]",
@@ -1018,11 +1179,11 @@
           "outputs": {
             "out_funcAppServiceprincipalId": {
               "type": "string",
-              "value": "[reference(resourceId('Microsoft.Web/sites', parameters('functionAppName')), '2021-03-01', 'full').identity.principalId]"
+              "value": "[reference(resourceId('Microsoft.Web/sites', parameters('functionAppName')), '2022-09-01', 'full').identity.principalId]"
             },
             "out_AzureWebJobsStorage": {
               "type": "string",
-              "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};AccountKey={1};EndpointSuffix={2}', variables('storageAccountName'), listKeys(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2021-09-01').keys[0].value, environment().suffixes.storage)]"
+              "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', parameters('storageAccountName'), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountName')), '2023-01-01').keys[0].value)]"
             }
           }
         }
@@ -1277,7 +1438,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.20.4.51522",
-              "templateHash": "13653005143431396918"
+              "templateHash": "8914699460053889058"
             }
           },
           "parameters": {
@@ -1470,15 +1631,16 @@
               "name": "[format('{0}/{1}', parameters('functionAppName'), 'appsettings')]",
               "kind": "string",
               "properties": {
-                "AzureWebJobsStorage": "[parameters('KeyVault_AzureWebJobsStorageValue')]",
-                "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING": "[parameters('KeyVault_AzureWebJobsStorageValue')]",
+                "AzureWebJobsStorage": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('KeyVault_AzureWebJobsStorageName'))]",
                 "Shared_Access_Key_EVENTHUB": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('KeyVault_Shared_Access_Key_EVENTHUBName'))]",
                 "Shared_Access_Key_DOCUMENTDB": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('KeyVault_Shared_Access_Key_DOCUMENTDBName'))]",
                 "Azure_Maps_Subscription_Key": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('KeyVault_Azure_Maps_Subscription_KeyName'))]",
                 "APPINSIGHTS_INSTRUMENTATIONKEY": "[parameters('appInsightsInstrumentationKey')]",
                 "APPLICATIONINSIGHTS_CONNECTION_STRING": "[parameters('appInsightsConnectionString')]",
                 "FUNCTIONS_WORKER_RUNTIME": "dotnet",
-                "FUNCTIONS_EXTENSION_VERSION": "~4"
+                "FUNCTIONS_EXTENSION_VERSION": "~4",
+                "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('KeyVault_AzureWebJobsStorageName'))]",
+                "WEBSITE_CONTENTSHARE": "[parameters('functionAppName')]"
               },
               "dependsOn": [
                 "[resourceId('Microsoft.KeyVault/vaults/secrets', parameters('keyvaultName'), parameters('KeyVault_AzureWebJobsStorageName'))]",
