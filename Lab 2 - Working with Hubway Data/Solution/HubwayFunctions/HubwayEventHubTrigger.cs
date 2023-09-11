@@ -8,7 +8,12 @@ namespace Company.function
     public static class HubwayEventHubTrigger
     {
         [FunctionName("HubwayEventHubTrigger")]
-        public static void Run([EventHubTrigger("hubwaytelemetry", Connection = "Shared_Access_Key_EVENTHUB", ConsumerGroup = "hubwaycg")]string myEventHubMessage, [CosmosDB(databaseName: "Hubway",collectionName: "Tripdata",ConnectionStringSetting = "Shared_Access_Key_DOCUMENTDB")] out dynamic outputDocument, ILogger log)
+        public static void Run([EventHubTrigger("hubwaytelemetry",
+         Connection = "Shared_Access_Key_EVENTHUB", 
+         ConsumerGroup = "hubwaycg")]string myEventHubMessage, 
+         [CosmosDB(databaseName: "Hubway",collectionName: "Tripdata", 
+         ConnectionStringSetting = "Shared_Access_Key_DOCUMENTDB")] out dynamic outputDocument, ILogger log)
+         
         {
             log.LogInformation($"C# Event Hub trigger function processed a message: {myEventHubMessage}");
             

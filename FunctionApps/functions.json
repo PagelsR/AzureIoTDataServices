@@ -1,0 +1,13 @@
+{
+  "bindings": [
+    {
+      "type": "cosmosDB",
+      "name": "outputDocument",
+      "databaseName": "Hubway",
+      "collectionName": "Tripdata",
+      "createIfNotExists": true,
+      "direction": "out" // Make sure this property is set to "out" for output bindings
+    }
+  ],
+  "disabled": false
+}

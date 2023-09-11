@@ -27,6 +27,10 @@ namespace simulated_device
             // Access the connection string
             string s_connectionString = configuration.GetConnectionString("Shared_IoT_Hub_ConnnectionString");
 
+            Console.WriteLine("******************************************************\n");
+            Console.WriteLine( s_connectionString );
+            Console.WriteLine("******************************************************\n");
+
             // Connect to the IoT hub using the MQTT protocol
             s_deviceClient = DeviceClient.CreateFromConnectionString(s_connectionString, TransportType.Mqtt);
             SendDeviceToCloudMessagesAsync();
