@@ -25,6 +25,7 @@ var cosmosDBName = 'cosmos-${uniqueString(resourceGroup().id)}'
 
 // remove dashes for storage account name
 //var storageAccountName = 'sta${uniqueString(resourceGroup().id)}'
+var storageAccountName = 'stafunc${uniqueString(resourceGroup().id)}'
 
 // KeyVault Secret Names
 // Note: Underscores Not allowed in KeyVault
@@ -122,7 +123,7 @@ module functionappmod 'funcapp.bicep' = {
     functionAppServicePlanName: functionAppServicePlanName
     functionAppName: functionAppName
     defaultTags: defaultTags
-    //storageAccountName: storageAccountName
+    storageAccountName: storageAccountName
   }
   dependsOn:  [
     appinsightsmod

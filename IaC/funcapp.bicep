@@ -6,7 +6,7 @@ param location string = resourceGroup().location
 param functionAppName string
 param functionAppServicePlanName string
 param defaultTags object
-//param storageAccountName string
+param storageAccountName string
 
 // param location string = resourceGroup().location
 // param functionAppName string
@@ -14,17 +14,17 @@ param defaultTags object
 // param defaultTags object
 
 // remove dashes for storage account name
-var storageAccountName = 'sta${uniqueString(resourceGroup().id)}'
+// var storageAccountName = 'stafunc${uniqueString(resourceGroup().id)}'
 
 // Storage Account
-resource storageAccount 'Microsoft.Storage/storageAccounts@2021-09-01' = {
+resource storageAccount 'Microsoft.Storage/storageAccounts@2023-01-01' = {
   name: storageAccountName
   location: location
   sku: {
     name: 'Standard_LRS'
   }
   tags: defaultTags
-  kind: 'StorageV2'
+  kind: 'Storage'
   properties: {
     supportsHttpsTrafficOnly: true
     allowBlobPublicAccess: false
@@ -48,7 +48,7 @@ resource blobServices 'Microsoft.Storage/storageAccounts/blobServices@2021-09-01
 }
 
 // App Service
-resource appService 'Microsoft.Web/serverfarms@2021-03-01' = {
+resource appService 'Microsoft.Web/serverfarms@2022-09-01' = {
   name: functionAppServicePlanName
   location: location
   kind: 'functionapp'
@@ -73,7 +73,7 @@ resource appService 'Microsoft.Web/serverfarms@2021-03-01' = {
 }
 
 // Function App
-resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
+resource functionApp 'Microsoft.Web/sites@2022-09-01' = {
   name: functionAppName
   location: location
   kind: 'functionapp'
@@ -111,7 +111,7 @@ resource functionApp 'Microsoft.Web/sites@2021-03-01' = {
 }
 
 // Function App Config
-resource functionAppConfig 'Microsoft.Web/sites/config@2021-03-01' = {
+resource functionAppConfig 'Microsoft.Web/sites/config@2022-09-01' = {
   parent: functionApp
   name: 'web'
   properties: {
@@ -188,7 +188,7 @@ resource functionAppConfig 'Microsoft.Web/sites/config@2021-03-01' = {
 }
 
 // Function App Binding
-resource functionAppBinding 'Microsoft.Web/sites/hostNameBindings@2021-03-01' = {
+resource functionAppBinding 'Microsoft.Web/sites/hostNameBindings@2022-09-01' = {
   parent: functionApp
   name: '${functionApp.name}.azurewebsites.net'
   properties: {
@@ -197,9 +197,8 @@ resource functionAppBinding 'Microsoft.Web/sites/hostNameBindings@2021-03-01' = 
   }
 }
 
-//var secretAzureWebJobsStorage = 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
-// var secretAzureWebJobsStorage = 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
-var secretAzureWebJobsStorage = 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};AccountKey=${storageAccount.listKeys().keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
+//var secretAzureWebJobsStorage = 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};AccountKey=${storageAccount.listKeys().keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
+var secretAzureWebJobsStorage = 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${listKeys(storageAccount.id, storageAccount.apiVersion).keys[0].value}'
 
 output out_funcAppServiceprincipalId string = functionApp.identity.principalId
 output out_AzureWebJobsStorage string = secretAzureWebJobsStorage
