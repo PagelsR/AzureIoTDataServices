@@ -182,7 +182,7 @@ jobs:
       continue-on-error: true
       with:
         inlineScript: |
-          az iot hub device-identity create -n ${{ needs.Deploy_Infrastructure.outputs.output_iotHubName }} -d 'raspberrypi-detroit-002' --ee
+          az iot hub device-identity create -n ${{ needs.Deploy_Infrastructure.outputs.output_iotHubName }} -d 'raspberrypi-detroit-001' --ee
 
   Deploy_Application:
     runs-on: ubuntu-latest

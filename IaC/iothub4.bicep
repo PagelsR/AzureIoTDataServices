@@ -117,7 +117,7 @@ resource IoTHub 'Microsoft.Devices/IotHubs@2021-07-02' = {
   }
 }
 
-var deviceId = 'raspberrypi-detroit-001'
+var deviceId = 'raspberrypi-detroit-005'
 
 resource iotDevice 'Microsoft.Devices/IotHubs/devices@2021-03-22' = {
   name: deviceId
