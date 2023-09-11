@@ -15,7 +15,9 @@ namespace simulated_device
 
         private static void Main(string[] args)
         {
+            Console.WriteLine("******************************************************\n");
             Console.WriteLine("Boston Hubway Data - Simulated device. Ctrl-C to exit.\n");
+            Console.WriteLine("******************************************************\n");
 
             IConfigurationRoot configuration = new ConfigurationBuilder()
                 .SetBasePath(Path.GetDirectoryName(Assembly.GetEntryAssembly().Location))
@@ -37,7 +39,9 @@ namespace simulated_device
             string dirPath = Path.GetFullPath(Directory.GetCurrentDirectory());
             string sFilePath = dirPath+"/data/201502-hubway-tripdata.csv";
 
-            Console.WriteLine( sFilePath ); 
+            Console.WriteLine("******************************************************\n");
+            Console.WriteLine( sFilePath );
+            Console.WriteLine("******************************************************\n");
 
             var reader = new ChoCSVReader(sFilePath).WithFirstLineHeader();
             dynamic rec;
