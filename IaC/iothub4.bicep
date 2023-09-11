@@ -55,13 +55,12 @@ resource IoTHub 'Microsoft.Devices/IotHubs@2021-07-02' = {
       endpoints: {
         // eventHubs: [
         //   {
-        //     connectionString: 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount_resource.listKeys().keys[0].value}'
-        //     containerName: storageContainerName
-        //     fileNameFormat: '{iothub}/{partition}/{YYYY}/{MM}/{DD}/{HH}/{mm}'
-        //     batchFrequencyInSeconds: 100
-        //     maxChunkSizeInBytes: 104857600
-        //     encoding: 'JSON'
-        //     name: storageEndpoint
+        //     connectionString: 'Endpoint=sb://rg-pagelsr-iotdataservices-eventhub.servicebus.windows.net:5671/;SharedAccessKeyName=iothubroutes_${IotHubs_rg_PagelsR_IoTDataServices_iothub_name};SharedAccessKey=****;EntityPath=hubwaytelemetry'
+        //     authenticationType: 'keyBased'
+        //     name: 'HubwayTelemetryRoute'
+        //     id: '8a99b198-d711-4b5a-8486-3c38bac1df07'
+        //     subscriptionId: '295e777c-2a1b-456a-989e-3c9b15d52a8e'
+        //     resourceGroup: 'rg-PagelsR-IoTDataServices'
         //   }
         // ]
         // storageContainers: [
