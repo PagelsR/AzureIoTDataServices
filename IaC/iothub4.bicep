@@ -64,29 +64,29 @@ resource IoTHub 'Microsoft.Devices/IotHubs@2021-07-02' = {
         //     name: storageEndpoint
         //   }
         // ]
-        storageContainers: [
-          {
-            connectionString: 'DefaultEndpointsProtocol=https;AccountName=${storageAccountForIoTName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount_resource.listKeys().keys[0].value}'
-            containerName: storageContainerName
-            fileNameFormat: '{iothub}/{partition}/{YYYY}/{MM}/{DD}/{HH}/{mm}'
-            batchFrequencyInSeconds: 100
-            maxChunkSizeInBytes: 104857600
-            encoding: 'JSON'
-            name: storageEndpoint
-          }
-        ]
+        // storageContainers: [
+        //   {
+        //     connectionString: 'DefaultEndpointsProtocol=https;AccountName=${storageAccountForIoTName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount_resource.listKeys().keys[0].value}'
+        //     containerName: storageContainerName
+        //     fileNameFormat: '{iothub}/{partition}/{YYYY}/{MM}/{DD}/{HH}/{mm}'
+        //     batchFrequencyInSeconds: 100
+        //     maxChunkSizeInBytes: 104857600
+        //     encoding: 'JSON'
+        //     name: storageEndpoint
+        //   }
+        // ]
       }
-      routes: [
-        {
-          name: 'BostonHubwayTelemetryRoute'
-          source: 'DeviceMessages'
-          condition: 'RoutingProperty = \'Hubway\'' //'level="storage"'
-          endpointNames: [
-            storageEndpoint
-          ]
-          isEnabled: true
-        }
-      ]
+      // routes: [
+      //   {
+      //     name: 'BostonHubwayTelemetryRoute'
+      //     source: 'DeviceMessages'
+      //     condition: 'RoutingProperty = \'Hubway\'' //'level="storage"'
+      //     endpointNames: [
+      //       storageEndpoint
+      //     ]
+      //     isEnabled: true
+      //   }
+      // ]
       fallbackRoute: {
         name: '$fallback'
         source: 'DeviceMessages'
