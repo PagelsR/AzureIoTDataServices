@@ -50,7 +50,6 @@ namespace FunctionApps
                     try
                     {
 
-                        //var url = string.Format("https://atlas.microsoft.com/search/address/reverse/json?subscription-key=" + AzureMapsSubscriptionKey = "&api-version=1.0&query=" + lat + "," + lon);
                         var url = $"https://atlas.microsoft.com/search/address/reverse/json?subscription-key={AzureMapsSubscriptionKey}&api-version=1.0&query={lat},{lon}";
 
                         log.LogInformation("Formatted Map URL: " + url);

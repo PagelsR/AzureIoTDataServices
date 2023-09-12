@@ -1,5 +1,5 @@
 {
   "ConnectionStrings": {
-    "Shared_IoT_Hub_ConnnectionString": "HostName=iot-fxbaa757trs56.azure-devices.net;DeviceId=raspberrypi-detroit-000;SharedAccessKey=glJ/8quu7nTGPxipGtseR/TYxTe1vCaGgu+tVFAEHv8="
+    "Shared_IoT_Hub_ConnnectionString": "HostName=iot-jtr225kvhhwza.azure-devices.net;DeviceId=raspberrypi-detroit-000;SharedAccessKey=gjN+sKyo5QypCP7fJXqgzSqpDnS6RBRwSt0phcaGcEo="
   }
 }
