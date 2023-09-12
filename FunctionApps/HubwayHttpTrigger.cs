@@ -13,8 +13,7 @@ namespace FunctionApps
         //public static IActionResult Run(
         public static TripDataGeoJson Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
-        [CosmosDB(
-        databaseName: "Hubway",
+        [CosmosDB(databaseName: "Hubway",
                 containerName: "Tripdata",
                 Connection = "Shared_Access_Key_DOCUMENTDB",
                 SqlQuery = "SELECT * FROM c order by c.startStationID")]
@@ -42,54 +41,61 @@ namespace FunctionApps
             string sLastStationID = null;
             int iCounter = 1;
 
-            // process each item in the list
-            foreach (var doc in tripItems)
+            try
             {
-                // grab the stationID from the list
-                sCurrentStationID = doc.startStationID;
-
-                //compare station ID's
-                if (sCurrentStationID == sLastStationID)
+                // process each item in the list
+                foreach (var doc in tripItems)
                 {
-                    // they are in the same array
-                    //log.LogInformation("Station id's match: "+ sCurrentStationID );
+                    // grab the stationID from the list
+                    sCurrentStationID = doc.startStationID;
 
-                    // increment the counter
-                    iCounter += 1;
+                    //compare station ID's
+                    if (sCurrentStationID == sLastStationID)
+                    {
+                        // they are in the same array
+                        //log.LogInformation("Station id's match: "+ sCurrentStationID );
+
+                        // increment the counter
+                        iCounter += 1;
+                    }
+                    else
+                    {
+                        // they do not match
+                        //log.LogInformation("Station id's do NOT match: "+ sCurrentStationID );
+
+                        // create the Properties object
+                        Properties prop = new Properties();
+                        prop.numberOfStations = iCounter;
+                        prop.startStationID = sLastStationID;
+                        prop.startStationName = sStartStationName;
+
+                        LocalGeometry geo = new LocalGeometry();
+                        geo.coordinates = new List<double>();
+                        geo.coordinates.Add(dStartStationLongitude);
+                        geo.coordinates.Add(dStartStationLatitiude);
+
+                        myFeatures = new LocalFeatures();
+                        myFeatures.properties = prop;
+                        myFeatures.geometry = geo;
+
+                        tdGeoJson.features.Add(myFeatures);
+
+                        // reset the counter
+                        iCounter = 1;
+
+                    }
+
+                    // set for comparison
+                    sLastStationID = doc.startStationID;
+                    sStartStationName = doc.startStationName;
+                    dStartStationLatitiude = Convert.ToDouble(doc.startStationLatitiude);
+                    dStartStationLongitude = Convert.ToDouble(doc.startStationLongitude);
+
                 }
-                else
-                {
-                    // they do not match
-                    //log.LogInformation("Station id's do NOT match: "+ sCurrentStationID );
-
-                    // create the Properties object
-                    Properties prop = new Properties();
-                    prop.numberOfStations = iCounter;
-                    prop.startStationID = sLastStationID;
-                    prop.startStationName = sStartStationName;
-
-                    LocalGeometry geo = new LocalGeometry();
-                    geo.coordinates = new List<double>();
-                    geo.coordinates.Add(dStartStationLongitude);
-                    geo.coordinates.Add(dStartStationLatitiude);
-
-                    myFeatures = new LocalFeatures();
-                    myFeatures.properties = prop;
-                    myFeatures.geometry = geo;
-
-                    tdGeoJson.features.Add(myFeatures);
-
-                    // reset the counter
-                    iCounter = 1;
-
-                }
-
-                // set for comparison
-                sLastStationID = doc.startStationID;
-                sStartStationName = doc.startStationName;
-                dStartStationLatitiude = Convert.ToDouble(doc.startStationLatitiude);
-                dStartStationLongitude = Convert.ToDouble(doc.startStationLongitude);
-
+            }
+            catch (Exception ex)
+            {
+                log.LogInformation("Exception: " + ex.Message);
             }
 
             // remove the first record -- null references first time thru loop
