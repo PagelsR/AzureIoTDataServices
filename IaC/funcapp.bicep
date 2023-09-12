@@ -218,7 +218,7 @@ resource functionAppBinding 'Microsoft.Web/sites/hostNameBindings@2022-09-01' = 
 }
 
 //var secretAzureWebJobsStorage = 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};AccountKey=${storageAccount.listKeys().keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
-var secretAzureWebJobsStorage = 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};AccountKey=${storageAccount.listKeys().keys[0].value};EndpointSuffix=${environment().suffixes.storage};'
+var secretAzureWebJobsStorage = 'DefaultEndpointsProtocol=https;AccountName=${storageAccount.name};AccountKey=${storageAccount.listKeys().keys[0].value};EndpointSuffix=${environment().suffixes.storage}'
 
 output out_funcAppServiceprincipalId string = functionApp.identity.principalId
 output out_AzureWebJobsStorage string = secretAzureWebJobsStorage
