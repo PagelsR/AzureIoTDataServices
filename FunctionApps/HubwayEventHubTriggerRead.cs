@@ -9,10 +9,12 @@ using Microsoft.Extensions.Logging;
 
 namespace FunctionApps
 {
-    public static class Function
+    public static class HubwayEventHubTriggerRead
     {
-        [FunctionName("Function")]
-        public static async Task Run([EventHubTrigger("samples-workitems", Connection = "")] EventData[] events, ILogger log)
+        [FunctionName("HubwayEventHubTriggerRead")]
+        public static async Task Run([EventHubTrigger("hubwaytelemetry",
+            Connection = "Shared_Access_Key_EVENTHUB",
+            ConsumerGroup = "hubwaycg")] EventData[] events, ILogger log)
         {
             var exceptions = new List<Exception>();
 
