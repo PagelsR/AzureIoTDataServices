@@ -39,7 +39,7 @@ jobs:
     - name: dotnet build unit test and publish
       run: |
         dotnet build FunctionApps/FunctionApps.csproj --configuration ${{ env.buildConfiguration }} --no-restore
-        dotnet publish FunctionApps/FunctionApps.csproj --configuration ${{ env.buildConfiguration }} -o './FunctionApps'
+        dotnet publish FunctionApps/FunctionApps.csproj --configuration ${{ env.buildConfiguration }} --no-build --no-restore -o './FunctionApps'
 
     - name: Upload Build Artifacts-FunctionApp
       uses: actions/upload-artifact@v2
