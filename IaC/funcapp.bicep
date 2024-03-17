@@ -15,45 +15,61 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2023-01-01' = {
   }
   tags: defaultTags
   kind: 'StorageV2'
-  // properties: {
-  //   supportsHttpsTrafficOnly: true
-  //   allowBlobPublicAccess: false
-  //   accessTier: 'Hot'
-  // }
   properties: {
-    dnsEndpointType: 'Standard'
-    defaultToOAuthAuthentication: false
-    publicNetworkAccess: 'Enabled'
-    allowCrossTenantReplication: false
-    minimumTlsVersion: 'TLS1_2'
-    allowBlobPublicAccess: false
-    allowSharedKeyAccess: true
-    networkAcls: {
-      bypass: 'AzureServices'
-      virtualNetworkRules: []
-      ipRules: []
-      defaultAction: 'Allow'
-    }
     supportsHttpsTrafficOnly: true
-    encryption: {
-      services: {
-        file: {
-          keyType: 'Account'
-          enabled: true
-        }
-        blob: {
-          keyType: 'Account'
-          enabled: true
-        }
-      }
-      keySource: 'Microsoft.Storage'
-    }
+    allowBlobPublicAccess: false
     accessTier: 'Hot'
   }
 }
 
+// Storage Account
+// resource storageAccount 'Microsoft.Storage/storageAccounts@2023-01-01' = {
+//   name: storageAccountName
+//   location: location
+//   sku: {
+//     name: 'Standard_LRS'
+//   }
+//   tags: defaultTags
+//   kind: 'StorageV2'
+//   // properties: {
+//   //   supportsHttpsTrafficOnly: true
+//   //   allowBlobPublicAccess: false
+//   //   accessTier: 'Hot'
+//   // }
+//   properties: {
+//     dnsEndpointType: 'Standard'
+//     defaultToOAuthAuthentication: false
+//     publicNetworkAccess: 'Enabled'
+//     allowCrossTenantReplication: false
+//     minimumTlsVersion: 'TLS1_2'
+//     allowBlobPublicAccess: false
+//     allowSharedKeyAccess: true
+//     networkAcls: {
+//       bypass: 'AzureServices'
+//       virtualNetworkRules: []
+//       ipRules: []
+//       defaultAction: 'Allow'
+//     }
+//     supportsHttpsTrafficOnly: true
+//     encryption: {
+//       services: {
+//         file: {
+//           keyType: 'Account'
+//           enabled: true
+//         }
+//         blob: {
+//           keyType: 'Account'
+//           enabled: true
+//         }
+//       }
+//       keySource: 'Microsoft.Storage'
+//     }
+//     accessTier: 'Hot'
+//   }
+// }
+
 // Blob Services for Storage Account
-resource blobServices 'Microsoft.Storage/storageAccounts/blobServices@2021-09-01' = {
+resource blobServices 'Microsoft.Storage/storageAccounts/blobServices@2023-01-01' = {
   parent: storageAccount
   name: 'default'
   properties: {
@@ -68,7 +84,7 @@ resource blobServices 'Microsoft.Storage/storageAccounts/blobServices@2021-09-01
 }
 
 // App Service
-resource appService 'Microsoft.Web/serverfarms@2022-09-01' = {
+resource appService 'Microsoft.Web/serverfarms@2023-01-01' = {
   name: functionAppServicePlanName
   location: location
   kind: 'functionapp'
@@ -93,7 +109,7 @@ resource appService 'Microsoft.Web/serverfarms@2022-09-01' = {
 }
 
 // Function App
-resource functionApp 'Microsoft.Web/sites@2022-09-01' = {
+resource functionApp 'Microsoft.Web/sites@2023-01-01' = {
   name: functionAppName
   location: location
   kind: 'functionapp'
@@ -131,7 +147,7 @@ resource functionApp 'Microsoft.Web/sites@2022-09-01' = {
 }
 
 // Function App Config
-resource functionAppConfig 'Microsoft.Web/sites/config@2022-09-01' = {
+resource functionAppConfig 'Microsoft.Web/sites/config@2023-01-01' = {
   parent: functionApp
   name: 'web'
   properties: {
@@ -208,7 +224,7 @@ resource functionAppConfig 'Microsoft.Web/sites/config@2022-09-01' = {
 }
 
 // Function App Binding
-resource functionAppBinding 'Microsoft.Web/sites/hostNameBindings@2022-09-01' = {
+resource functionAppBinding 'Microsoft.Web/sites/hostNameBindings@2023-01-01' = {
   parent: functionApp
   name: '${functionApp.name}.azurewebsites.net'
   properties: {

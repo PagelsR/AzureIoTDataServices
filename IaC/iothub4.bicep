@@ -12,7 +12,7 @@ var storageContainerName = '${toLower('storiot')}results'
 //   name: storageAccountName
 // }
 
-resource storageAccount_resource 'Microsoft.Storage/storageAccounts@2021-08-01' = {
+resource storageAccount_resource 'Microsoft.Storage/storageAccounts@2023-01-01' = {
   name: storageAccountForIoTName
   location: location
   tags: defaultTags
@@ -22,7 +22,7 @@ resource storageAccount_resource 'Microsoft.Storage/storageAccounts@2021-08-01' 
   kind: 'StorageV2'
 }
 
-resource container_resource 'Microsoft.Storage/storageAccounts/blobServices/containers@2021-08-01' = {
+resource container_resource 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-01-01' = {
   name: '${storageAccountForIoTName}/default/${storageContainerName}'
   properties: {
     publicAccess: 'None'
@@ -36,7 +36,7 @@ resource container_resource 'Microsoft.Storage/storageAccounts/blobServices/cont
 // name: eventHubNamespaceName
 // }
 
-resource IoTHub 'Microsoft.Devices/IotHubs@2021-07-02' = {
+resource IoTHub 'Microsoft.Devices/IotHubs@2023-06-30' = {
   name: iotHubName
   location: location
   tags: defaultTags

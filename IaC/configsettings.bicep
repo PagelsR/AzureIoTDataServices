@@ -106,12 +106,12 @@ param accessPolicies array = [
 ]
 
 // Reference Existing resource
-resource existing_keyvault 'Microsoft.KeyVault/vaults@2022-07-01' existing = {
+resource existing_keyvault 'Microsoft.KeyVault/vaults@2023-07-01' existing = {
   name: keyvaultName
 }
 
 // Create KeyVault accessPolicies
-resource keyvaultaccessmod 'Microsoft.KeyVault/vaults/accessPolicies@2022-07-01' = {
+resource keyvaultaccessmod 'Microsoft.KeyVault/vaults/accessPolicies@2023-07-01' = {
   name: 'add'
   parent: existing_keyvault
   properties: {
@@ -120,13 +120,13 @@ resource keyvaultaccessmod 'Microsoft.KeyVault/vaults/accessPolicies@2022-07-01'
 }
 
 // Reference Existing resource
-resource existing_azuremaps 'Microsoft.Maps/accounts@2021-12-01-preview' existing = {
+resource existing_azuremaps 'Microsoft.Maps/accounts@2024-01-01-preview' existing = {
   name: azuremapname
 }
 var AzureMapsSubscriptionKeyString = existing_azuremaps.listKeys().primaryKey
 
 // Create KeyVault Secrets
-resource secret1 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
+resource secret1 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
   name: KeyVault_ClientIdName
   parent: existing_keyvault
   properties: {
@@ -135,7 +135,7 @@ resource secret1 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
 }
 
 // Create KeyVault Secrets
-resource secret2 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
+resource secret2 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
   name: KeyVault_MapsSubscriptionKeyName
   parent: existing_keyvault
   properties: {
@@ -144,7 +144,7 @@ resource secret2 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
 }
 
 //create secret for Func App
-resource secret3 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
+resource secret3 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
   name: KeyVault_AzureWebJobsStorageName
   parent: existing_keyvault
   properties: {
@@ -153,7 +153,7 @@ resource secret3 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
   }
 }
 // create secret for Func App
-resource secret4 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
+resource secret4 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
   name: KeyVault_WebsiteContentAzureFileConnectionStringName
   parent: existing_keyvault
   properties: {
@@ -162,7 +162,7 @@ resource secret4 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
   }
 }
 // create secret for Func App
-resource secret5 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
+resource secret5 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
   name: KeyVault_Shared_Access_Key_EVENTHUBName
   parent: existing_keyvault
   properties: {
@@ -171,7 +171,7 @@ resource secret5 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
   }
 }
 // create secret for Func App
-resource secret6 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
+resource secret6 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
   name: KeyVault_Shared_Access_Key_DOCUMENTDBName
   parent: existing_keyvault
   properties: {
@@ -180,7 +180,7 @@ resource secret6 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
   }
 }
 // create secret for Func App
-resource secret7 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
+resource secret7 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
   name: KeyVault_Azure_Maps_Subscription_KeyName
   parent: existing_keyvault
   properties: {
@@ -190,11 +190,11 @@ resource secret7 'Microsoft.KeyVault/vaults/secrets@2022-07-01' = {
 }
 
 // Reference Existing resource
-resource existing_funcAppService 'Microsoft.Web/sites@2022-09-01' existing = {
+resource existing_funcAppService 'Microsoft.Web/sites@2023-01-01' existing = {
   name: functionAppName
 }
 // Create Web sites/config 'appsettings' - Function App
-resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2022-09-01' = {
+resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2023-01-01' = {
   name: 'appsettings'
   kind: 'string'
   parent: existing_funcAppService

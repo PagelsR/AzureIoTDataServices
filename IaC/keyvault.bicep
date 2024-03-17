@@ -9,7 +9,7 @@ param networkAcls object = {
   virtualNetworkRules: []
 }
 
-resource keyvault 'Microsoft.KeyVault/vaults@2021-11-01-preview' = {
+resource keyvault 'Microsoft.KeyVault/vaults@2023-07-01' = {
   name: vaultName
   location: location
   properties: {

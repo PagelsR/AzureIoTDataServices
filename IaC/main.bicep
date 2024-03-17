@@ -2,7 +2,7 @@
 
 // Region for all resources
 param location string = resourceGroup().location
-param resourceGroupName string = resourceGroup().name
+//param resourceGroupName string = resourceGroup().name
 param createdBy string = 'Randy Pagels'
 param costCenter string = '74f644d3e665'
 
