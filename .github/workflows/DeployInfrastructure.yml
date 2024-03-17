@@ -42,6 +42,15 @@ jobs:
     #     dotnet build FunctionApps/FunctionApps.csproj --configuration ${{ env.buildConfiguration }} --no-restore
     #     dotnet publish FunctionApps/FunctionApps.csproj --configuration ${{ env.buildConfiguration }} --no-build --no-restore -o './FunctionApps'
 
+    # - name: Restore dependencies
+    #   run: dotnet restore FunctionApps/FunctionApps.csproj
+
+    # - name: Build
+    #   run: dotnet build FunctionApps/FunctionApps.csproj --configuration ${{ env.buildConfiguration }} --no-restore
+
+    # - name: Publish
+    #   run: dotnet publish FunctionApps/FunctionApps.csproj --configuration ${{ env.buildConfiguration }} --no-build --no-restore -o './FunctionApps'
+
     - name: dotnet build unit test and publish
       run: |
         cd FunctionApps
@@ -105,7 +114,7 @@ jobs:
       continue-on-error: false
       with:
         scope: resourcegroup
-        resourceGroupName: ${{ env.Azure_Resource_GroupName }}
+        #resourceGroupName: ${{ env.Azure_Resource_GroupName }}
         template: ./IaC/main.bicep
         #parameters: ./IaC/main-1.params.json Deployed_Environment=${{ env.Deployed_Environment }}
         deploymentMode: Incremental
