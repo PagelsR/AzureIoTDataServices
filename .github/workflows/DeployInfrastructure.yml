@@ -16,7 +16,7 @@ env:
   buildConfiguration: 'Release'
   buildPlatform: 'Any CPU'
   dotnet_version: '6.x.x'
-  Azure_Resource_GroupName: 'rg-PagelsR-IoTDataServices-v4'
+  Azure_Resource_GroupName: 'rg-PagelsR-IoTDataServices-dev'
   Azure_Resource_GroupLocation: 'eastus'
   
 permissions:
@@ -38,6 +38,7 @@ jobs:
       # Run dotnet build and publish
     - name: dotnet build unit test and publish
       run: |
+        dotnet restore
         dotnet build FunctionApps/FunctionApps.csproj --configuration ${{ env.buildConfiguration }} --no-restore
         dotnet publish FunctionApps/FunctionApps.csproj --configuration ${{ env.buildConfiguration }} --no-build --no-restore -o './FunctionApps'
 
