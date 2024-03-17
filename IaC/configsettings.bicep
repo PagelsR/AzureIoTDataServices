@@ -209,7 +209,6 @@ resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2022-09-01' = {
     APPLICATIONINSIGHTS_CONNECTION_STRING: appInsightsConnectionString
     FUNCTIONS_WORKER_RUNTIME: 'dotnet'
     FUNCTIONS_EXTENSION_VERSION: '~4'
-    //WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: KeyVault_AzureWebJobsStorageValue
     WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_AzureWebJobsStorageName})'
     WEBSITE_CONTENTSHARE: functionAppName
   }
