@@ -53,16 +53,16 @@ resource IoTHub 'Microsoft.Devices/IotHubs@2023-06-30' = {
     }
     routing: {
       endpoints: {
-        // eventHubs: [
-        //   {
-        //     connectionString: 'Endpoint=sb://rg-pagelsr-iotdataservices-eventhub.servicebus.windows.net:5671/;SharedAccessKeyName=iothubroutes_${IotHubs_rg_PagelsR_IoTDataServices_iothub_name};SharedAccessKey=****;EntityPath=hubwaytelemetry'
-        //     authenticationType: 'keyBased'
-        //     name: 'HubwayTelemetryRoute'
-        //     id: '8a99b198-d711-4b5a-8486-3c38bac1df07'
-        //     subscriptionId: '295e777c-2a1b-456a-989e-3c9b15d52a8e'
-        //     resourceGroup: 'rg-PagelsR-IoTDataServices'
-        //   }
-        // ]
+        eventHubs: [
+          {
+            connectionString: 'Endpoint=sb://rg-pagelsr-iotdataservices-eventhub.servicebus.windows.net:5671/;SharedAccessKeyName=iothubroutes_${IotHubs_rg_PagelsR_IoTDataServices_iothub_name};SharedAccessKey=****;EntityPath=hubwaytelemetry'
+            authenticationType: 'keyBased'
+            name: 'HubwayTelemetryRoute'
+            id: '8a99b198-d711-4b5a-8486-3c38bac1df07'
+            subscriptionId: '295e777c-2a1b-456a-989e-3c9b15d52a8e'
+            resourceGroup: 'rg-PagelsR-IoTDataServices'
+          }
+        ]
         // storageContainers: [
         //   {
         //     connectionString: 'DefaultEndpointsProtocol=https;AccountName=${storageAccountForIoTName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount_resource.listKeys().keys[0].value}'
@@ -75,17 +75,17 @@ resource IoTHub 'Microsoft.Devices/IotHubs@2023-06-30' = {
         //   }
         // ]
       }
-      // routes: [
-      //   {
-      //     name: 'BostonHubwayTelemetryRoute'
-      //     source: 'DeviceMessages'
-      //     condition: 'RoutingProperty = \'Hubway\'' //'level="storage"'
-      //     endpointNames: [
-      //       storageEndpoint
-      //     ]
-      //     isEnabled: true
-      //   }
-      // ]
+      routes: [
+        {
+          name: 'BostonHubwayTelemetryRoute'
+          source: 'DeviceMessages'
+          condition: 'RoutingProperty = \'Hubway\''
+          endpointNames: [
+            'HubwayTelemetryRoute'
+          ]
+          isEnabled: true
+        }
+      ]
       fallbackRoute: {
         name: '$fallback'
         source: 'DeviceMessages'
