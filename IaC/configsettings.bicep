@@ -1,7 +1,6 @@
 param keyvaultName string
 param azuremapname string
 param functionAppName string
-param iotHubName string
 param KeyVault_AzureWebJobsStorageName string
 param KeyVault_Shared_Access_Key_EVENTHUBName string
 param KeyVault_Shared_Access_Key_DOCUMENTDBName string
@@ -20,21 +19,8 @@ param KeyVault_Shared_Access_Key_DOCUMENTDBValue string
 @secure()
 param KeyVault_Azure_Maps_Subscription_KeyValue string
 
-//param functionAppName string
-// param secret_AzureWebJobsStorageName string
-// param secret_WebsiteContentAzureFileConnectionStringName string
 param appInsightsInstrumentationKey string
 param appInsightsConnectionString string
-
-// param KeyVault_MapsClientIdName string
-
-// @secure()
-// param KeyVault_MapsClientIdValue string
-
-// param KeyVault_MapsSubscriptionKeyName string
-
-// @secure()
-// param KeyVault_MapsSubscriptionKeyValue string
 
 param KeyVault_ClientIdName string
 
@@ -52,11 +38,8 @@ param ADOServiceprincipalObjectId string
 @secure()
 param funcAppServiceprincipalId string
 
-// @secure()
-// param secret_AzureWebJobsStorageValue string
 
 param tenant string
-//param mysubscription string = subscription();
 
 // Define KeyVault accessPolicies
 param accessPolicies array = [
@@ -220,67 +203,3 @@ resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2023-01-01' = {
     secret7
   ]
 }
-
-// resource IoTHub 'Microsoft.Devices/IotHubs@2023-06-30' existing = {
-//   name: iotHubName
-//   properties: {
-//     routing: {
-//       routes: [
-//         {
-//           name: 'BostonHubwayTelemetryRoute'
-//           source: 'DeviceMessages'
-//           condition: 'RoutingProperty = \'Hubway\''
-//           endpointNames: [
-//             'HubwayTelemetryRoute'
-//           ]
-//           isEnabled: true
-//         }
-//       ]
-//     }
-//   }
-// }
-
-// resource existing_iotHubName_resource 'Microsoft.Devices/IotHubs@2022-04-30-preview' existing = {
-
-// {
-
-// Add a route to IoT Hub to existing Event Hub Namespace 
-
-
-// resource iothub_addroute 'Microsoft.Devices/IoTHubs' = {
-//   name: 'HubwayTelemetryRoute'
-//   parent: existing_iotHubName_resource
-//   properties: {
-//     condition: 'Hubway'
-//     endpointNames: [
-//       'HubwayTelemetry'
-//     ]
-//   }
-// }
-
-
-// Reference Existing resource
-// resource existing_eventHubName 'Microsoft.EventHub/namespaces@2022-10-01-preview' existing = {
-//   name: eventHubName
-// }
-
-
-// Setup Events Hubs Namespace?
-
-// Setup Events Hubs Consumer Group?
-
-// Setup IoT Hub Built In End Points
-// Point to Event Hub
-// Event Hub compatible endpoint
-
-
-// Setup IoT Hub Message Routing
-// Event Hubs Endpoint: HubwayTelemetryRoute
-// Routing Query
-// RoutingProperty = 'Hubway'
-
-// 1. Add a Route
-// 2. Endpoint Type = "Event Hubs"
-// 3. Event Hub Namespaces = evh-3kqatjsvwshvq or eventHubName
-
-

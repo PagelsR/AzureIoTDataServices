@@ -67,7 +67,7 @@ jobs:
     - name: Upload Build Artifacts-FuncApp
       uses: actions/upload-artifact@v2
       with:
-        name: IoTDataServices.FuncApp
+        name: FuncApp
         path: ${{ github.workspace }}/FuncApp
 
     - name: Upload Infrastucture Files
@@ -200,8 +200,8 @@ jobs:
       uses: actions/download-artifact@v2
       continue-on-error: false
       with:
-        name: IoTDataServices.FuncApp
-        path: ${{ github.workspace }}/IoTDataServices.FuncApp
+        name: FuncApp
+        path: ${{ github.workspace }}/FuncApp
 
     # Deploy Function Application
     - name: 'Deploy Function Application'
@@ -209,7 +209,7 @@ jobs:
       with:
         app-name: ${{ needs.Deploy_Infrastructure.outputs.output_functionAppName }}
         slot-name: 'production'
-        package: './IoTDataServices.FuncApp'
+        package: './FuncApp'
       
     - name: Ensure Resource Group is Locked
       uses: Azure/CLI@v1
@@ -224,7 +224,7 @@ jobs:
           
   Define_IoT_Route:
     runs-on: ubuntu-latest
-    name: Add route to IoT Hub
+    name: Add Msg Route to IoT Hub
     needs: [Deploy_Infrastructure, Deploy_Application]
       
     permissions:

@@ -4,7 +4,6 @@ param defaultTags object
 //param AzureWebJobsStorageName string
 
 var storageAccountForIoTName = '${toLower('storiot')}${uniqueString(resourceGroup().id)}'
-var storageEndpoint = 'HubwayTelemetryRoute'
 var storageContainerName = '${toLower('storiot')}results'
 
 // Storage Account
@@ -55,6 +54,8 @@ resource IoTHub 'Microsoft.Devices/IotHubs@2023-06-30' = {
     routing: {
       endpoints: {
         eventHubs: [
+          // setup during deployment using az cli using az iot hub routing-endpoint create
+          //
           // {
           //   connectionString: 'Endpoint=sb://rg-pagelsr-iotdataservices-eventhub.servicebus.windows.net:5671/;SharedAccessKeyName=iothubroutes_${iotHubName};SharedAccessKey=****;EntityPath=hubwaytelemetry'
           //   authenticationType: 'keyBased'
@@ -77,6 +78,8 @@ resource IoTHub 'Microsoft.Devices/IotHubs@2023-06-30' = {
         // ]
       }
       routes: [
+        // Setup during deployment using az cli az iot hub update
+        //
         // {
         //   name: 'BostonHubwayTelemetryRoute'
         //   source: 'DeviceMessages'

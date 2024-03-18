@@ -162,7 +162,6 @@ module configsettingsmod './configsettings.bicep' = {
   params: {
     keyvaultName: keyvaultName
     functionAppName: functionAppName
-    iotHubName: iotHubName
     tenant: subscription().tenantId
     KeyVault_MapsSubscriptionKeyName: KeyVault_MapsSubscriptionKeyName
     KeyVault_ClientIdName: KeyVault_MapsClientIdName
