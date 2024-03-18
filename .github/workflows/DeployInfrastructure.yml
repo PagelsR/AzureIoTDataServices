@@ -63,12 +63,13 @@ jobs:
         dotnet restore FuncApp.csproj
         dotnet build FuncApp.csproj --configuration ${{ env.buildConfiguration }} --no-restore
         dotnet publish FuncApp.csproj --configuration ${{ env.buildConfiguration }} --no-build --no-restore -o './FuncApp'
+      working-directory: ./IoTDataServices.FuncApp
 
     - name: Upload Build Artifacts-FuncApp
       uses: actions/upload-artifact@v2
       with:
         name: FuncApp
-        path: ${{ github.workspace }}/FuncApp
+        path: ${{ github.workspace }}/IoTDataServices.FuncApp/FuncApp
 
     - name: Upload Infrastucture Files
       uses: actions/upload-artifact@v3
