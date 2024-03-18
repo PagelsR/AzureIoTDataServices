@@ -35,27 +35,6 @@ jobs:
       with:
         dotnet-version: ${{ env.dotnet_version }}
 
-      # Run dotnet build and publish
-    # - name: dotnet build unit test and publish
-    #   run: |
-    #     dotnet restore
-    #     dotnet build FunctionApps/FunctionApps.csproj --configuration ${{ env.buildConfiguration }} --no-restore
-    #     dotnet publish FunctionApps/FunctionApps.csproj --configuration ${{ env.buildConfiguration }} --no-build --no-restore -o './FunctionApps'
-
-    # - name: Restore dependencies
-    #   run: dotnet restore FunctionApps/FunctionApps.csproj
-
-    # - name: Build
-    #   run: dotnet build FunctionApps/FunctionApps.csproj --configuration ${{ env.buildConfiguration }} --no-restore
-
-    # - name: Publish
-    #   run: dotnet publish FunctionApps/FunctionApps.csproj --configuration ${{ env.buildConfiguration }} --no-build --no-restore -o './FunctionApps'
-
-    # cd FunctionApps
-    # dotnet restore FunctionApps.csproj
-    # dotnet build FunctionApps.csproj --configuration ${{ env.buildConfiguration }} --no-restore
-    # dotnet publish FunctionApps.csproj --configuration ${{ env.buildConfiguration }} --no-build --no-restore -o './FunctionApps'
-
     - name: Build and Publish FunctionApp
       run: |
         dotnet restore FunctionApps2.csproj
