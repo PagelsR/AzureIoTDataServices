@@ -104,7 +104,7 @@ resource keyvaultaccessmod 'Microsoft.KeyVault/vaults/accessPolicies@2023-07-01'
 }
 
 // Reference Existing resource
-resource existing_azuremaps 'Microsoft.Maps/accounts@2024-01-01-preview' existing = {
+resource existing_azuremaps 'Microsoft.Maps/accounts@2023-06-01' existing = {
   name: azuremapname
 }
 var AzureMapsSubscriptionKeyString = existing_azuremaps.listKeys().primaryKey
