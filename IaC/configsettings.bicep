@@ -221,24 +221,24 @@ resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2023-01-01' = {
   ]
 }
 
-resource IoTHub 'Microsoft.Devices/IotHubs@2023-06-30' existing = {
-  name: iotHubName
-  properties: {
-    routing: {
-      routes: [
-        {
-          name: 'BostonHubwayTelemetryRoute'
-          source: 'DeviceMessages'
-          condition: 'RoutingProperty = \'Hubway\''
-          endpointNames: [
-            'HubwayTelemetryRoute'
-          ]
-          isEnabled: true
-        }
-      ]
-    }
-  }
-}
+// resource IoTHub 'Microsoft.Devices/IotHubs@2023-06-30' existing = {
+//   name: iotHubName
+//   properties: {
+//     routing: {
+//       routes: [
+//         {
+//           name: 'BostonHubwayTelemetryRoute'
+//           source: 'DeviceMessages'
+//           condition: 'RoutingProperty = \'Hubway\''
+//           endpointNames: [
+//             'HubwayTelemetryRoute'
+//           ]
+//           isEnabled: true
+//         }
+//       ]
+//     }
+//   }
+// }
 
 // resource existing_iotHubName_resource 'Microsoft.Devices/IotHubs@2022-04-30-preview' existing = {
 
