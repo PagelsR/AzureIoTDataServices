@@ -1,6 +1,7 @@
 param keyvaultName string
 param azuremapname string
 param functionAppName string
+param iotHubName string
 param KeyVault_AzureWebJobsStorageName string
 param KeyVault_Shared_Access_Key_EVENTHUBName string
 param KeyVault_Shared_Access_Key_DOCUMENTDBName string
@@ -218,6 +219,25 @@ resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2023-01-01' = {
     secret6
     secret7
   ]
+}
+
+resource IoTHub 'Microsoft.Devices/IotHubs@2023-06-30' existing = {
+  name: iotHubName
+  properties: {
+    routing: {
+      routes: [
+        {
+          name: 'BostonHubwayTelemetryRoute'
+          source: 'DeviceMessages'
+          condition: 'RoutingProperty = \'Hubway\''
+          endpointNames: [
+            'HubwayTelemetryRoute'
+          ]
+          isEnabled: true
+        }
+      ]
+    }
+  }
 }
 
 // resource existing_iotHubName_resource 'Microsoft.Devices/IotHubs@2022-04-30-preview' existing = {

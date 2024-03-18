@@ -77,15 +77,15 @@ resource IoTHub 'Microsoft.Devices/IotHubs@2023-06-30' = {
         // ]
       }
       routes: [
-        {
-          name: 'BostonHubwayTelemetryRoute'
-          source: 'DeviceMessages'
-          condition: 'RoutingProperty = \'Hubway\''
-          endpointNames: [
-            'HubwayTelemetryRoute'
-          ]
-          isEnabled: true
-        }
+        // {
+        //   name: 'BostonHubwayTelemetryRoute'
+        //   source: 'DeviceMessages'
+        //   condition: 'RoutingProperty = \'Hubway\''
+        //   endpointNames: [
+        //     'HubwayTelemetryRoute'
+        //   ]
+        //   isEnabled: true
+        // }
       ]
       fallbackRoute: {
         name: '$fallback'
