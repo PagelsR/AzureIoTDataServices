@@ -225,7 +225,7 @@ jobs:
   Define_IoT_Route:
     runs-on: ubuntu-latest
     name: Add route to IoT Hub
-    needs: [Deploy_Infrastructure, Build_Application]
+    needs: [Deploy_Infrastructure, Deploy_Application]
       
     permissions:
       contents: read
