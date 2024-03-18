@@ -1,7 +1,7 @@
 param azuremapname string
 param location string = resourceGroup().location
 
-resource azuremaps 'Microsoft.Maps/accounts@2024-01-01-preview' = {
+resource azuremaps 'Microsoft.Maps/accounts@2023-06-01' = {
   name: azuremapname
   location: location
   sku: {
