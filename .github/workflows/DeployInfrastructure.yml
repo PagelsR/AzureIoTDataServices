@@ -59,17 +59,17 @@ jobs:
 
     - name: dotnet build unit test and publish
       run: |
-        cd IoTDataServices.FuncApp
-        dotnet restore FuncApp.csproj
-        dotnet build FuncApp.csproj --configuration ${{ env.buildConfiguration }} --no-restore
-        dotnet publish FuncApp.csproj --configuration ${{ env.buildConfiguration }} --no-build --no-restore -o './FuncApp'
-      working-directory: ./IoTDataServices.FuncApp
+        cd FunctionApps
+        dotnet restore FunctionApps.csproj
+        dotnet build FunctionApps.csproj --configuration ${{ env.buildConfiguration }} --no-restore
+        dotnet publish FunctionApps.csproj --configuration ${{ env.buildConfiguration }} --no-build --no-restore -o './FunctionApps'
+      working-directory: ./FunctionApps
 
     - name: Upload Build Artifacts-FuncApp
       uses: actions/upload-artifact@v2
       with:
-        name: FuncApp
-        path: ${{ github.workspace }}/IoTDataServices.FuncApp/FuncApp
+        name: FunctionApps
+        path: ${{ github.workspace }}/FunctionApps
 
     - name: Upload Infrastucture Files
       uses: actions/upload-artifact@v3
@@ -201,8 +201,8 @@ jobs:
       uses: actions/download-artifact@v2
       continue-on-error: false
       with:
-        name: FuncApp
-        path: ${{ github.workspace }}/IoTDataServices.FuncApp/FuncApp
+        name: FunctionApps
+        path: ${{ github.workspace }}/FunctionApps
 
     # Deploy Function Application
     - name: 'Deploy Function Application'
@@ -210,7 +210,7 @@ jobs:
       with:
         app-name: ${{ needs.Deploy_Infrastructure.outputs.output_functionAppName }}
         slot-name: 'production'
-        package: './FuncApp'
+        package: './FunctionApps'
       
     - name: Ensure Resource Group is Locked
       uses: Azure/CLI@v1
