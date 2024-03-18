@@ -2,7 +2,7 @@ param location string = resourceGroup().location
 param cosmosDBName string
 param defaultTags object
 
-resource cosmosDBName_resource 'Microsoft.DocumentDB/databaseAccounts@2024-02-15-preview' = {
+resource cosmosDBName_resource 'Microsoft.DocumentDB/databaseAccounts@2023-11-15' = {
   name: cosmosDBName
   location: location
   tags: defaultTags
@@ -66,7 +66,7 @@ resource cosmosDBName_resource 'Microsoft.DocumentDB/databaseAccounts@2024-02-15
   }
 }
 
-resource cosmosDBName_Hubway 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2024-02-15-preview' = {
+resource cosmosDBName_Hubway 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2023-11-15' = {
   parent: cosmosDBName_resource
   name: 'Hubway'
   properties: {
@@ -76,7 +76,7 @@ resource cosmosDBName_Hubway 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases
   }
 }
 
-resource cosmosDBName_00000000_0000_0000_0000_000000000001 'Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions@2024-02-15-preview' = {
+resource cosmosDBName_00000000_0000_0000_0000_000000000001 'Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions@2023-11-15' = {
   parent: cosmosDBName_resource
   name: '00000000-0000-0000-0000-000000000001'
   properties: {
@@ -99,7 +99,7 @@ resource cosmosDBName_00000000_0000_0000_0000_000000000001 'Microsoft.DocumentDB
   }
 }
 
-resource cosmosDBName_00000000_0000_0000_0000_000000000002 'Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions@2024-02-15-preview' = {
+resource cosmosDBName_00000000_0000_0000_0000_000000000002 'Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions@2023-11-15' = {
   parent: cosmosDBName_resource
   name: '00000000-0000-0000-0000-000000000002'
   properties: {
@@ -121,7 +121,7 @@ resource cosmosDBName_00000000_0000_0000_0000_000000000002 'Microsoft.DocumentDB
   }
 }
 
-resource cosmosDBName_Hubway_Tripdata 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers@2024-02-15-preview' = {
+resource cosmosDBName_Hubway_Tripdata 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers@2023-11-15' = {
   parent: cosmosDBName_Hubway
   name: 'Tripdata'
   properties: {
