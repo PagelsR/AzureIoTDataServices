@@ -51,18 +51,26 @@ jobs:
     # - name: Publish
     #   run: dotnet publish FunctionApps/FunctionApps.csproj --configuration ${{ env.buildConfiguration }} --no-build --no-restore -o './FunctionApps'
 
+    # cd FunctionApps
+    # dotnet restore FunctionApps.csproj
+    # dotnet build FunctionApps.csproj --configuration ${{ env.buildConfiguration }} --no-restore
+    # dotnet publish FunctionApps.csproj --configuration ${{ env.buildConfiguration }} --no-build --no-restore -o './FunctionApps'
+
+
     - name: dotnet build unit test and publish
       run: |
-        cd FunctionApps
-        dotnet restore FunctionApps.csproj
-        dotnet build FunctionApps.csproj --configuration ${{ env.buildConfiguration }} --no-restore
-        dotnet publish FunctionApps.csproj --configuration ${{ env.buildConfiguration }} --no-build --no-restore -o './FunctionApps'
+        cd IoTDataServices.FuncApp
+        dotnet restore FuncApp.csproj
+        dotnet build FuncApp.csproj --configuration ${{ env.buildConfiguration }} --no-restore
+        dotnet publish FuncApp.csproj --configuration ${{ env.buildConfiguration }} --no-build --no-restore -o './FuncApp'
 
-    - name: Upload Build Artifacts-FunctionApp
+        IoTDataServices.FuncApp
+
+    - name: Upload Build Artifacts-FuncApp
       uses: actions/upload-artifact@v2
       with:
-        name: FunctionApps
-        path: ${{ github.workspace }}/FunctionApps
+        name: IoTDataServices.FuncApp
+        path: ${{ github.workspace }}/FuncApp
 
     - name: Upload Infrastucture Files
       uses: actions/upload-artifact@v3
@@ -194,8 +202,8 @@ jobs:
       uses: actions/download-artifact@v2
       continue-on-error: false
       with:
-        name: FunctionApps
-        path: ${{ github.workspace }}/FunctionApps
+        name: IoTDataServices.FuncApp
+        path: ${{ github.workspace }}/IoTDataServices.FuncApp
 
     # Deploy Function Application
     - name: 'Deploy Function Application'
@@ -203,7 +211,7 @@ jobs:
       with:
         app-name: ${{ needs.Deploy_Infrastructure.outputs.output_functionAppName }}
         slot-name: 'production'
-        package: './FunctionApps'
+        package: './IoTDataServices.FuncApp'
       
     - name: Ensure Resource Group is Locked
       uses: Azure/CLI@v1
