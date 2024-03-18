@@ -136,7 +136,7 @@ jobs:
   Deploy_IoT_Device:
     runs-on: ubuntu-latest
     name: Deploy IoT Device
-    needs: [Deploy_Infrastructure]
+    needs: [Deploy_Infrastructure, Deploy_Application]
       
     permissions:
       contents: read
