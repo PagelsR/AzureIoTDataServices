@@ -21,14 +21,24 @@ resource storageAccount_resource 'Microsoft.Storage/storageAccounts@2023-01-01' 
   kind: 'StorageV2'
 }
 
-resource container_resource 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-01-01' = {
+// resource iotStorageContainer_resource 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-01-01' = {
+//   name: '${storageAccountForIoTName}/default/${storageContainerName}'
+//   properties: {
+//     publicAccess: 'None'
+//   }
+//   dependsOn: [
+//     storageAccount_resource
+//   ]
+// }
+
+resource iotStorageContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-01-01' = {
   name: '${storageAccountForIoTName}/default/${storageContainerName}'
   properties: {
     publicAccess: 'None'
   }
   dependsOn: [
-    storageAccount_resource
-  ]
+     storageAccount_resource
+   ]
 }
 
 // resource existing_eventHubName_resource 'Microsoft.EventHub/namespaces@2022-10-01-preview' existing =  {

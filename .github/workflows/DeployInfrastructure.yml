@@ -56,8 +56,7 @@ jobs:
     # dotnet build FunctionApps.csproj --configuration ${{ env.buildConfiguration }} --no-restore
     # dotnet publish FunctionApps.csproj --configuration ${{ env.buildConfiguration }} --no-build --no-restore -o './FunctionApps'
 
-
-    - name: dotnet build unit test and publish
+    - name: Build and Publish FunctionApp
       run: |
         dotnet restore FunctionApps.csproj
         dotnet build FunctionApps.csproj --configuration ${{ env.buildConfiguration }} --no-restore
