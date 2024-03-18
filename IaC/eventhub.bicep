@@ -104,8 +104,8 @@ resource eventHubName_hubwaytelemetry_hubwaycg 'Microsoft.EventHub/namespaces/ev
 
 // Save primary connections string of RootManageSharedAccessKey
 
-var eventHubNamespaceConnectionString = listKeys(eventHubName_RootManageSharedAccessKey.id, eventHubName_RootManageSharedAccessKey.apiVersion).primaryConnectionString
-
+//var eventHubNamespaceConnectionString = listKeys(eventHubName_RootManageSharedAccessKey.id, eventHubName_RootManageSharedAccessKey.apiVersion).primaryConnectionString
+var eventHubNamespaceConnectionString = eventHubName_RootManageSharedAccessKey.listKeys().primaryConnectionString
 // Output our variables
 
 output eventHubNamespaceConnectionString string = eventHubNamespaceConnectionString
