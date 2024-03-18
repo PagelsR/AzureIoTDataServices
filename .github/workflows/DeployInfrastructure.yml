@@ -37,16 +37,16 @@ jobs:
 
     - name: Build and Publish FunctionApp
       run: |
-        dotnet restore FunctionApps2.csproj
-        dotnet build FunctionApps2.csproj --configuration ${{ env.buildConfiguration }} --no-restore
-        dotnet publish FunctionApps2.csproj --configuration ${{ env.buildConfiguration }} --no-build --no-restore -o './FunctionApps2'
-      working-directory: ./FunctionApps2
+        dotnet restore FunctionApps.csproj
+        dotnet build FunctionApps.csproj --configuration ${{ env.buildConfiguration }} --no-restore
+        dotnet publish FunctionApps.csproj --configuration ${{ env.buildConfiguration }} --no-build --no-restore -o './FunctionApps'
+      working-directory: ./FunctionApps
 
     - name: Upload Build Artifacts-FuncApp
       uses: actions/upload-artifact@v2
       with:
-        name: FunctionApps2
-        path: ${{ github.workspace }}/FunctionApps2
+        name: FunctionApps
+        path: ${{ github.workspace }}/FunctionApps
 
     - name: Upload Infrastucture Files
       uses: actions/upload-artifact@v3
@@ -178,8 +178,8 @@ jobs:
       uses: actions/download-artifact@v2
       continue-on-error: false
       with:
-        name: FunctionApps2
-        path: ${{ github.workspace }}/FunctionApps2
+        name: FunctionApps
+        path: ${{ github.workspace }}/FunctionApps
 
     # Deploy Function Application
     - name: 'Deploy Function Application'
@@ -187,7 +187,7 @@ jobs:
       with:
         app-name: ${{ needs.Deploy_Infrastructure.outputs.output_functionAppName }}
         slot-name: 'production'
-        package: './FunctionApps2'
+        package: './FunctionApps'
       
     - name: Ensure Resource Group is Locked
       uses: Azure/CLI@v1
