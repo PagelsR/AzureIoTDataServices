@@ -64,8 +64,6 @@ jobs:
         dotnet build FuncApp.csproj --configuration ${{ env.buildConfiguration }} --no-restore
         dotnet publish FuncApp.csproj --configuration ${{ env.buildConfiguration }} --no-build --no-restore -o './FuncApp'
 
-        IoTDataServices.FuncApp
-
     - name: Upload Build Artifacts-FuncApp
       uses: actions/upload-artifact@v2
       with:
