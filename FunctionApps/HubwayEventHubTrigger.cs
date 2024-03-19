@@ -3,7 +3,8 @@ using Azure.Messaging.EventHubs;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
-//using Newtonsoft.Json.Linq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace FunctionApps
 {
@@ -22,44 +23,84 @@ namespace FunctionApps
             try
             {
                 // Parse the Event Hub message from JSON
-                JsonDocument msg = JsonDocument.Parse(myEventHubMessage);
+                //JsonDocument msg = JsonDocument.Parse(myEventHubMessage);
+                // Parse the incoming message
+                var messageData = JsonConvert.DeserializeObject<JObject>(myEventHubMessage);
 
                 // Create the document to be written to Cosmos DB
                 outputDocument = new
+                {
+                    startTime = messageData["\"starttime\""]?.ToString(),
+                    stopTime = messageData["\"stoptime\""]?.ToString(),
+                    tripDuration = messageData["\"tripduration\""]?.ToString(),
+                    startStationID = messageData["\"start station id\""]?.ToString(),
+                    startStationName = messageData["\"start station name\""]?.ToString(),
+                    startStationLatitiude = messageData["\"start station latitude\""]?.ToString(),
+                    startStationLongitude = messageData["\"start station longitude\""]?.ToString(),
+                    endStationID = messageData["\"end station id\""]?.ToString(),
+                    endStationName = messageData["\"end station name\""]?.ToString(),
+                    endStationLatitude = messageData["\"end station latitude\""]?.ToString(),
+                    endStationLongitude = messageData["\"end station longitude\""]?.ToString(),
+                    bikeID = messageData["\"bikeid\""]?.ToString(),
+                    userType = messageData["\"usertype\""]?.ToString(),
+                    gender = messageData["\"gender\""]?.ToString()
+                };
+
+                // startTime = messageData["startTime"]?.ToString(), // Safe navigation in case of null
+                // stopTime = messageData["stopTime"]?.ToString(),
+                // tripDuration = messageData["tripDuration"]?.ToString(),
+                // startStationID = messageData["start_station_id"]?.ToString(),
+                // startStationName = messageData["start_station_name"]?.ToString(),
+                // startStationLatitiude = messageData["start_station_latitude"]?.ToString(),
+                // startStationLongitude = messageData["start_station_longitude"]?.ToString(),
+                // endStationID = messageData["end_station_id"]?.ToString(),
+                // endStationName = messageData["end_station_name"]?.ToString(),
+                // endStationLatitude = messageData["end_station_latitude"]?.ToString(),
+                // endStationLongitude = messageData["end_station_longitude"]?.ToString(),
+                // bikeID = messageData["bikeid"]?.ToString(),
+                // userType = messageData["usertype"]?.ToString(),
+                // gender = messageData["gender"]?.ToString()
+
+                // Serialize the document to a JSON string
+                string outputDocumentJson = JsonConvert.SerializeObject(outputDocument);
+
+                // Log the JSON string
+                log.LogInformation($"Output document: {outputDocumentJson}");
+
+                // messageData.TryGetValue("starttime", out object startTime);
+                // messageData.TryGetValue("stoptime", out object stopTime);
+                // messageData.TryGetValue("tripduration", out object tripDuration);
+                // messageData.TryGetValue("start_station_id", out object startStationID);
+                // messageData.TryGetValue("start_station_name", out object startStationName);
+                // messageData.TryGetValue("start_station_latitude", out object startStationLatitude);
+                // messageData.TryGetValue("start_station_longitude", out object startStationLongitude);
+                // messageData.TryGetValue("end_station_id", out object endStationID);
+                // messageData.TryGetValue("end_station_name", out object endStationName);
+                // messageData.TryGetValue("end_station_latitude", out object endStationLatitude);
+                // messageData.TryGetValue("end_station_longitude", out object endStationLongitude);
+                // messageData.TryGetValue("bikeid", out object bikeID);
+                // messageData.TryGetValue("usertype", out object userType);
+                // messageData.TryGetValue("gender", out object gender);
+
+                // outputDocument = new
                 // {
-                //     startTime = msg.RootElement.GetProperty("starttime").GetString(),
-                //     stopTime = msg.RootElement.GetProperty("stoptime").GetString(),
-                //     tripDuration = msg.RootElement.GetProperty("tripduration").GetString(),
-                //     startStationID = msg.RootElement.GetProperty("start station id").GetString(),
-                //     startStationName = msg.RootElement.GetProperty("start station name").GetString(),
-                //     startStationLatitiude = msg.RootElement.GetProperty("start station latitude").GetString(),
-                //     startStationLongitude = msg.RootElement.GetProperty("start station longitude").GetString(),
-                //     endStationID = msg.RootElement.GetProperty("end station id").GetString(),
-                //     endStationName = msg.RootElement.GetProperty("end station name").GetString(),
-                //     endStationLatitude = msg.RootElement.GetProperty("end station latitude").GetString(),
-                //     endStationLongitude = msg.RootElement.GetProperty("end station longitude").GetString(),
-                //     bikeID = msg.RootElement.GetProperty("bikeid").GetString(),
-                //     userType = msg.RootElement.GetProperty("usertype").GetString(),
-                //     gender = msg.RootElement.GetProperty("gender").GetString()
+                //     startTime = startTime?.ToString(),
+                //     stopTime = stopTime?.ToString(),
+                //     tripDuration = tripDuration?.ToString(),
+                //     startStationID = startStationID?.ToString(),
+                //     startStationName = startStationName?.ToString(),
+                //     startStationLatitude = startStationLatitude?.ToString(),
+                //     startStationLongitude = startStationLongitude?.ToString(),
+                //     endStationID = endStationID?.ToString(),
+                //     endStationName = endStationName?.ToString(),
+                //     endStationLatitude = endStationLatitude?.ToString(),
+                //     endStationLongitude = endStationLongitude?.ToString(),
+                //     bikeID = bikeID?.ToString(),
+                //     userType = userType?.ToString(),
+                //     gender = gender?.ToString()
                 // };
 
-                {
-                    startTime = msg.RootElement.TryGetProperty("starttime", out JsonElement startTimeElement) ? startTimeElement.GetString() : null,
-                    stopTime = msg.RootElement.TryGetProperty("stoptime", out JsonElement stopTimeElement) ? stopTimeElement.GetString() : null,
-                    tripDuration = msg.RootElement.TryGetProperty("tripduration", out JsonElement tripDurationElement) ? tripDurationElement.GetString() : null,
-                    startStationID = msg.RootElement.TryGetProperty("start station id", out JsonElement startStationIDElement) ? startStationIDElement.GetString() : null,
-                    startStationName = msg.RootElement.TryGetProperty("start station name", out JsonElement startStationNameElement) ? startStationNameElement.GetString() : null,
-                    startStationLatitiude = msg.RootElement.TryGetProperty("start station latitude", out JsonElement startStationLatitiudeElement) ? startStationLatitiudeElement.GetString() : null,
-                    startStationLongitude = msg.RootElement.TryGetProperty("start station longitude", out JsonElement startStationLongitudeElement) ? startStationLongitudeElement.GetString() : null,
-                    endStationID = msg.RootElement.TryGetProperty("end station id", out JsonElement endStationIDElement) ? endStationIDElement.GetString() : null,
-                    endStationName = msg.RootElement.TryGetProperty("end station name", out JsonElement endStationNameElement) ? endStationNameElement.GetString() : null,
-                    endStationLatitude = msg.RootElement.TryGetProperty("end station latitude", out JsonElement endStationLatitudeElement) ? endStationLatitudeElement.GetString() : null,
-                    endStationLongitude = msg.RootElement.TryGetProperty("end station longitude", out JsonElement endStationLongitudeElement) ? endStationLongitudeElement.GetString() : null,
-                    bikeID = msg.RootElement.TryGetProperty("bikeid", out JsonElement bikeIDElement) ? bikeIDElement.GetString() : null,
-                    userType = msg.RootElement.TryGetProperty("usertype", out JsonElement userTypeElement) ? userTypeElement.GetString() : null,
-                    gender = msg.RootElement.TryGetProperty("gender", out JsonElement genderElement) ? genderElement.GetString() : null
-                };
-                
+
                 // // Parse the Event Hub message from JSON
                 // dynamic msg = JObject.Parse(myEventHubMessage);
 
