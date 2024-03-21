@@ -16,7 +16,7 @@ env:
   buildConfiguration: 'Release'
   buildPlatform: 'Any CPU'
   dotnet_version: '6.x.x'
-  Azure_Resource_GroupName: 'rg-PagelsR-IoTDataServices-dev'
+  Azure_Resource_GroupName: 'rg-PagelsR-IoTDataServices-qa'
   Azure_Resource_GroupLocation: 'eastus'
   
 permissions:
@@ -253,7 +253,7 @@ jobs:
           --condition "RoutingProperty = 'Hubway'" \
           --name "BostonHubwayTelemetryRoute" \
           --enabled true
-          
+
     - name: Ensure Resource Group is Locked
       uses: Azure/CLI@v1
       continue-on-error: true
