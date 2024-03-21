@@ -1,61 +1,104 @@
 param location string
-//param resourceGroupName string
 param iotHubName string
 param defaultTags object
+//param AzureWebJobsStorageName string
 
-// @secure()
-param iotHub_connectionString string
+var storageAccountForIoTName = '${toLower('storiot')}${uniqueString(resourceGroup().id)}'
+var storageContainerName = '${toLower('storiot')}results'
 
-@secure()
-param iotHub_containerName string
+// Storage Account
+// resource storageAccount 'Microsoft.Storage/storageAccounts@2021-09-01' existing = {
+//   name: storageAccountName
+// }
 
-resource iotHubName_resource 'Microsoft.Devices/IotHubs@2023-06-30' = {
+resource storageAccount_resource 'Microsoft.Storage/storageAccounts@2023-01-01' = {
+  name: storageAccountForIoTName
+  location: location
+  tags: defaultTags
+  sku: {
+    name: 'Standard_LRS'
+  }
+  kind: 'StorageV2'
+}
+
+// resource iotStorageContainer_resource 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-01-01' = {
+//   name: '${storageAccountForIoTName}/default/${storageContainerName}'
+//   properties: {
+//     publicAccess: 'None'
+//   }
+//   dependsOn: [
+//     storageAccount_resource
+//   ]
+// }
+
+resource iotStorageContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-01-01' = {
+  name: '${storageAccountForIoTName}/default/${storageContainerName}'
+  properties: {
+    publicAccess: 'None'
+  }
+  dependsOn: [
+     storageAccount_resource
+   ]
+}
+
+// resource existing_eventHubName_resource 'Microsoft.EventHub/namespaces@2022-10-01-preview' existing =  {
+// name: eventHubNamespaceName
+// }
+
+
+resource IoTHub 'Microsoft.Devices/IotHubs@2023-06-30' = {
   name: iotHubName
   location: location
   tags: defaultTags
   sku: {
-    name: 'B1'
-    //tier: 'Free'
+    name: 'S1'
     capacity: 1
   }
-  identity: {
-    type: 'None'
-  }
   properties: {
-    ipFilterRules: []
     eventHubEndpoints: {
       events: {
         retentionTimeInDays: 1
-        partitionCount: 2
+        partitionCount: 4
       }
     }
     routing: {
-      // endpoints: {
-      //   serviceBusQueues: []
-      //   serviceBusTopics: []
-      //   eventHubs: [
-      //     {
-      //       connectionString: 'Endpoint=sb://rg-pagelsr-iotdataservices-eventhub.servicebus.windows.net:5671/;SharedAccessKeyName=iothubroutes_${iotHubName};SharedAccessKey=****;EntityPath=hubwaytelemetry'
-      //       authenticationType: 'keyBased'
-      //       name: 'HubwayTelemetryRoute'
-      //       id: '8a99b198-d711-4b5a-8486-3c38bac1df07'
-      //       subscriptionId: '295e777c-2a1b-456a-989e-3c9b15d52a8e'
-      //       resourceGroup: resourceGroupName
-      //     }
-      //   ]
-      //   storageContainers: []
-      //   cosmosDBSqlCollections: []
-      // }
+      endpoints: {
+        eventHubs: [
+          // setup during deployment using az cli using az iot hub routing-endpoint create
+          //
+          // {
+          //   connectionString: 'Endpoint=sb://rg-pagelsr-iotdataservices-eventhub.servicebus.windows.net:5671/;SharedAccessKeyName=iothubroutes_${iotHubName};SharedAccessKey=****;EntityPath=hubwaytelemetry'
+          //   authenticationType: 'keyBased'
+          //   name:  'HubwayTelemetryRoute'
+          //   id: '8a99b198-d711-4b5a-8486-3c38bac1df07'
+          //   subscriptionId: '295e777c-2a1b-456a-989e-3c9b15d52a8e'
+          //   resourceGroup: resourceGroup().name // 'rg-PagelsR-IoTDataServices' 
+          // }
+        ]
+        // storageContainers: [
+        //   {
+        //     connectionString: 'DefaultEndpointsProtocol=https;AccountName=${storageAccountForIoTName};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccount_resource.listKeys().keys[0].value}'
+        //     containerName: storageContainerName
+        //     fileNameFormat: '{iothub}/{partition}/{YYYY}/{MM}/{DD}/{HH}/{mm}'
+        //     batchFrequencyInSeconds: 100
+        //     maxChunkSizeInBytes: 104857600
+        //     encoding: 'JSON'
+        //     name: storageEndpoint
+        //   }
+        // ]
+      }
       routes: [
-        {
-          name: 'BostonHubwayTelemetryRoute'
-          source: 'DeviceMessages'
-          condition: 'RoutingProperty = \'Hubway\''
-          endpointNames: [
-            'HubwayTelemetryRoute'
-          ]
-          isEnabled: true
-        }
+        // Setup during deployment using az cli az iot hub update
+        //
+        // {
+        //   name: 'BostonHubwayTelemetryRoute'
+        //   source: 'DeviceMessages'
+        //   condition: 'RoutingProperty = \'Hubway\''
+        //   endpointNames: [
+        //     'HubwayTelemetryRoute'
+        //   ]
+        //   isEnabled: true
+        // }
       ]
       fallbackRoute: {
         name: '$fallback'
@@ -65,13 +108,6 @@ resource iotHubName_resource 'Microsoft.Devices/IotHubs@2023-06-30' = {
           'events'
         ]
         isEnabled: true
-      }
-    }
-    storageEndpoints: {
-      '$default': {
-        sasTtlAsIso8601: 'PT1H'
-        connectionString: iotHub_connectionString
-        containerName: iotHub_containerName
       }
     }
     messagingEndpoints: {
@@ -91,16 +127,22 @@ resource iotHubName_resource 'Microsoft.Devices/IotHubs@2023-06-30' = {
         maxDeliveryCount: 10
       }
     }
-    features: 'None'
-    disableLocalAuth: false
-    allowedFqdnList: []
-    enableDataResidency: false
   }
 }
 
-// resource iothub_addroute 'Microsoft.Devices/IotHubs/Routes@2020-03-01' = {
+var deviceId = 'raspberrypi-detroit-909'
+
+resource iotDevice 'Microsoft.Devices/IotHubs/devices@2021-03-22' = {
+  name: '${IoTHub.name}/${deviceId}'
+  properties: {
+    deviceId: deviceId
+  }
+}
+
+
+// resource iothub_addroute 'Microsoft.Devices/IotHubs/Routing@2020-03-01' = {
 //   name: 'HubwayTelemetryRoutev2'
-//   parent: iotHubName_resource
+//   parent: IoTHub
 //   properties: {
 //     condition: 'Hubway'
 //     endpointNames: [
@@ -109,13 +151,12 @@ resource iotHubName_resource 'Microsoft.Devices/IotHubs@2023-06-30' = {
 //   }
 // }
 
-resource iothub_addroute 'Microsoft.Devices/IotHubs/Routing@2020-03-01' = {
-  name: 'HubwayTelemetryRoutev2'
-  parent: iotHubName_resource
-  properties: {
-    condition: 'Hubway'
-    endpointNames: [
-      'HubwayTelemetry'
-    ]
-  }
-}
+
+// Correct usage of listKeys function
+var deviceKeys = listKeys(iotDevice.id, IoTHub.apiVersion)
+
+// Get the primary connection string
+var deviceConnectionString = deviceKeys.primaryConnectionString
+
+// Output the connection string
+output out_deviceConnectionString string = deviceConnectionString

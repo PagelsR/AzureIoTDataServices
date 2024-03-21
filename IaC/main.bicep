@@ -45,7 +45,7 @@ var defaultTags = {
 }
 
 // Create IoT Hub
-module iotHubmod './iothub4.bicep' = {
+module iotHubmod './iothub.bicep' = {
   name: 'iothubdeploy'
   params: {
     location: location
@@ -194,3 +194,12 @@ module configsettingsmod './configsettings.bicep' = {
 output out_azuremapname string = azuremapname
 output out_functionAppName string = functionAppName
 output out_iotHubName string = iotHubName
+output out_deviceConnectionString string = iotHubmod.outputs.out_deviceConnectionString
+
+// --endpoint-resource-group: This should be the name of the resource group you created. In the provided code excerpts, it's referred to as <*lastname*>-piday-rg. Replace <*lastname*> with your actual last name.
+
+// --endpoint-subscription-id: This is the subscription ID associated with your Azure account. This information is not provided in the code excerpts, but you can find it in your Azure portal.
+
+// --endpoint-type: Based on the code excerpts, the endpoint type could be "EventHub" as you're working with Azure IoT Hub and Event Hubs.
+
+// --connection-string: This is the IoT Hub connection string. In the provided code excerpts, you're instructed to copy the "Connection string (primary key)" from the IoT Devices menu in the Azure portal. This is the connection string you should use.
