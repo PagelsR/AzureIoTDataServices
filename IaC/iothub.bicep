@@ -70,14 +70,14 @@ resource IoTHub 'Microsoft.Devices/IotHubs@2023-06-30' = {
         eventHubs: [
           // setup during deployment using az cli using az iot hub routing-endpoint create
           //
-          {
-            connectionString: EventHubPrimaryConnectionString
-            authenticationType: 'keyBased'
-            name:  'HubwayTelemetryRoute'
-            id: '8a99b198-d711-4b5a-8486-3c38bac1df07'
-            subscriptionId: '295e777c-2a1b-456a-989e-3c9b15d52a8e'
-            resourceGroup: resourceGroup().name
-          }
+          // {
+          //   connectionString: EventHubPrimaryConnectionString
+          //   authenticationType: 'keyBased'
+          //   name:  'HubwayTelemetryRoute'
+          //   id: '8a99b198-d711-4b5a-8486-3c38bac1df07'
+          //   subscriptionId: '295e777c-2a1b-456a-989e-3c9b15d52a8e'
+          //   resourceGroup: resourceGroup().name
+          // }
         ]
         storageContainers: [
           {

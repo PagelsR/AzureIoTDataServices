@@ -3,7 +3,7 @@ param eventHubName string
 param eventHubNamespaceName string
 param defaultTags object
 
-resource eventHubName_resource 'Microsoft.EventHub/namespaces@2022-10-01-preview' = {
+resource eventHubName_resource 'Microsoft.EventHub/namespaces@2024-01-01' = {
   name: eventHubName
   location: location
   tags: defaultTags
@@ -23,7 +23,7 @@ resource eventHubName_resource 'Microsoft.EventHub/namespaces@2022-10-01-preview
   }
 }
 
-resource eventHubName_RootManageSharedAccessKey 'Microsoft.EventHub/namespaces/authorizationrules@2022-10-01-preview' = {
+resource eventHubName_RootManageSharedAccessKey 'Microsoft.EventHub/namespaces/authorizationrules@2024-01-01' = {
   parent: eventHubName_resource
   name: 'RootManageSharedAccessKey'
   properties: {
@@ -35,7 +35,7 @@ resource eventHubName_RootManageSharedAccessKey 'Microsoft.EventHub/namespaces/a
   }
 }
 
-resource eventHubName_hubwaytelemetry 'Microsoft.EventHub/namespaces/eventhubs@2022-10-01-preview' = {
+resource eventHubName_hubwaytelemetry 'Microsoft.EventHub/namespaces/eventhubs@2024-01-01' = {
   parent: eventHubName_resource
   name: 'hubwaytelemetry'
   properties: {
@@ -49,7 +49,7 @@ resource eventHubName_hubwaytelemetry 'Microsoft.EventHub/namespaces/eventhubs@2
   }
 }
 
-resource eventHubName_default 'Microsoft.EventHub/namespaces/networkrulesets@2022-10-01-preview' = {
+resource eventHubName_default 'Microsoft.EventHub/namespaces/networkrulesets@2024-01-01' = {
   parent: eventHubName_resource
   name: 'default'
   properties: {
@@ -61,7 +61,7 @@ resource eventHubName_default 'Microsoft.EventHub/namespaces/networkrulesets@202
   }
 }
 
-resource eventHubName_hubwaytelemetry_eventHubNamespaceName 'Microsoft.EventHub/namespaces/eventhubs/authorizationrules@2022-10-01-preview' = {
+resource eventHubName_hubwaytelemetry_eventHubNamespaceName 'Microsoft.EventHub/namespaces/eventhubs/authorizationrules@2024-01-01' = {
   parent: eventHubName_hubwaytelemetry
   name: eventHubNamespaceName
   properties: {
@@ -72,46 +72,21 @@ resource eventHubName_hubwaytelemetry_eventHubNamespaceName 'Microsoft.EventHub/
 
 }
 
-resource eventHubName_hubwaytelemetry_Default 'Microsoft.EventHub/namespaces/eventhubs/consumergroups@2022-10-01-preview' = {
+resource eventHubName_hubwaytelemetry_Default 'Microsoft.EventHub/namespaces/eventhubs/consumergroups@2024-01-01' = {
   parent: eventHubName_hubwaytelemetry
   name: '$Default'
   properties: {
   }
 }
 
-resource eventHubName_hubwaytelemetry_hubwaycg 'Microsoft.EventHub/namespaces/eventhubs/consumergroups@2022-10-01-preview' = {
+resource eventHubName_hubwaytelemetry_hubwaycg 'Microsoft.EventHub/namespaces/eventhubs/consumergroups@2024-01-01' = {
   parent: eventHubName_hubwaytelemetry
   name: 'hubwaycg'
   properties: {
   }
 
 }
-
-//output rootManageConnectionString string = eventHubName_hubwaytelemetry_eventHubNamespaceName.properties.primaryConnectionString
-
-
-// Find endpoint of policy
-//var eventHubEndpoint = '${eventHubName_resource.id}/AuthorizationRules/${eventHubName_hubwaytelemetry_eventHubNamespaceName.name}'
-
-// Save primary connections string
-//var serviceBusConnectionString = listKeys(eventHubEndpoint, eventHubName_resource.apiVersion).primaryConnectionString
-
-// Pass as output and saved in Key Vault
-//output out_servicebusConnectionString string = serviceBusConnectionString
-
-// Find endpoint of policy
-//var eventHubEndpointPrimary = eventHubName_hubwaytelemetry_eventHubNamespaceName.listKeys().primaryConnectionString
-
-// Save primary connections string of RootManageSharedAccessKey
-
 //var eventHubNamespaceConnectionString = listKeys(eventHubName_RootManageSharedAccessKey.id, eventHubName_RootManageSharedAccessKey.apiVersion).primaryConnectionString
 var eventHubNamespaceConnectionString = eventHubName_RootManageSharedAccessKey.listKeys().primaryConnectionString
-// Output our variables
-
 output eventHubNamespaceConnectionString string = eventHubNamespaceConnectionString
-
-// var eventHubEndpointPrimary = eventHubName_resource.listKeys().primaryConnectionString
-
-// var randy = eventHubName_resource.listKeys(eventHubName_resource.id, 'RootManageSharedAccessKey').primaryConnectionString
-
 output out_eventHubPrimaryConnectionString string = eventHubNamespaceConnectionString
