@@ -132,8 +132,9 @@ resource IoTHub 'Microsoft.Devices/IotHubs@2023-06-30' = {
 
 var deviceId = 'raspberrypi-detroit-909'
 
-resource iotDevice 'Microsoft.Devices/IotHubs/devices@2021-03-22' = {
-  name: '${IoTHub.name}/${deviceId}'
+resource iotDevice 'Microsoft.Devices/IotHubs/devices@2020-03-01' = {
+   parent: IoTHub
+   name: deviceId
   properties: {
     deviceId: deviceId
   }
