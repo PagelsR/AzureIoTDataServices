@@ -3,7 +3,7 @@ param eventHubName string
 param eventHubNamespaceName string
 param defaultTags object
 
-resource eventHubName_resource 'Microsoft.EventHub/namespaces@2024-01-01' = {
+resource eventHubName_resource 'Microsoft.EventHub/namespaces@2021-01-01-preview' = {
   name: eventHubName
   location: location
   tags: defaultTags
@@ -23,7 +23,7 @@ resource eventHubName_resource 'Microsoft.EventHub/namespaces@2024-01-01' = {
   }
 }
 
-resource eventHubName_RootManageSharedAccessKey 'Microsoft.EventHub/namespaces/authorizationrules@2024-01-01' = {
+resource eventHubName_RootManageSharedAccessKey 'Microsoft.EventHub/namespaces/authorizationrules@2021-01-01-preview' = {
   parent: eventHubName_resource
   name: 'RootManageSharedAccessKey'
   properties: {
@@ -35,7 +35,7 @@ resource eventHubName_RootManageSharedAccessKey 'Microsoft.EventHub/namespaces/a
   }
 }
 
-resource eventHubName_hubwaytelemetry 'Microsoft.EventHub/namespaces/eventhubs@2024-01-01' = {
+resource eventHubName_hubwaytelemetry 'Microsoft.EventHub/namespaces/eventhubs@2021-01-01-preview' = {
   parent: eventHubName_resource
   name: 'hubwaytelemetry'
   properties: {
@@ -49,7 +49,7 @@ resource eventHubName_hubwaytelemetry 'Microsoft.EventHub/namespaces/eventhubs@2
   }
 }
 
-resource eventHubName_default 'Microsoft.EventHub/namespaces/networkrulesets@2024-01-01' = {
+resource eventHubName_default 'Microsoft.EventHub/namespaces/networkrulesets@2021-01-01-preview' = {
   parent: eventHubName_resource
   name: 'default'
   properties: {
@@ -61,7 +61,7 @@ resource eventHubName_default 'Microsoft.EventHub/namespaces/networkrulesets@202
   }
 }
 
-resource eventHubName_hubwaytelemetry_eventHubNamespaceName 'Microsoft.EventHub/namespaces/eventhubs/authorizationrules@2024-01-01' = {
+resource eventHubName_hubwaytelemetry_eventHubNamespaceName 'Microsoft.EventHub/namespaces/eventhubs/authorizationRules@2021-01-01-preview' = {
   parent: eventHubName_hubwaytelemetry
   name: eventHubNamespaceName
   properties: {
