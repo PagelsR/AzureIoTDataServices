@@ -94,15 +94,15 @@ resource IoTHub 'Microsoft.Devices/IotHubs@2023-06-30' = {
       routes: [
         // Setup during deployment using az cli az iot hub update
         //
-        {
-          name: 'BostonHubwayTelemetryRoute2'
-          source: 'DeviceMessages'
-          condition: 'RoutingProperty = \'Hubway\''
-          endpointNames: [
-            'HubwayTelemetryRoute2'
-          ]
-          isEnabled: true
-        }
+        // {
+        //   name: 'BostonHubwayTelemetryRoute2'
+        //   source: 'DeviceMessages'
+        //   condition: 'RoutingProperty = \'Hubway\''
+        //   endpointNames: [
+        //     'HubwayTelemetryRoute2'
+        //   ]
+        //   isEnabled: true
+        // }
       ]
       fallbackRoute: {
         name: '$fallback'
