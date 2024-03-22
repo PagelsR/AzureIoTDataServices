@@ -72,14 +72,14 @@ resource eventHubName_hubwaytelemetry_eventHubNamespaceName 'Microsoft.EventHub/
 
 }
 
-resource eventHubName_hubwaytelemetry_Default 'Microsoft.EventHub/namespaces/eventhubs/consumergroups@2024-01-01' = {
+resource eventHubName_hubwaytelemetry_Default 'Microsoft.EventHub/namespaces/eventhubs/consumergroups@2021-01-01-preview' = {
   parent: eventHubName_hubwaytelemetry
   name: '$Default'
   properties: {
   }
 }
 
-resource eventHubName_hubwaytelemetry_hubwaycg 'Microsoft.EventHub/namespaces/eventhubs/consumergroups@2024-01-01' = {
+resource eventHubName_hubwaytelemetry_hubwaycg 'Microsoft.EventHub/namespaces/eventhubs/consumergroups@2021-01-01-preview' = {
   parent: eventHubName_hubwaytelemetry
   name: 'hubwaycg'
   properties: {
