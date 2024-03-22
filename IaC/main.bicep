@@ -51,6 +51,7 @@ module iotHubmod './iothub.bicep' = {
     location: location
     iotHubName: iotHubName
     defaultTags: defaultTags
+    EventHubPrimaryConnectionString: eventhubmod.outputs.out_eventHubPrimaryConnectionString
   }
   dependsOn:  [
     eventhubmod
@@ -167,7 +168,7 @@ module configsettingsmod './configsettings.bicep' = {
     KeyVault_ClientIdName: KeyVault_MapsClientIdName
     KeyVault_ClientIdValue: azuremapsmod.outputs.out_AzureMapsClientId
     KeyVault_Shared_Access_Key_EVENTHUBName: KeyVault_Shared_Access_Key_EVENTHUBName
-    KeyVault_Shared_Access_Key_EVENTHUBValue: eventhubmod.outputs.out_eventHubEndpointPrimary
+    KeyVault_Shared_Access_Key_EVENTHUBValue: eventhubmod.outputs.out_eventHubPrimaryConnectionString
     KeyVault_Shared_Access_Key_DOCUMENTDBName: KeyVault_Shared_Access_Key_DOCUMENTDBName
     KeyVault_Shared_Access_Key_DOCUMENTDBValue: cosmosdbmod.outputs.out_CosmosDBConnectionString
     KeyVault_AzureWebJobsStorageName: KeyVault_AzureWebJobsStorageName
@@ -194,7 +195,9 @@ module configsettingsmod './configsettings.bicep' = {
 output out_azuremapname string = azuremapname
 output out_functionAppName string = functionAppName
 output out_iotHubName string = iotHubName
-output out_deviceConnectionString string = iotHubmod.outputs.out_deviceConnectionString
+output out_eventHubPrimaryConnectionString string = eventhubmod.outputs.out_eventHubPrimaryConnectionString
+
+//output out_deviceConnectionString string = iotHubmod.outputs.out_deviceConnectionString
 
 // --endpoint-resource-group: This should be the name of the resource group you created. In the provided code excerpts, it's referred to as <*lastname*>-piday-rg. Replace <*lastname*> with your actual last name.
 

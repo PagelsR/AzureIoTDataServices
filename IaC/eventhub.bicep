@@ -114,4 +114,4 @@ output eventHubNamespaceConnectionString string = eventHubNamespaceConnectionStr
 
 // var randy = eventHubName_resource.listKeys(eventHubName_resource.id, 'RootManageSharedAccessKey').primaryConnectionString
 
-output out_eventHubEndpointPrimary string = eventHubNamespaceConnectionString
+output out_eventHubPrimaryConnectionString string = eventHubNamespaceConnectionString
