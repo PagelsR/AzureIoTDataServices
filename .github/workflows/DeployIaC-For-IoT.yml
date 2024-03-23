@@ -1,0 +1,60 @@
+name: Deploy IaC for IoT Rig
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  Azure_Resource_GroupName: 'rg-IoT-Rig'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Ensure Resource Group Exists
+      uses: Azure/CLI@v1
+      continue-on-error: true
+      with:
+        inlineScript: |
+          #!/bin/bash
+          az group create --name ${{ env.Azure_Resource_GroupName }} --location ${{ env.Azure_Resource_GroupLocation }}
+  
+    - name: Install Bicep CLI
+      run: |
+        curl -Lo bicep https://github.com/Azure/bicep/releases/latest/download/bicep-linux-x64
+        chmod +x ./bicep
+        sudo mv ./bicep /usr/local/bin/bicep
+        bicep --help
+
+    - name: Validate Bicep template
+      run: |
+        bicep build ./IaC-v2/main-1.bicep
+
+    - name: Deploy Infrastructure
+      id: Infra
+      uses: azure/arm-deploy@v1
+      continue-on-error: false
+      with:
+        scope: resourcegroup
+        resourceGroupName: ${{ env.Azure_Resource_GroupName }}
+        template: ./IaC-v2/main-1.bicep
+        deploymentMode: Incremental
+        failOnStdErr: false
+
+    # - name: Deploy Bicep template
+    #   run: |
+    #     az deployment group create --resource-group ${{ env.RESOURCE_GROUP }} --template-file ./IaC-v2/main-1.bicep
+
+    - name: Logout of Azure
+      run: |
+        az logout
