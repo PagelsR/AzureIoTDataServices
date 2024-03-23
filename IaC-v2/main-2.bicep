@@ -29,15 +29,15 @@ resource eventHubNamespace 'Microsoft.EventHub/namespaces@2021-01-01-preview' = 
   }
 }
 
-//resource eventHub 'Microsoft.EventHub/namespaces/eventhubs@2021-01-01-preview' = {
-//  parent: eventHubNamespace
-//  name: 'hubwaytelemetry'
-//  properties: {
-//    messageRetentionInDays: 1
-//    partitionCount: 1
-//    status: 'Active'
-//  }
-//}
+resource eventHub 'Microsoft.EventHub/namespaces/eventhubs@2021-01-01-preview' = {
+ parent: eventHubNamespace
+ name: 'hubwaytelemetry'
+ properties: {
+   messageRetentionInDays: 1
+   partitionCount: 1
+   status: 'Active'
+ }
+}
 
 //resource consumerGroup 'Microsoft.EventHub/namespaces/eventhubs/consumergroups@2021-01-01-preview' = {
 //  parent: eventHub
