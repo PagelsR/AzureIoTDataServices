@@ -10,7 +10,8 @@ resource iotHub 'Microsoft.Devices/IotHubs@2020-03-01' = {
   name: iotHubName
   location: resourceGroup().location
   sku: {
-    name: 'S1'
+    name: 'Standard'
+    tier: 'Standard'
     capacity: 1
   }
   properties: {
