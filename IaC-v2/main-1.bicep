@@ -1,14 +1,16 @@
-param iotHubName string = 'myIoTHub-Test'
-param eventHubNamespaceName string = 'myEventHubNamespace-Test'
-param eventHubName string = 'myEventHub-Test'
 param deviceName string = 'Detroit-909'
 param endpointName string = 'HubwayTelemetryRoute'
 param routeName string = 'BostonHubwayTelemetryRoute'
 param condition string = 'RoutingProperty = \'Hubway\''
+param resourceGroupName string = resourceGroup().name
+param location string = resourceGroup().location
+var iotHubName = 'iot-${uniqueString(resourceGroup().id)}'
+var eventHubName = 'evh-${uniqueString(resourceGroup().id)}'
+var eventHubNamespaceName = 'evhns-${uniqueString(resourceGroup().id)}'
 
 resource iotHub 'Microsoft.Devices/IotHubs@2020-03-01' = {
   name: iotHubName
-  location: resourceGroup().location
+  location: location
   sku: {
     name: 'Standard'
     tier: 'Standard'
@@ -26,7 +28,7 @@ resource iotHub 'Microsoft.Devices/IotHubs@2020-03-01' = {
 
 resource eventHubNamespace 'Microsoft.EventHub/namespaces@2017-04-01' = {
   name: eventHubNamespaceName
-  location: resourceGroup().location
+  location: location
   sku: {
     tier: 'Standard'
     capacity: 1
@@ -35,7 +37,7 @@ resource eventHubNamespace 'Microsoft.EventHub/namespaces@2017-04-01' = {
 
 resource eventHub 'Microsoft.EventHub/namespaces/eventhubs@2017-04-01' = {
   name: '${eventHubNamespace.name}/${eventHubName}'
-  location: resourceGroup().location
+  location: location
 }
 
 resource device 'Microsoft.Devices/IotHubs/devices@2020-03-01' = {
@@ -50,7 +52,7 @@ resource endpoint 'Microsoft.Devices/IotHubs/RoutingEndpoints@2020-03-01' = {
     connectionString: 'Endpoint=${eventHubNamespace.properties.endpoint};SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=${listKeys(eventHubNamespace.id, eventHubNamespace.apiVersion).primaryConnectionString}'
     endpointType: 'EventHub'
     entityPath: eventHubName
-    resourceGroup: resourceGroup().name
+    resourceGroup: resourceGroupName
     subscriptionId: subscription().subscriptionId
   }
 }
