@@ -1,7 +1,7 @@
-param deviceName string = 'Detroit-909'
-param endpointName string = 'HubwayTelemetryRoute'
-param routeName string = 'BostonHubwayTelemetryRoute'
-param condition string = 'RoutingProperty = \'Hubway\''
+//param deviceName string = 'Detroit-909'
+//param endpointName string = 'HubwayTelemetryRoute'
+//param routeName string = 'BostonHubwayTelemetryRoute'
+//param condition string = 'RoutingProperty = \'Hubway\''
 param resourceGroupName string = resourceGroup().name
 param location string = resourceGroup().location
 var iotHubName = 'iot-${uniqueString(resourceGroup().id)}'
@@ -63,7 +63,7 @@ resource eventHub 'Microsoft.EventHub/namespaces/eventhubs@2021-01-01-preview' =
 
 resource device 'Microsoft.Devices/IotHubs/devices@2020-03-01' = {
   parent: iotHub
-  name: deviceName
+  name: 'Detroit-909' //deviceName
 }
 
 // Get the keys of the Event Hub namespace
@@ -76,20 +76,21 @@ resource endpoint 'Microsoft.Devices/IotHubs/RoutingEndpoints@2020-03-01' = {
     connectionString: eventHubNamespaceKeys.primaryConnectionString
     endpointType: 'EventHub'
     entityPath: eventHubName
-    resourceGroup: resourceGroup().name
+    resourceGroup: resourceGroupName
     subscriptionId: subscription().subscriptionId
   }
 }
 
 resource route 'Microsoft.Devices/IotHubs/Routes@2020-03-01' = {
   parent: iotHub
-  name: routeName
+  name: 'BostonHubwayTelemetryRoute'
   properties: {
     source: 'DeviceMessages'
-    condition: condition
+    condition: 'RoutingProperty = \'Hubway\''
     endpointNames: [
-      endpointName
+      'HubwayTelemetryRoute'
     ]
     isEnabled: true
   }
 }
+
