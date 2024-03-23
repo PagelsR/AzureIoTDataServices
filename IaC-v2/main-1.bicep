@@ -46,14 +46,17 @@ resource device 'Microsoft.Devices/IotHubs/devices@2020-03-01' = {
   name: deviceName
 }
 
+// Get the keys of the Event Hub namespace
+var eventHubNamespaceKeys = listKeys(eventHubNamespace.id, eventHubNamespace.apiVersion)
+
 resource endpoint 'Microsoft.Devices/IotHubs/RoutingEndpoints@2020-03-01' = {
   parent: iotHub
   name: endpointName
   properties: {
-    connectionString: 'Endpoint=${eventHubNamespace.properties.endpoint};SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=${listKeys(eventHubNamespace.id, eventHubNamespace.apiVersion).primaryConnectionString}'
+    connectionString: eventHubNamespaceKeys.primaryConnectionString
     endpointType: 'EventHub'
     entityPath: eventHubName
-    resourceGroup: resourceGroupName
+    resourceGroup: resourceGroup().name
     subscriptionId: subscription().subscriptionId
   }
 }
