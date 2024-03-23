@@ -26,16 +26,17 @@ resource iotHub 'Microsoft.Devices/IotHubs@2020-03-01' = {
   }
 }
 
-resource eventHubNamespace 'Microsoft.EventHub/namespaces@2017-04-01' = {
+resource eventHubNamespace 'Microsoft.EventHub/namespaces@2021-01-01-preview' = {
   name: eventHubNamespaceName
   location: location
   sku: {
+    name: 'Standard'
     tier: 'Standard'
     capacity: 1
   }
 }
 
-resource eventHub 'Microsoft.EventHub/namespaces/eventhubs@2017-04-01' = {
+resource eventHub 'Microsoft.EventHub/namespaces/eventhubs@2021-01-01-preview' = {
   name: '${eventHubNamespace.name}/${eventHubName}'
   location: location
 }
