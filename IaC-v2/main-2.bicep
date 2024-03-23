@@ -30,40 +30,42 @@ resource eventHubNamespace 'Microsoft.EventHub/namespaces@2021-01-01-preview' = 
 }
 
 resource eventHub 'Microsoft.EventHub/namespaces/eventhubs@2021-01-01-preview' = {
- parent: eventHubNamespace
- name: 'hubwaytelemetry'
- properties: {
-   messageRetentionInDays: 1
-   partitionCount: 1
-   status: 'Active'
- }
+  parent: eventHubNamespace
+  name: 'hubwaytelemetry'
+  properties: {
+    messageRetentionInDays: 1
+    partitionCount: 1
+    status: 'Active'
+  }
 }
 
-//resource consumerGroup 'Microsoft.EventHub/namespaces/eventhubs/consumergroups@2021-01-01-preview' = {
-//  parent: eventHub
-//  name: 'hubwaycg'
-//}
+resource consumerGroup 'Microsoft.EventHub/namespaces/eventhubs/consumergroups@2021-01-01-preview' = {
+  parent: eventHub
+  name: 'hubwaycg'
+}
 
-//resource device 'Microsoft.Devices/IotHubs/devices@2020-03-01' = {
-//  parent: iotHub
-//  name: 'Detroit-909'
-//}
+// resource device 'Microsoft.Devices/IotHubs/devices@2020-03-01' = {
+//   parent: iotHub
+//   name: 'Detroit-909'
+// }
 
 // Get the keys of the Event Hub namespace
 //var eventHubNamespaceKeys = listKeys(eventHubNamespace.id, eventHubNamespace.apiVersion)
 var eventHubNamespaceKeys = eventHubNamespace.listKeys()
 
-resource endpoint 'Microsoft.Devices/IotHubs/RoutingEndpoints@2020-03-01' = {
-  parent: iotHub
-  name: 'HubwayTelemetryRoute'
-  properties: {
-    connectionString: eventHubNamespaceKeys.primaryConnectionString
-    endpointType: 'EventHub'
-    entityPath: eventHub.name
-    resourceGroup: resourceGroup().name
-    subscriptionId: subscription().subscriptionId
-  }
-}
+// resource endpoint 'Microsoft.Devices/IotHubs/RoutingEndpoints@2020-03-01' = {
+//   parent: iotHub
+//   name: 'HubwayTelemetryRoute'
+//   properties: {
+//     connectionString: eventHubNamespaceKeys.primaryConnectionString
+//     endpointType: 'EventHub'
+//   }
+// }
+//     entityPath: eventHub.name
+//     resourceGroup: resourceGroup().name
+//     subscriptionId: subscription().subscriptionId
+//   }
+// }
 
 //resource route 'Microsoft.Devices/IotHubs/Routes@2020-03-01' = {
 //  parent: iotHub
