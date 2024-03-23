@@ -49,6 +49,11 @@ resource consumerGroup 'Microsoft.EventHub/namespaces/eventhubs/consumergroups@2
 //   name: 'Detroit-909'
 // }
 
+resource device 'Microsoft.Devices/IotHubs/devices@2020-03-01' = {
+  parent: iotHub
+  name: 'Detroit-909' //deviceName
+}
+
 // Get the keys of the Event Hub namespace
 //var eventHubNamespaceKeys = listKeys(eventHubNamespace.id, eventHubNamespace.apiVersion)
 var eventHubNamespaceKeys = eventHubNamespace.listKeys()
