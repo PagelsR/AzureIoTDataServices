@@ -41,25 +41,25 @@ resource eventHub 'Microsoft.EventHub/namespaces/eventhubs@2021-01-01-preview' =
   location: location
 }
 
-#resource eventHubName_consumergroup 'Microsoft.EventHub/namespaces/eventhubs/consumergroups@2021-01-01-preview' = {
-#  parent: eventHubNamespace
-#  name: 'hubwaycg'
-#  properties: {
-#  }
+//resource eventHubName_consumergroup 'Microsoft.EventHub/namespaces/eventhubs/consumergroups@2021-01-01-preview' = {
+//  parent: eventHubNamespace
+//  name: 'hubwaycg'
+//#  properties: {
+//#  }
 
-#resource eventHubName_hubwaytelemetry 'Microsoft.EventHub/namespaces/eventhubs@2021-01-01-preview' = {
-#  parent: eventHubNamespace
-#  name: 'hubwaytelemetry'
-#  properties: {
-#    retentionDescription: {
-#      cleanupPolicy: 'Delete'
-#      retentionTimeInHours: 24
-#    }
-#    messageRetentionInDays: 1
-#    partitionCount: 1
-#    status: 'Active'
-#  }
-#}
+//#resource eventHubName_hubwaytelemetry 'Microsoft.EventHub/namespaces/eventhubs@2021-01-01-preview' = {
+//#  parent: eventHubNamespace
+//#  name: 'hubwaytelemetry'
+//#  properties: {
+//#    retentionDescription: {
+//#      cleanupPolicy: 'Delete'
+//#      retentionTimeInHours: 24
+//#    }
+//#    messageRetentionInDays: 1
+//#    partitionCount: 1
+//#    status: 'Active'
+//#  }
+//#}
 
 resource device 'Microsoft.Devices/IotHubs/devices@2020-03-01' = {
   parent: iotHub
