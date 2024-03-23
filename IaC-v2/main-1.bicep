@@ -12,8 +12,7 @@ resource iotHub 'Microsoft.Devices/IotHubs@2020-03-01' = {
   name: iotHubName
   location: location
   sku: {
-    name: 'Standard'
-    tier: 'Standard'
+    name: 'S1'
     capacity: 1
   }
   properties: {
@@ -36,30 +35,25 @@ resource eventHubNamespace 'Microsoft.EventHub/namespaces@2021-01-01-preview' = 
   }
 }
 
-resource eventHub 'Microsoft.EventHub/namespaces/eventhubs@2021-01-01-preview' = {
-  name: '${eventHubNamespace.name}/${eventHubName}'
-  location: location
+resource eventHubName_hubwaytelemetry 'Microsoft.EventHub/namespaces/eventhubs@2021-01-01-preview' = {
+  parent: eventHubNamespace
+  name: 'hubwaytelemetry'
+  properties: {
+    retentionDescription: {
+      cleanupPolicy: 'Delete'
+      retentionTimeInHours: 24
+    }
+    messageRetentionInDays: 1
+    partitionCount: 1
+    status: 'Active'
+  }
 }
 
-//resource eventHubName_consumergroup 'Microsoft.EventHub/namespaces/eventhubs/consumergroups@2021-01-01-preview' = {
-//  parent: eventHubNamespace
-//  name: 'hubwaycg'
-//#  properties: {
-//#  }
-
-//#resource eventHubName_hubwaytelemetry 'Microsoft.EventHub/namespaces/eventhubs@2021-01-01-preview' = {
-//#  parent: eventHubNamespace
-//#  name: 'hubwaytelemetry'
-//#  properties: {
-//#    retentionDescription: {
-//#      cleanupPolicy: 'Delete'
-//#      retentionTimeInHours: 24
-//#    }
-//#    messageRetentionInDays: 1
-//#    partitionCount: 1
-//#    status: 'Active'
-//#  }
-//#}
+resource eventHubName_consumergroup 'Microsoft.EventHub/namespaces/eventhubs/consumergroups@2021-01-01-preview' = {
+  parent: eventHubNamespace
+  name: 'hubwaycg'
+  properties: {
+}
 
 resource device 'Microsoft.Devices/IotHubs/devices@2020-03-01' = {
   parent: iotHub
