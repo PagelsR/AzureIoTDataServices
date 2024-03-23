@@ -1,9 +1,13 @@
 name: Deploy IaC for IoT Rig
 
 on:
-  push:
-    branches:
-      - main
+  # Triggers the workflow on push or pull request events but only for the "main" branch
+#   push:
+#     branches: [ "main" ]
+#   pull_request:
+#     branches: [ "main" ]
+
+  workflow_dispatch:
 
 env:
   Azure_Resource_GroupName: 'rg-IoT-Rig'
