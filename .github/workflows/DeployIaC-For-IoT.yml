@@ -7,6 +7,7 @@ on:
 
 env:
   Azure_Resource_GroupName: 'rg-IoT-Rig'
+  Azure_Resource_GroupLocation: 'eastus'
 
 jobs:
   build-and-deploy:
