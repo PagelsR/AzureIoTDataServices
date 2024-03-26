@@ -252,7 +252,8 @@ jobs:
  
     - name: Add route to EndPoint
       run: |
-        az iot hub route create \
+        az extension add --name azure-iot
+        az iot hub message-endpoint create \
           --resource-group ${{ env.Azure_Resource_GroupName }} \
           --hub-name ${{ needs.Deploy_Infrastructure.outputs.output_iotHubName }} \
           --endpoint-name "HubwayTelemetryRoute" \
