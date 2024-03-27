@@ -59,6 +59,19 @@ resource eventHubName_consumergroup 'Microsoft.EventHub/namespaces/eventhubs/con
   properties: {}
 }
 
+resource iotHubRoute 'Microsoft.Devices/IotHubs/Routes@2020-03-01' = {
+  parent: iotHub
+  name: 'BostonHubwayTelemetryRoute'
+  properties: {
+    source: 'DeviceMessages'
+    condition: 'RoutingProperty = \'Hubway\''
+    endpointNames: [
+      'HubwayTelemetryRoute'
+    ]
+    isEnabled: true
+  }
+}
+
 // This causes an Error: BadRequest
 // var eventHubNamespaceKeys = listKeys(eventHubNamespace.id, eventHubNamespace.apiVersion)
 
@@ -85,19 +98,5 @@ resource eventHubName_consumergroup 'Microsoft.EventHub/namespaces/eventhubs/con
 //   }
 // }
 
-// resource iotHubRoute 'Microsoft.Devices/IotHubs/Routes@2020-03-01' = {
-//   parent: iotHub
-//   name: 'BostonHubwayTelemetryRoute'
-//   properties: {
-//     source: 'DeviceMessages'
-//     condition: 'RoutingProperty = \'Hubway\''
-//     endpointNames: [
-//       'HubwayTelemetryRoute'
-//     ]
-//     isEnabled: true
-//   }
-//   dependsOn: [
-//     iotHubEndpoint
-//   ]
-// }
+
 
