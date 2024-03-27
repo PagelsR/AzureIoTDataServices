@@ -52,7 +52,22 @@ resource eventHubAuthorizationRule 'Microsoft.EventHub/namespaces/eventhubs/auth
   }
 }
 
-var eventHubKeys = listKeys(eventHubAuthorizationRule.id, '2018-01-01-preview')
+// var eventHubKeys = listKeys(eventHubAuthorizationRule.id, '2018-01-01-preview')
+
+var eventHubNamespaceKeys = listKeys(eventHubNamespace.id, eventHubNamespace.apiVersion)
+
+resource endpoint 'Microsoft.Devices/IotHubs/RoutingEndpoints@2020-03-01' = {
+  parent: iotHub
+  name: 'HubwayTelemetryRoute'
+  properties: {
+    connectionString: eventHubNamespaceKeys.primaryConnectionString
+    endpointType: 'EventHub'
+    entityPath: eventHubName
+    resourceGroup: resourceGroup().name
+    subscriptionId: subscription().subscriptionId
+  }
+}
+
 
 // Correct resource types need to be used for iotHubEndpoint and iotHubRoute
 // resource iotHubEndpoint 'Microsoft.Devices/IotHubs/eventHubEndpoints@2020-03-01' = {
