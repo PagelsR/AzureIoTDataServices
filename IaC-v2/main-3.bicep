@@ -31,7 +31,8 @@ resource eventHubNamespace 'Microsoft.EventHub/namespaces@2018-01-01-preview' = 
 }
 
 resource eventHub 'Microsoft.EventHub/namespaces/eventhubs@2018-01-01-preview' = {
-  name: '${eventHubNamespace.name}/${eventHubName}'
+  parent: eventHubNamespace
+  name: eventHubName
   properties: {
     messageRetentionInDays: 7
     partitionCount: 2
@@ -39,7 +40,8 @@ resource eventHub 'Microsoft.EventHub/namespaces/eventhubs@2018-01-01-preview' =
 }
 
 resource eventHubAuthorizationRule 'Microsoft.EventHub/namespaces/eventhubs/authorizationRules@2017-04-01' = {
-  name: '${eventHubNamespace.name}/${eventHubName}/RootManageSharedAccessKey'
+  parent: eventHub
+  name: 'RootManageSharedAccessKey'
   dependsOn: [
     eventHub
   ]
@@ -54,6 +56,7 @@ resource eventHubAuthorizationRule 'Microsoft.EventHub/namespaces/eventhubs/auth
 
 var eventHubKeys = listKeys(eventHubAuthorizationRule.id, '2018-01-01-preview')
 
+// Correct resource types need to be used for iotHubEndpoint and iotHubRoute
 resource iotHubEndpoint 'Microsoft.Devices/IotHubs/eventHubEndpoints@2020-03-01' = {
   parent: iotHub
   name: 'HubwayTelemetryRoute'
@@ -63,39 +66,19 @@ resource iotHubEndpoint 'Microsoft.Devices/IotHubs/eventHubEndpoints@2020-03-01'
   }
 }
 
-resource iotHubRoute 'Microsoft.Devices/IotHubs/Routes@2020-03-01' = {
-  parent: iotHub
-  name: 'BostonHubwayTelemetryRoute'
-  properties: {
-    source: 'DeviceMessages'
-    condition: 'RoutingProperty = \'Hubway\''
-    endpointNames: [
-      'HubwayTelemetryRoute'
-    ]
-    isEnabled: true
-  }
-  dependsOn: [
-    iotHubEndpoint
-  ]
-}
-
-
-// resource iotHubRoute 'Microsoft.Devices/IotHubs@2020-03-01' = {
-//   name: iotHub
-//   location: location
-//   // other properties...
+// resource iotHubRoute 'Microsoft.Devices/IotHubs/Routes@2020-03-01' = {
+//   parent: iotHub
+//   name: 'BostonHubwayTelemetryRoute'
 //   properties: {
-//     routes: [
-//       {
-//         name: 'BostonHubwayTelemetryRoute'
-//         source: 'DeviceMessages'
-//         condition: 'RoutingProperty = \'Hubway\''
-//         endpointNames: [
-//           'HubwayTelemetryRoute'
-//         ]
-//         isEnabled: true
-//       }
+//     source: 'DeviceMessages'
+//     condition: 'RoutingProperty = \'Hubway\''
+//     endpointNames: [
+//       'HubwayTelemetryRoute'
 //     ]
-//     // other properties...
+//     isEnabled: true
 //   }
+//   dependsOn: [
+//     iotHubEndpoint
+//   ]
 // }
+
