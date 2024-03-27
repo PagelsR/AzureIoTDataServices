@@ -57,14 +57,14 @@ resource eventHubAuthorizationRule 'Microsoft.EventHub/namespaces/eventhubs/auth
 var eventHubKeys = listKeys(eventHubAuthorizationRule.id, '2018-01-01-preview')
 
 // Correct resource types need to be used for iotHubEndpoint and iotHubRoute
-resource iotHubEndpoint 'Microsoft.Devices/IotHubs/eventHubEndpoints@2020-03-01' = {
-  parent: iotHub
-  name: 'HubwayTelemetryRoute'
-  properties: {
-    connectionString: 'Endpoint=${eventHubKeys.primaryConnectionString};EntityPath=${eventHub.name}'
-    containerName: eventHubName
-  }
-}
+// resource iotHubEndpoint 'Microsoft.Devices/IotHubs/eventHubEndpoints@2020-03-01' = {
+//   parent: iotHub
+//   name: 'HubwayTelemetryRoute'
+//   properties: {
+//     connectionString: 'Endpoint=${eventHubKeys.primaryConnectionString};EntityPath=${eventHub.name}'
+//     containerName: eventHubName
+//   }
+// }
 
 // resource iotHubRoute 'Microsoft.Devices/IotHubs/Routes@2020-03-01' = {
 //   parent: iotHub
