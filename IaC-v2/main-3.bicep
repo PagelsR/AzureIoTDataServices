@@ -38,7 +38,7 @@ resource eventHub 'Microsoft.EventHub/namespaces/eventhubs@2018-01-01-preview' =
   }
 }
 
-resource eventHubAuthorizationRule 'Microsoft.EventHub/namespaces/eventhubs/authorizationRules@2018-01-01-preview' = {
+resource eventHubAuthorizationRule 'Microsoft.EventHub/namespaces/eventhubs/authorizationRules@2017-04-01' = {
   name: '${eventHubNamespace.name}/${eventHubName}/RootManageSharedAccessKey'
   dependsOn: [
     eventHub
@@ -62,18 +62,6 @@ resource iotHubEndpoint 'Microsoft.Devices/IotHubs/eventHubEndpoints@2020-03-01'
     containerName: eventHubName
   }
 }
-
-// resource iotHubEndpoint 'Microsoft.Devices/IotHubs/eventHubEndpoints@2020-03-01' = {
-//   parent: iotHub
-//   name: 'HubwayTelemetryRoute'
-//   properties: {
-//     connectionString: 'Endpoint=${eventHubNamespace.properties.defaultPrimaryConnectionString};SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=${eventHubNamespace.properties.defaultPrimaryKey};EntityPath=${eventHub.name}'
-//     containerName: eventHubName
-//   }
-//   dependsOn: [
-//     eventHub
-//   ]
-// }
 
 resource iotHubRoute 'Microsoft.Devices/IotHubs/Routes@2020-03-01' = {
   parent: iotHub
