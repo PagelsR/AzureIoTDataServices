@@ -59,7 +59,7 @@ resource eventHubName_consumergroup 'Microsoft.EventHub/namespaces/eventhubs/con
   properties: {}
 }
 
-resource iotHubRoute 'Microsoft.Devices/IotHubs/RoutingEndpoints@2020-03-01' = {
+resource iotHubRoute 'Microsoft.Devices/IotHubs/Routes@2020-03-01' = {
   parent: iotHub
   name: 'BostonHubwayTelemetryRoute'
   properties: {
