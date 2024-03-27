@@ -32,26 +32,48 @@ resource eventHubNamespace 'Microsoft.EventHub/namespaces@2018-01-01-preview' = 
 
 resource eventHub 'Microsoft.EventHub/namespaces/eventhubs@2018-01-01-preview' = {
   name: '${eventHubNamespace.name}/${eventHubName}'
-  dependsOn: [
-    eventHubNamespace
-  ]
   properties: {
     messageRetentionInDays: 7
     partitionCount: 2
   }
 }
 
+resource eventHubAuthorizationRule 'Microsoft.EventHub/namespaces/eventhubs/authorizationRules@2018-01-01-preview' = {
+  name: '${eventHubNamespace.name}/${eventHubName}/RootManageSharedAccessKey'
+  dependsOn: [
+    eventHub
+  ]
+  properties: {
+    rights: [
+      'Listen'
+      'Send'
+      'Manage'
+    ]
+  }
+}
+
+var eventHubKeys = listKeys(eventHubAuthorizationRule.id, '2018-01-01-preview')
+
 resource iotHubEndpoint 'Microsoft.Devices/IotHubs/eventHubEndpoints@2020-03-01' = {
   parent: iotHub
   name: 'HubwayTelemetryRoute'
   properties: {
-    connectionString: 'Endpoint=${eventHubNamespace.properties.defaultPrimaryConnectionString};SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=${eventHubNamespace.properties.defaultPrimaryKey};EntityPath=${eventHub.name}'
+    connectionString: 'Endpoint=${eventHubKeys.primaryConnectionString};EntityPath=${eventHub.name}'
     containerName: eventHubName
   }
-  dependsOn: [
-    eventHub
-  ]
 }
+
+// resource iotHubEndpoint 'Microsoft.Devices/IotHubs/eventHubEndpoints@2020-03-01' = {
+//   parent: iotHub
+//   name: 'HubwayTelemetryRoute'
+//   properties: {
+//     connectionString: 'Endpoint=${eventHubNamespace.properties.defaultPrimaryConnectionString};SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=${eventHubNamespace.properties.defaultPrimaryKey};EntityPath=${eventHub.name}'
+//     containerName: eventHubName
+//   }
+//   dependsOn: [
+//     eventHub
+//   ]
+// }
 
 resource iotHubRoute 'Microsoft.Devices/IotHubs/Routes@2020-03-01' = {
   parent: iotHub
