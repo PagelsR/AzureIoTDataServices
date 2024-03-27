@@ -42,9 +42,6 @@ resource eventHub 'Microsoft.EventHub/namespaces/eventhubs@2018-01-01-preview' =
 resource eventHubAuthorizationRule 'Microsoft.EventHub/namespaces/eventhubs/authorizationRules@2017-04-01' = {
   parent: eventHub
   name: 'RootManageSharedAccessKey'
-  dependsOn: [
-    eventHub
-  ]
   properties: {
     rights: [
       'Listen'
