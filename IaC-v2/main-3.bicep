@@ -1,7 +1,8 @@
 param location string = resourceGroup().location
 
 var iotHubName = 'iothubname-${uniqueString(resourceGroup().id)}'
-var eventHubName = 'evhubname-${uniqueString(resourceGroup().id)}'
+//var eventHubName = 'evhubname-${uniqueString(resourceGroup().id)}'
+var eventHubName = 'hubwaytelemetry'
 var eventHubNamespaceName = 'evhnamespace-${uniqueString(resourceGroup().id)}'
 
 resource iotHub 'Microsoft.Devices/IotHubs@2020-03-01' = {
