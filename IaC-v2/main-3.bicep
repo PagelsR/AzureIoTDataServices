@@ -59,6 +59,21 @@ resource eventHubName_consumergroup 'Microsoft.EventHub/namespaces/eventhubs/con
   properties: {}
 }
 
+// This causes an Error: BadRequest
+var eventHubNamespaceKeys = listKeys(eventHubNamespace.id, eventHubNamespace.apiVersion)
+
+resource endpoint 'Microsoft.Devices/IotHubs/RoutingEndpoints@2020-03-01' = {
+  parent: iotHub
+  name: 'HubwayTelemetryRoute'
+  properties: {
+    connectionString: eventHubNamespaceKeys.primaryConnectionString
+    endpointType: 'EventHub'
+    entityPath: eventHubName
+    resourceGroup: resourceGroup().name
+    subscriptionId: subscription().subscriptionId
+  }
+}
+
 resource iotHubRoute 'Microsoft.Devices/IotHubs/Routes@2020-03-01' = {
   parent: iotHub
   name: 'BostonHubwayTelemetryRoute'
@@ -71,21 +86,6 @@ resource iotHubRoute 'Microsoft.Devices/IotHubs/Routes@2020-03-01' = {
     isEnabled: true
   }
 }
-
-// This causes an Error: BadRequest
-// var eventHubNamespaceKeys = listKeys(eventHubNamespace.id, eventHubNamespace.apiVersion)
-
-// resource endpoint 'Microsoft.Devices/IotHubs/RoutingEndpoints@2020-03-01' = {
-//   parent: iotHub
-//   name: 'HubwayTelemetryRoute'
-//   properties: {
-//     connectionString: eventHubNamespaceKeys.primaryConnectionString
-//     endpointType: 'EventHub'
-//     entityPath: eventHubName
-//     resourceGroup: resourceGroup().name
-//     subscriptionId: subscription().subscriptionId
-//   }
-// }
 
 
 // Correct resource types need to be used for iotHubEndpoint and iotHubRoute
