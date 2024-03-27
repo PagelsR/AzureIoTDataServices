@@ -53,9 +53,9 @@ resource eventHubAuthorizationRule 'Microsoft.EventHub/namespaces/eventhubs/auth
 }
 
 resource eventHubName_consumergroup 'Microsoft.EventHub/namespaces/eventhubs/consumergroups@2021-01-01-preview' = {
-  parent: eventHubNamespace
+  parent: eventHub
   name: 'hubwaycg'
-  properties: {
+  properties: {}
 }
 
 // var eventHubKeys = listKeys(eventHubAuthorizationRule.id, '2018-01-01-preview')
