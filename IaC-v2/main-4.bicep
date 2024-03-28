@@ -10,7 +10,7 @@ resource eventHubNamespace 'Microsoft.EventHub/namespaces@2018-01-01-preview' = 
 }
 
 resource eventHub 'Microsoft.EventHub/namespaces/eventhubs@2018-01-01-preview' = {
-  name: eventHubName
+  name: '${eventHubNamespace.name}/${eventHubName}'
   properties: {
     partitionCount: 2
     messageRetentionInDays: 7
