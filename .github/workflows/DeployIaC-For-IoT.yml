@@ -79,10 +79,6 @@ jobs:
         sudo mv ./bicep /usr/local/bin/bicep
         bicep --help
 
-    - name: Validate Bicep template
-      run: |
-        bicep build ./IaC-v2/main.bicep
-
     - name: Ensure Resource Group is UnLocked
       uses: Azure/CLI@v1
       continue-on-error: true
@@ -96,7 +92,11 @@ jobs:
       with:
         name: IaC-v2
         path: ${{ github.workspace }}/IaC-v2
-            
+
+    - name: Validate Bicep template
+      run: |
+        bicep build ./IaC-v2/main.bicep
+
     - name: Deploy Infrastructure
       id: Infra
       uses: azure/arm-deploy@v1
