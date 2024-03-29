@@ -57,12 +57,12 @@ jobs:
         failOnStdErr: false
 
     # Create an IoT device
-    # - name: Create an IoT device
-    #   uses: Azure/CLI@v1
-    #   continue-on-error: true
-    #   with:
-    #     inlineScript: |
-    #       az iot hub device-identity create -n ${{ needs.Deploy_Infrastructure.outputs.output_iotHubName }} -d 'raspberrypi-detroit-000' --ee
+    - name: Create an IoT device
+      uses: Azure/CLI@v1
+      continue-on-error: true
+      with:
+        inlineScript: |
+          az iot hub device-identity create -n ${{ needs.Deploy_Infrastructure.outputs.output_iotHubName }} -d 'iot-raspberrypi-wwagrwbj25yfa' --ee
 
     - name: Logout of Azure
       run: |
