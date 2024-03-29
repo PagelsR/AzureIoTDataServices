@@ -120,7 +120,6 @@ module functionappmod 'funcapp.bicep' = {
   dependsOn:  [
     appinsightsmod
   ]
-  
 }
 
 // Create Azure KeyVault

@@ -10,6 +10,16 @@ var eventHubNamespaceName = 'evhns-${uniqueString(resourceGroup().id)}'
 param createdBy string = 'Randy Pagels'
 param costCenter string = '74f644d3e665'
 
+// Variables for Recommended abbreviations for Azure resource types
+// https://docs.microsoft.com/en-us/azure/cloud-adoption-framework/ready/azure-best-practices/resource-abbreviations
+var appInsightsName = 'appi-${uniqueString(resourceGroup().id)}'
+var appInsightsWorkspaceName = 'appw-${uniqueString(resourceGroup().id)}'
+var appInsightsAlertName = 'responsetime-${uniqueString(resourceGroup().id)}'
+var azuremapname = 'maps-${uniqueString(resourceGroup().id)}'
+var functionAppName = 'func-${uniqueString(resourceGroup().id)}'
+var functionAppServicePlanName = 'funcplan-${uniqueString(resourceGroup().id)}'
+var keyvaultName = 'kv-${uniqueString(resourceGroup().id)}'
+
 // remove dashes for storage account name
 var storageAccountName = 'sta${uniqueString(resourceGroup().id)}'
 
@@ -44,6 +54,46 @@ module iotHubmod './iothub.bicep' = {
     eventhubmod
   ]
 }
+
+// Create Application Insights
+module appinsightsmod './appinsights.bicep' = {
+  name: 'appinsightsdeploy'
+  params: {
+    location: location
+    appInsightsName: appInsightsName
+    defaultTags: defaultTags
+    appInsightsAlertName: appInsightsAlertName
+    appInsightsWorkspaceName: appInsightsWorkspaceName
+  }
+}
+
+// Create Function App
+module functionappmod './funcapp.bicep' = {
+  name: 'functionappdeploy'
+  params: {
+    location: location
+    functionAppServicePlanName: functionAppServicePlanName
+    functionAppName: functionAppName
+    defaultTags: defaultTags
+    storageAccountName: storageAccountName
+  }
+  dependsOn:  [
+    appinsightsmod
+  ]
+}
+
+// // Create Storage Account
+// module storageaccountmod './storageaccount.bicep' = {
+//   name: 'storageaccountdeploy'
+//   params: {
+//     //location: location
+//     //defaultTags: defaultTags
+//     storageAccountName: storageAccountName
+//   }
+//   dependsOn:  [
+//     eventhubmod
+//   ]
+// }
 
 
  // ObjectId of alias RPagels
