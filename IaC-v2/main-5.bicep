@@ -1,14 +1,16 @@
 param location string = resourceGroup().location
-var iotHubName = 'iothubname-${uniqueString(resourceGroup().id)}'
+var iotHubName = 'iot-${uniqueString(resourceGroup().id)}'
 var eventHubName = 'hubwaytelemetry'
-var eventHubNamespaceName = 'evhnamespace-${uniqueString(resourceGroup().id)}'
+var eventHubNamespaceName = 'evhns-${uniqueString(resourceGroup().id)}'
 
+// Define the Event Hub Namespace
 resource eventHubNamespace 'Microsoft.EventHub/namespaces@2023-01-01-preview' = {
   name: eventHubNamespaceName
   location: location
   properties: {}
 }
 
+// Define the Event Hub
 resource eventHub 'Microsoft.EventHub/namespaces/eventhubs@2023-01-01-preview' = {
   name: eventHubName
   parent: eventHubNamespace
@@ -18,6 +20,7 @@ resource eventHub 'Microsoft.EventHub/namespaces/eventhubs@2023-01-01-preview' =
   }
 }
 
+// Define the Authorization Rule
 resource iotHubAuthorizedToSendRule 'Microsoft.EventHub/namespaces/eventhubs/authorizationRules@2017-04-01' = {
   name: 'iothubCanSend'
   parent: eventHub
@@ -37,6 +40,7 @@ resource iotHubAuthorizedToSendRule 'Microsoft.EventHub/namespaces/eventhubs/aut
 
 }
 
+// Define the IoT Hub
 resource iotHub 'Microsoft.Devices/IotHubs@2023-06-30' = {
   name: iotHubName
   location: location
