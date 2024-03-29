@@ -28,6 +28,15 @@ resource iotHubAuthorizedToSendRule 'Microsoft.EventHub/namespaces/eventhubs/aut
    }
 }
 
+ // Define the Consumer Group
+ resource eventHubName_hubwaytelemetry_hubwaycg 'Microsoft.EventHub/namespaces/eventhubs/consumergroups@2021-01-01-preview' = {
+  parent: eventHub
+  name: 'hubwaycg'
+  properties: {
+  }
+
+}
+
 resource iotHub 'Microsoft.Devices/IotHubs@2023-06-30' = {
   name: iotHubName
   location: location

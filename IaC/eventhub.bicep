@@ -5,24 +5,30 @@ param iotHubName string
 param defaultTags object
 
 // Defind the Event Hub Namespace
-resource eventHubNamespace 'Microsoft.EventHub/namespaces@2023-01-01-preview'= {
+// resource eventHubNamespace 'Microsoft.EventHub/namespaces@2023-01-01-preview'= {
+//   name: eventHubNamespaceName
+//   location: location
+//   tags: defaultTags
+//   sku: {
+//     name: 'Standard'
+//     tier: 'Standard'
+//     capacity: 1
+//   }
+//   properties: {
+//     minimumTlsVersion: '1.2'
+//     publicNetworkAccess: 'Enabled'
+//     disableLocalAuth: false
+//     zoneRedundant: true
+//     isAutoInflateEnabled: false
+//     maximumThroughputUnits: 0
+//     kafkaEnabled: true
+//   }
+// }
+
+resource eventHubNamespace 'Microsoft.EventHub/namespaces@2023-01-01-preview' = {
   name: eventHubNamespaceName
   location: location
-  tags: defaultTags
-  sku: {
-    name: 'Standard'
-    tier: 'Standard'
-    capacity: 1
-  }
-  properties: {
-    minimumTlsVersion: '1.2'
-    publicNetworkAccess: 'Enabled'
-    disableLocalAuth: false
-    zoneRedundant: true
-    isAutoInflateEnabled: false
-    maximumThroughputUnits: 0
-    kafkaEnabled: true
-  }
+  properties: {}
 }
 
 // Define the Event Hub
@@ -98,6 +104,17 @@ resource iotHub 'Microsoft.Devices/IotHubs@2023-06-30' = {
   }
 }
 
+var AuthorizedeventHubNamespaceConnectionString = listKeys(iotHubAuthorizedToSendRule.id, iotHubAuthorizedToSendRule.apiVersion).primaryConnectionString
 
-var AuthorizedeventHubNamespaceConnectionString = iotHubAuthorizedToSendRule.listKeys().primaryConnectionString
+// Output our variables
+
+//output eventHubNamespaceConnectionString string = eventHubNamespaceConnectionString
+
+// connectionString: iotHubAuthorizedToSendRule.listKeys().primaryConnectionString
+
+// listKeys(iotHubAuthorizedToSendRule.id, iotHubAuthorizedToSendRule.apiVersion).primaryConnectionString
+
+//output eventHubConnectionString string = listKeys('${eventHubNamespace}/authorizationRules/${authorizationRuleName}', '2017-04-01').primaryConnectionString
+
+//var AuthorizedeventHubNamespaceConnectionString = iotHubAuthorizedToSendRule.listKeys().primaryConnectionString
 output out_eventHubPrimaryConnectionString string = AuthorizedeventHubNamespaceConnectionString
