@@ -63,7 +63,8 @@ jobs:
       output_iotHubName: ${{ steps.Infra.outputs.out_iotHubName }}
       #output_deviceConnectionString: ${{ steps.Infra.outputs.out_deviceConnectionString }}
       output_eventHubPrimaryConnectionString: ${{ steps.Infra.outputs.out_eventHubPrimaryConnectionString }}
-
+      output_iotDeviceName: ${{ steps.Infra.outputs.out_iotDeviceName }}
+      
     steps:
     - name: Login to Azure
       uses: azure/login@v1
