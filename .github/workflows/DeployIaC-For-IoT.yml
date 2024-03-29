@@ -43,7 +43,7 @@ jobs:
 
     - name: Validate Bicep template
       run: |
-        bicep build ./IaC-v2/main-5.bicep
+        bicep build ./IaC-v2/main.bicep
 
     - name: Deploy Infrastructure
       id: Infra
@@ -52,7 +52,7 @@ jobs:
       with:
         scope: resourcegroup
         resourceGroupName: ${{ env.Azure_Resource_GroupName }}
-        template: ./IaC-v2/main-5.bicep
+        template: ./IaC-v2/main.bicep
         deploymentMode: Incremental
         failOnStdErr: false
 
