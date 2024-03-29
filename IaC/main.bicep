@@ -17,9 +17,11 @@ var functionAppServicePlanName = 'funcplan-${uniqueString(resourceGroup().id)}'
 var keyvaultName = 'kv-${uniqueString(resourceGroup().id)}'
 
 var iotHubName = 'iot-${uniqueString(resourceGroup().id)}'
+var iotDeviceName = 'iot-raspberrypi-${uniqueString(resourceGroup().id)}'
+
 //var iotContainerName = 'iotcontainer-${uniqueString(resourceGroup().id)}'
 //var storageaccountName = 'stor${uniqueString(resourceGroup().id)}'
-var eventHubName = 'evh-${uniqueString(resourceGroup().id)}'
+var eventHubName = 'hubwaytelemetry'
 var eventHubNamespaceName = 'evhns-${uniqueString(resourceGroup().id)}'
 var cosmosDBName = 'cosmos-${uniqueString(resourceGroup().id)}'
 
@@ -195,6 +197,7 @@ module configsettingsmod './configsettings.bicep' = {
 output out_azuremapname string = azuremapname
 output out_functionAppName string = functionAppName
 output out_iotHubName string = iotHubName
+output out_iotdeviceName string = iotDeviceName
 output out_eventHubPrimaryConnectionString string = eventhubmod.outputs.out_eventHubPrimaryConnectionString
 
 //output out_deviceConnectionString string = iotHubmod.outputs.out_deviceConnectionString

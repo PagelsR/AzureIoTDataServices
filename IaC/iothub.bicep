@@ -2,6 +2,7 @@ param location string
 param iotHubName string
 param defaultTags object
 
+@secure()
 param EventHubPrimaryConnectionString string
 
 //param AzureWebJobsStorageName string
@@ -68,16 +69,10 @@ resource IoTHub 'Microsoft.Devices/IotHubs@2023-06-30' = {
     routing: {
       endpoints: {
         eventHubs: [
-          // setup during deployment using az cli using az iot hub routing-endpoint create
-          //
-          // {
-          //   connectionString: EventHubPrimaryConnectionString
-          //   authenticationType: 'keyBased'
-          //   name:  'HubwayTelemetryRoute'
-          //   id: '8a99b198-d711-4b5a-8486-3c38bac1df07'
-          //   subscriptionId: '295e777c-2a1b-456a-989e-3c9b15d52a8e'
-          //   resourceGroup: resourceGroup().name
-          // }
+          {
+            name: 'HubwayTelemetryRoute'
+            connectionString: EventHubPrimaryConnectionString
+          }
         ]
         storageContainers: [
           {
@@ -92,17 +87,15 @@ resource IoTHub 'Microsoft.Devices/IotHubs@2023-06-30' = {
         ]
       }
       routes: [
-        // Setup during deployment using az cli az iot hub update
-        //
-        // {
-        //   name: 'BostonHubwayTelemetryRoute2'
-        //   source: 'DeviceMessages'
-        //   condition: 'RoutingProperty = \'Hubway\''
-        //   endpointNames: [
-        //     'HubwayTelemetryRoute2'
-        //   ]
-        //   isEnabled: true
-        // }
+        {
+          name: 'BostonHubwayTelemetryRoute'
+          source: 'DeviceMessages'
+          condition: 'RoutingProperty = \'Hubway\''
+          endpointNames: [
+            'HubwayTelemetryRoute'
+          ]
+          isEnabled: true
+        }
       ]
       fallbackRoute: {
         name: '$fallback'
@@ -134,34 +127,3 @@ resource IoTHub 'Microsoft.Devices/IotHubs@2023-06-30' = {
   }
 }
 
-// var deviceId = 'raspberrypi-detroit-909'
-
-// resource iotDevice 'Microsoft.Devices/IotHubs/devices@2020-03-01' = {
-//    parent: IoTHub
-//    name: deviceId
-//   properties: {
-//     deviceId: deviceId
-//   }
-// }
-
-
-// resource iothub_addroute 'Microsoft.Devices/IotHubs/Routing@2020-03-01' = {
-//   name: 'HubwayTelemetryRoutev2'
-//   parent: IoTHub
-//   properties: {
-//     condition: 'Hubway'
-//     endpointNames: [
-//       'HubwayTelemetry'
-//     ]
-//   }
-// }
-
-
-// // Correct usage of listKeys function
-// var deviceKeys = listKeys(iotDevice.id, IoTHub.apiVersion)
-
-// // Get the primary connection string
-// var deviceConnectionString = deviceKeys.primaryConnectionString
-
-// // Output the connection string
-// output out_deviceConnectionString string = deviceConnectionString
