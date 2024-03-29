@@ -62,7 +62,7 @@ jobs:
       continue-on-error: true
       with:
         inlineScript: |
-          az iot hub device-identity create -n 'iot-3hcldlrksxfym' -d 'iot-raspberrypi-3hcldlrksxfym' --ee
+          az iot hub device-identity create -n 'iot-ayiavp35h75co' -d 'iot-raspberrypi-ayiavp35h75co' --ee
 
     - name: Logout of Azure
       run: |

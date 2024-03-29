@@ -24,6 +24,16 @@ var cosmosDBName = 'cosmos-${uniqueString(resourceGroup().id)}'
 // remove dashes for storage account name
 var storageAccountName = 'sta${uniqueString(resourceGroup().id)}'
 
+// KeyVault Secret Names
+// Note: Underscores Not allowed in KeyVault
+param KeyVault_MapsClientIdName string = 'MapsClientId'
+param KeyVault_MapsSubscriptionKeyName string = 'MapsSubscriptionKey'
+param KeyVault_AzureWebJobsStorageName string = 'AzureWebJobsStorage'
+param KeyVault_WebsiteContentAzureFileConnectionString string = 'WebsiteContentAzureFileConnectionString'
+param KeyVault_Shared_Access_Key_EVENTHUBName string = 'SharedAccessKeyEVENTHUB'
+param KeyVault_Shared_Access_Key_DOCUMENTDBName string = 'SharedAccessKeyDOCUMENTDB'
+param KeyVault_Azure_Maps_Subscription_KeyName string = 'AzureMapsSubscriptionKey'
+
 // Tags
 var defaultTags = {
   App: 'Azure IoT Data Services'
@@ -110,19 +120,18 @@ module cosmosdbmod './cosmosdb.bicep' = {
   }
 }
 
-// // Create Storage Account
-// module storageaccountmod './storageaccount.bicep' = {
-//   name: 'storageaccountdeploy'
-//   params: {
-//     //location: location
-//     //defaultTags: defaultTags
-//     storageAccountName: storageAccountName
-//   }
-//   dependsOn:  [
-//     eventhubmod
-//   ]
-// }
-
+// Create Storage Account
+module storageaccountmod './storageaccount.bicep' = {
+  name: 'storageaccountdeploy'
+  params: {
+    //location: location
+    //defaultTags: defaultTags
+    storageAccountName: storageAccountName
+  }
+  dependsOn:  [
+    eventhubmod
+  ]
+}
 
  // ObjectId of alias RPagels
 param AzObjectIdPagels string = '0aa95253-9e37-4af9-a63a-3b35ed78e98b'
@@ -130,6 +139,39 @@ param AzObjectIdPagels string = '0aa95253-9e37-4af9-a63a-3b35ed78e98b'
 // ObjectId of Service Principal "52a8e_ServicePrincipal_FullAccess"
 param ADOServiceprincipalObjectId string = '1681488b-a0ee-4491-a254-728fe9e43d8c'
 
+ // Create Configuration Entries
+ module configsettingsmod './configsettings.bicep' = {
+  name: 'configSettings'
+  params: {
+    keyvaultName: keyvaultName
+    functionAppName: functionAppName
+    tenant: subscription().tenantId
+    KeyVault_MapsSubscriptionKeyName: KeyVault_MapsSubscriptionKeyName
+    KeyVault_ClientIdName: KeyVault_MapsClientIdName
+    KeyVault_ClientIdValue: azuremapsmod.outputs.out_AzureMapsClientId
+    KeyVault_Shared_Access_Key_EVENTHUBName: KeyVault_Shared_Access_Key_EVENTHUBName
+    KeyVault_Shared_Access_Key_EVENTHUBValue: eventhubmod.outputs.out_eventHubPrimaryConnectionString
+    KeyVault_Shared_Access_Key_DOCUMENTDBName: KeyVault_Shared_Access_Key_DOCUMENTDBName
+    KeyVault_Shared_Access_Key_DOCUMENTDBValue: cosmosdbmod.outputs.out_CosmosDBConnectionString
+    KeyVault_AzureWebJobsStorageName: KeyVault_AzureWebJobsStorageName
+    KeyVault_WebsiteContentAzureFileConnectionStringName: KeyVault_WebsiteContentAzureFileConnectionString
+    KeyVault_AzureWebJobsStorageValue: functionappmod.outputs.out_AzureWebJobsStorage
+    KeyVault_Azure_Maps_Subscription_KeyName: KeyVault_Azure_Maps_Subscription_KeyName
+    KeyVault_Azure_Maps_Subscription_KeyValue: azuremapsmod.outputs.out_AzureMapsSubscriptionKeyString
+    azuremapname: azuremapname
+    funcAppServiceprincipalId: functionappmod.outputs.out_funcAppServiceprincipalId
+    appInsightsInstrumentationKey: appinsightsmod.outputs.out_appInsightsInstrumentationKey
+    appInsightsConnectionString: appinsightsmod.outputs.out_appInsightsConnectionString
+    ADOServiceprincipalObjectId: ADOServiceprincipalObjectId
+    AzObjectIdPagels: AzObjectIdPagels
+    }
+    dependsOn:  [
+     keyvaultmod
+     functionappmod
+     azuremapsmod
+     storageaccountmod
+   ]
+ }
 
 // Output Params used for IaC deployment in pipeline
 // output out_azuremapname string = azuremapname
