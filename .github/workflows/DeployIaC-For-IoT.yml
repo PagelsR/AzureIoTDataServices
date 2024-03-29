@@ -10,17 +10,55 @@ on:
   workflow_dispatch:
 
 env:
+  buildConfiguration: 'Release'
+  buildPlatform: 'Any CPU'
+  dotnet_version: '6.x.x'
   Azure_Resource_GroupName: 'rg-PagelsR-IoTDataServices-dev'
   Azure_Resource_GroupLocation: 'eastus'
 
 jobs:
-  build-and-deploy:
+  Build_Application:
     runs-on: ubuntu-latest
+    name: Build Application
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: ${{ env.dotnet_version }}
+
+    - name: Build and Publish FunctionApp
+      run: |
+        dotnet restore FunctionApps.csproj
+        dotnet build FunctionApps.csproj --configuration ${{ env.buildConfiguration }} --no-restore
+        dotnet publish FunctionApps.csproj --configuration ${{ env.buildConfiguration }} --no-build --no-restore -o './FunctionApps'
+      working-directory: ./FunctionApps
+
+    - name: Upload Build Artifacts-FuncApp
+      uses: actions/upload-artifact@v2
+      with:
+        name: FunctionApps
+        path: ${{ github.workspace }}/FunctionApps
+
+    - name: Upload Infrastucture Files
+      uses: actions/upload-artifact@v3
+      with:
+        name: IaC-v2
+        path: ${{ github.workspace }}/IaC-v2/*.*
+
+  Deploy_Infrastructure:
+    runs-on: ubuntu-latest
+    name: Deploy Infrastructure
+    needs: Build_Application
+    outputs:
+      output_functionAppName: ${{ steps.Infra.outputs.out_functionAppName }}
+      output_iotHubName: ${{ steps.Infra.outputs.out_iotHubName }}
+      #output_deviceConnectionString: ${{ steps.Infra.outputs.out_deviceConnectionString }}
+      output_eventHubPrimaryConnectionString: ${{ steps.Infra.outputs.out_eventHubPrimaryConnectionString }}
+      output_iotDeviceName: ${{ steps.Infra.outputs.out_iotDeviceName }}
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
-
     - name: Login to Azure
       uses: azure/login@v1
       with:
@@ -45,6 +83,20 @@ jobs:
       run: |
         bicep build ./IaC-v2/main.bicep
 
+    - name: Ensure Resource Group is UnLocked
+      uses: Azure/CLI@v1
+      continue-on-error: true
+      with:
+        inlineScript: |
+          az group lock delete --name DontDeleteMe --resource-group ${{ env.Azure_Resource_GroupName }}
+  
+    - name: Download Build Artifact-Infrastructure
+      uses: actions/download-artifact@v2
+      continue-on-error: false
+      with:
+        name: IaC-v2
+        path: ${{ github.workspace }}/IaC-v2
+            
     - name: Deploy Infrastructure
       id: Infra
       uses: azure/arm-deploy@v1
@@ -56,14 +108,103 @@ jobs:
         deploymentMode: Incremental
         failOnStdErr: false
 
-    # Create an IoT device
-    - name: Create an IoT device
+    - name: DEBUG ONLY Display Output Variables
+      run: |
+        echo 'output_functionAppName: ${{ steps.Infra.outputs.out_functionAppName }}'
+        echo 'output_iotHubName: ${{ steps.Infra.outputs.out_iotHubName }}'
+        echo 'output_eventHubPrimaryConnectionString: ${{ steps.Infra.outputs.out_eventHubPrimaryConnectionString }}'
+        echo 'output_iotDeviceName: ${{ steps.Infra.outputs.out_iotDeviceName }}'
+    
+    - name: Ensure Resource Group is Locked
       uses: Azure/CLI@v1
       continue-on-error: true
       with:
         inlineScript: |
-          az iot hub device-identity create -n 'iot-ayiavp35h75co' -d 'iot-raspberrypi-ayiavp35h75co' --ee
+          az group lock create --lock-type CanNotDelete --name DontDeleteMe --resource-group ${{ env.Azure_Resource_GroupName }} --notes 'Prevent deletion of the resource group'
 
-    - name: Logout of Azure
+  Deploy_Application:
+    runs-on: ubuntu-latest
+    name: Deploy Application
+    needs: [Deploy_Infrastructure, Build_Application]
+      
+    steps:
+      
+    - name: Login to Azure
+      uses: azure/login@v1
+      continue-on-error: false
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Ensure Resource Group is UnLocked
+      uses: Azure/CLI@v1
+      continue-on-error: true
+      with:
+        inlineScript: |
+          az group lock delete --name DontDeleteMe --resource-group ${{ env.Azure_Resource_GroupName }} && sleep 10
+
+    - name: Download Build Artifacts-Function Application
+      uses: actions/download-artifact@v2
+      continue-on-error: false
+      with:
+        name: FunctionApps
+        path: ${{ github.workspace }}/FunctionApps
+
+    # Deploy Function Application
+    - name: 'Deploy Function Application'
+      uses: Azure/functions-action@v1
+      with:
+        app-name: ${{ needs.Deploy_Infrastructure.outputs.output_functionAppName }}
+        slot-name: 'production'
+        package: './FunctionApps'
+      
+    - name: Ensure Resource Group is Locked
+      uses: Azure/CLI@v1
+      continue-on-error: true
+      with:
+        inlineScript: |
+          az group lock create --lock-type CanNotDelete --name DontDeleteMe --resource-group ${{ env.Azure_Resource_GroupName }} --notes 'Prevent deletion of the resource group'
+  
+    - name: 'Azure logout'
       run: |
         az logout
+        
+
+  Deploy_IoT_Device:
+    runs-on: ubuntu-latest
+    name: Add IoT Device
+    needs: [Deploy_Infrastructure]
+
+    steps:
+    
+      - name: Login to Azure
+        uses: azure/login@v1
+        continue-on-error: false
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      # Install Azure IoT Extension
+      - name: Install Azure IoT Extension
+        uses: Azure/CLI@v1
+        continue-on-error: true
+        with:
+          inlineScript: |
+            az extension add --name azure-iot
+
+      - name: DEBUG ONLY Display Output Variables
+        run: |
+          echo 'output_functionAppName: ${{ needs.Deploy_Infrastructure.outputs.output_functionAppName }}'
+          echo 'output_iotHubName: ${{ needs.Deploy_Infrastructure.outputs.output_iotHubName }}'
+          echo 'output_eventHubPrimaryConnectionString: ${{ needs.Deploy_Infrastructure.outputs.output_eventHubPrimaryConnectionString }}'
+          echo 'output_iotDeviceName: ${{ needs.Deploy_Infrastructure.outputs.output_iotDeviceName }}'
+
+      # Create an IoT device
+      - name: Create an IoT device
+        uses: Azure/CLI@v1
+        continue-on-error: true
+        with:
+          inlineScript: |
+            az iot hub device-identity create -n ${{ needs.Deploy_Infrastructure.outputs.output_iotHubName }} -d ${{ needs.Deploy_Infrastructure.outputs.output_iotDeviceName }} --ee
+
+      - name: Logout of Azure
+        run: |
+          az logout
