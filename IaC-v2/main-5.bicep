@@ -3,21 +3,32 @@ var iotHubName = 'iothubname-${uniqueString(resourceGroup().id)}'
 var eventHubName = 'hubwaytelemetry'
 var eventHubNamespaceName = 'evhnamespace-${uniqueString(resourceGroup().id)}'
 
-resource eventHubNamespace 'Microsoft.EventHub/namespaces@2018-01-01-preview' = {
+resource eventHubNamespace 'Microsoft.EventHub/namespaces@2023-01-01-preview' = {
   name: eventHubNamespaceName
   location: location
   properties: {}
 }
 
-resource eventHub 'Microsoft.EventHub/namespaces/eventhubs@2018-01-01-preview' = {
-  name: '${eventHubNamespace.name}/${eventHubName}'
+resource eventHub 'Microsoft.EventHub/namespaces/eventhubs@2023-01-01-preview' = {
+  name: eventHubName
+  parent: eventHubNamespace
   properties: {
     partitionCount: 2
     messageRetentionInDays: 7
   }
 }
 
-resource iotHub 'Microsoft.Devices/IotHubs@2020-03-01' = {
+resource iotHubAuthorizedToSendRule 'Microsoft.EventHub/namespaces/eventhubs/authorizationRules@2017-04-01' = {
+  name: 'iothubCanSend'
+  parent: eventHub
+   properties: {
+      rights: [
+         'Send'
+      ]
+   }
+}
+
+resource iotHub 'Microsoft.Devices/IotHubs@2023-06-30' = {
   name: iotHubName
   location: location
   sku: {
@@ -44,10 +55,10 @@ resource iotHub 'Microsoft.Devices/IotHubs@2020-03-01' = {
         }
       ]
       endpoints: {
-        serviceBusQueues: [
+        eventHubs: [
           {
-            connectionString: 'Endpoint=${eventHubNamespace.properties.serviceBusEndpoint};SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=${listKeys(eventHubNamespace.id, eventHubNamespace.apiVersion).primaryConnectionString};EntityPath=${eventHubName}'
             name: 'HubwayTelemetryRoute'
+            connectionString: iotHubAuthorizedToSendRule.listKeys().primaryConnectionString
           }
         ]
       }
@@ -55,3 +66,4 @@ resource iotHub 'Microsoft.Devices/IotHubs@2020-03-01' = {
   }
 }
 
+output out_iotHubName string = iotHubName
