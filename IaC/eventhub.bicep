@@ -91,6 +91,4 @@ resource eventHubName_hubwaytelemetry_hubwaycg 'Microsoft.EventHub/namespaces/ev
 //var eventHubNamespaceConnectionString = listKeys(eventHubName_RootManageSharedAccessKey.id, eventHubName_RootManageSharedAccessKey.apiVersion).primaryConnectionString
 //var eventHubNamespaceConnectionString = eventHubName_RootManageSharedAccessKey.listKeys().primaryConnectionString
 var AuthorizedeventHubNamespaceConnectionString = iotHubAuthorizedToSendRule.listKeys().primaryConnectionString
-
-output eventHubNamespaceConnectionString string = AuthorizedeventHubNamespaceConnectionString
 output out_eventHubPrimaryConnectionString string = AuthorizedeventHubNamespaceConnectionString

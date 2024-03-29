@@ -46,6 +46,17 @@ var defaultTags = {
   CreatedBy: createdBy
 }
 
+// Create Event Hub Namespace
+module eventhubmod './eventhub.bicep' = {
+  name: 'eventhubnamespacedeploy'
+  params: {
+    location: location
+    defaultTags: defaultTags
+    eventHubName: eventHubName
+    eventHubNamespaceName: eventHubNamespaceName
+  }
+}
+
 // Create IoT Hub
 module iotHubmod './iothub.bicep' = {
   name: 'iothubdeploy'
@@ -58,31 +69,6 @@ module iotHubmod './iothub.bicep' = {
   dependsOn:  [
     eventhubmod
   ]
-}
-
-// module iotHubmod './iothub2.bicep' = {
-//     name: 'iothubdeploy'
-//     params: {
-//       location: location
-//       iotHubName: iotHubName
-//       defaultTags: defaultTags
-//       resourceGroupName: resourceGroupName
-//     }
-//     dependsOn:  [
-//       storageaccountmod
-//       eventhubmod
-//     ]
-//   }
-
-// Create Event Hub Namespace
-module eventhubmod './eventhub.bicep' = {
-  name: 'eventhubnamespacedeploy'
-  params: {
-    location: location
-    defaultTags: defaultTags
-    eventHubName: eventHubName
-    eventHubNamespaceName: eventHubNamespaceName
-  }
 }
 
 // Create CosmosDB
