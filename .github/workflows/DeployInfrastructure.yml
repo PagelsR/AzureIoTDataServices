@@ -123,7 +123,7 @@ jobs:
   
   Deploy_IoT_Device:
     runs-on: ubuntu-latest
-    name: Deploy IoT Device
+    name: Add IoT Device
     needs: [Deploy_Infrastructure, Deploy_Application]
       
     permissions:
@@ -151,8 +151,7 @@ jobs:
         echo 'output_functionAppName: ${{ needs.Deploy_Infrastructure.outputs.output_functionAppName }}'
         echo 'output_iotHubName: ${{ needs.Deploy_Infrastructure.outputs.output_iotHubName }}'
         echo 'output_eventHubPrimaryConnectionString: ${{ needs.Deploy_Infrastructure.outputs.output_eventHubPrimaryConnectionString }}'
-
-#echo 'output_deviceConnectionString: ${{ needs.Deploy_Infrastructure.outputs.output_deviceConnectionString }}'
+        echo 'output_iotDeviceName: ${{ needs.Deploy_Infrastructure.outputs.output_iotDeviceName }}'
 
     # Create an IoT device
     - name: Create an IoT device
@@ -213,109 +212,3 @@ jobs:
       run: |
         az logout
           
-  Define_IoT_Route:
-    runs-on: ubuntu-latest
-    name: Add Msg Route to IoT Hub
-    needs: [Deploy_Infrastructure, Deploy_Application]
-      
-    permissions:
-      contents: read
-
-    # Identify any jobs that must complete successfully before this job will run.
-    steps:
-      
-    - name: Login to Azure
-      uses: azure/login@v1
-      continue-on-error: false
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-    - name: Ensure Resource Group is UnLocked
-      uses: Azure/CLI@v1
-      continue-on-error: true
-      with:
-        inlineScript: |
-          az group lock delete --name DontDeleteMe --resource-group ${{ env.Azure_Resource_GroupName }} && sleep 10
-
-    - name: DEBUG ONLY Display Output Variables
-      run: |
-        echo 'output_functionAppName: ${{ needs.Deploy_Infrastructure.outputs.output_functionAppName }}'
-        echo 'output_iotHubName: ${{ needs.Deploy_Infrastructure.outputs.output_iotHubName }}'
-        echo 'output_eventHubPrimaryConnectionString: ${{ needs.Deploy_Infrastructure.outputs.output_eventHubPrimaryConnectionString }}'
-
-# echo 'output_deviceConnectionString: ${{ needs.Deploy_Infrastructure.outputs.output_deviceConnectionString }}'
-            
-    - name: Create an EndPoint
-      run: |
-        az iot hub routing-endpoint create \
-          --resource-group ${{ env.Azure_Resource_GroupName }} \
-          --hub-name ${{ needs.Deploy_Infrastructure.outputs.output_iotHubName }} \
-          --endpoint-name "HubwayTelemetryRoute" \
-          --endpoint-resource-group ${{ env.Azure_Resource_GroupName }} \
-          --endpoint-subscription-id "295e777c-2a1b-456a-989e-3c9b15d52a8e" \
-          --endpoint-type "EventHub" \
-          --connection-string 'TBD'
-          
-# ${{ needs.Deploy_Infrastructure.outputs.output_deviceConnectionString }}   
- 
-    - name: Add route to EndPoint
-      run: |
-        az extension add --name azure-iot
-        az iot hub message-endpoint create \
-          --resource-group ${{ env.Azure_Resource_GroupName }} \
-          --hub-name ${{ needs.Deploy_Infrastructure.outputs.output_iotHubName }} \
-          --endpoint-name "HubwayTelemetryRoute" \
-          --source "DeviceMessages" \
-          --condition "RoutingProperty = 'Hubway'" \
-          --name "BostonHubwayTelemetryRoute" \
-          --enabled true
-
-    - name: Ensure Resource Group is Locked
-      uses: Azure/CLI@v1
-      continue-on-error: true
-      with:
-        inlineScript: |
-          az group lock create --lock-type CanNotDelete --name DontDeleteMe --resource-group ${{ env.Azure_Resource_GroupName }} --notes 'Prevent deletion of the resource group'
-                
-    - name: 'Azure logout'
-      run: |
-        az logout
-
-  Define_EventHub_EndPoint:
-    runs-on: ubuntu-latest
-    name: Add EndPoint to EventHub
-    needs: [Deploy_Infrastructure, Deploy_Application]
-      
-    permissions:
-      contents: read
-
-    # Identify any jobs that must complete successfully before this job will run.
-    steps:
-      
-    - name: Login to Azure
-      uses: azure/login@v1
-      continue-on-error: false
-      with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-    - name: Ensure Resource Group is UnLocked
-      uses: Azure/CLI@v1
-      continue-on-error: true
-      with:
-        inlineScript: |
-          az group lock delete --name DontDeleteMe --resource-group ${{ env.Azure_Resource_GroupName }} && sleep 10
-
-    - name: Add route to IoT Hub
-      run: |
-        az iot hub routing-endpoint create --connection-string 'Endpoint=sb://rg-pagelsr-iotdataservices-eventhub.servicebus.windows.net:5671/;SharedAccessKeyName=iothubroutes_${{ env.Azure_Resource_GroupName }} --hub-name ${{ needs.Deploy_Infrastructure.outputs.output_iotHubName }};SharedAccessKey=****;EntityPath=hubwaytelemetry' --endpoint-resource-group ${{ env.Azure_Resource_GroupName }} --endpoint-subscription-id '295e777c-2a1b-456a-989e-3c9b15d52a8e' --endpoint-type 'EventHub' --hub-name ${{ needs.Deploy_Infrastructure.outputs.output_iotHubName }} --name 'HubwayTelemetryRoute'
-
-    - name: Ensure Resource Group is Locked
-      uses: Azure/CLI@v1
-      continue-on-error: true
-      with:
-        inlineScript: |
-          az group lock create --lock-type CanNotDelete --name DontDeleteMe --resource-group ${{ env.Azure_Resource_GroupName }} --notes 'Prevent deletion of the resource group'
-                
-    - name: 'Azure logout'
-      run: |
-        az logout
