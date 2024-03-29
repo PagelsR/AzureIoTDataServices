@@ -1,8 +1,10 @@
 param location string = resourceGroup().location
 param eventHubName string
 param eventHubNamespaceName string
+param iotHubName string
 param defaultTags object
 
+// Defind the Event Hub Namespace
 resource eventHubNamespace 'Microsoft.EventHub/namespaces@2023-01-01-preview'= {
   name: eventHubNamespaceName
   location: location
@@ -23,6 +25,7 @@ resource eventHubNamespace 'Microsoft.EventHub/namespaces@2023-01-01-preview'= {
   }
 }
 
+// Define the Event Hub
 resource eventHubName_hubwaytelemetry 'Microsoft.EventHub/namespaces/eventhubs@2023-01-01-preview' = {
   parent: eventHubNamespace
   name: eventHubName
@@ -36,51 +39,18 @@ resource eventHubName_hubwaytelemetry 'Microsoft.EventHub/namespaces/eventhubs@2
     status: 'Active'
   }
 }
+
+// Define the Authorization Rule
 resource iotHubAuthorizedToSendRule 'Microsoft.EventHub/namespaces/authorizationrules@2021-01-01-preview' = {
   parent: eventHubNamespace
-  // name: 'RootManageSharedAccessKey'
   name: 'IoTHubCanSend'
   properties: {
     rights: [
-      'Listen'
-      'Manage'
       'Send'
     ]
   }
 }
-
-
-
-// resource eventHubName_default 'Microsoft.EventHub/namespaces/networkrulesets@2021-01-01-preview' = {
-//   parent: eventHubName_resource
-//   name: 'default'
-//   properties: {
-//     publicNetworkAccess: 'Enabled'
-//     defaultAction: 'Allow'
-//     virtualNetworkRules: []
-//     ipRules: []
-//     trustedServiceAccessEnabled: false
-//   }
-// }
-
-// resource eventHubName_hubwaytelemetry_eventHubNamespaceName 'Microsoft.EventHub/namespaces/eventhubs/authorizationRules@2021-01-01-preview' = {
-//   parent: eventHubName_hubwaytelemetry
-//   name: eventHubNamespaceName
-//   properties: {
-//     rights: [
-//       'Send'
-//     ]
-//   }
-
-// }
-
-// resource eventHubName_hubwaytelemetry_Default 'Microsoft.EventHub/namespaces/eventhubs/consumergroups@2021-01-01-preview' = {
-//   parent: eventHubName_hubwaytelemetry
-//   name: '$Default'
-//   properties: {
-//   }
-// }
-
+ // Define the Consumer Group
 resource eventHubName_hubwaytelemetry_hubwaycg 'Microsoft.EventHub/namespaces/eventhubs/consumergroups@2021-01-01-preview' = {
   parent: eventHubName_hubwaytelemetry
   name: 'hubwaycg'
@@ -88,7 +58,46 @@ resource eventHubName_hubwaytelemetry_hubwaycg 'Microsoft.EventHub/namespaces/ev
   }
 
 }
-//var eventHubNamespaceConnectionString = listKeys(eventHubName_RootManageSharedAccessKey.id, eventHubName_RootManageSharedAccessKey.apiVersion).primaryConnectionString
-//var eventHubNamespaceConnectionString = eventHubName_RootManageSharedAccessKey.listKeys().primaryConnectionString
+
+// Define the IoT Hub
+resource iotHub 'Microsoft.Devices/IotHubs@2023-06-30' = {
+  name: iotHubName
+  location: location
+  sku: {
+    name: 'S1'
+    capacity: 1
+  }
+  properties: {
+    eventHubEndpoints: {
+      events: {
+        retentionTimeInDays: 1
+        partitionCount: 2
+      }
+    }
+    routing: {
+      routes: [
+        {
+          name: 'BostonHubwayTelemetryRoute'
+          source: 'DeviceMessages'
+          condition: 'RoutingProperty = \'Hubway\''
+          endpointNames: [
+            'HubwayTelemetryRoute'
+          ]
+          isEnabled: true
+        }
+      ]
+      endpoints: {
+        eventHubs: [
+          {
+            name: 'HubwayTelemetryRoute'
+            connectionString: iotHubAuthorizedToSendRule.listKeys().primaryConnectionString
+          }
+        ]
+      }
+    }
+  }
+}
+
+
 var AuthorizedeventHubNamespaceConnectionString = iotHubAuthorizedToSendRule.listKeys().primaryConnectionString
 output out_eventHubPrimaryConnectionString string = AuthorizedeventHubNamespaceConnectionString

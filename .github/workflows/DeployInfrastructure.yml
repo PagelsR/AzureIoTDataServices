@@ -98,7 +98,7 @@ jobs:
     - name: Deploy Infrastructure
       id: Infra
       uses: azure/arm-deploy@v1
-      continue-on-error: true
+      continue-on-error: false
       with:
         scope: resourcegroup
         resourceGroupName: ${{ env.Azure_Resource_GroupName }}

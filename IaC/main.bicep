@@ -54,22 +54,23 @@ module eventhubmod './eventhub.bicep' = {
     defaultTags: defaultTags
     eventHubName: eventHubName
     eventHubNamespaceName: eventHubNamespaceName
+    iotHubName: iotHubName
   }
 }
 
 // Create IoT Hub
-module iotHubmod './iothub.bicep' = {
-  name: 'iothubdeploy'
-  params: {
-    location: location
-    iotHubName: iotHubName
-    defaultTags: defaultTags
-    EventHubPrimaryConnectionString: eventhubmod.outputs.out_eventHubPrimaryConnectionString
-  }
-  dependsOn:  [
-    eventhubmod
-  ]
-}
+// module iotHubmod './iothub.bicep' = {
+//   name: 'iothubdeploy'
+//   params: {
+//     location: location
+//     iotHubName: iotHubName
+//     defaultTags: defaultTags
+//     EventHubPrimaryConnectionString: eventhubmod.outputs.out_eventHubPrimaryConnectionString
+//   }
+//   dependsOn:  [
+//     eventhubmod
+//   ]
+// }
 
 // Create CosmosDB
 module cosmosdbmod './cosmosdb.bicep' = {
@@ -90,7 +91,7 @@ module storageaccountmod './storageaccount.bicep' = {
     storageAccountName: storageAccountName
   }
   dependsOn:  [
-    iotHubmod
+    eventhubmod
   ]
 }
 
