@@ -19,6 +19,7 @@ var azuremapname = 'maps-${uniqueString(resourceGroup().id)}'
 var functionAppName = 'func-${uniqueString(resourceGroup().id)}'
 var functionAppServicePlanName = 'funcplan-${uniqueString(resourceGroup().id)}'
 var keyvaultName = 'kv-${uniqueString(resourceGroup().id)}'
+var cosmosDBName = 'cosmos-${uniqueString(resourceGroup().id)}'
 
 // remove dashes for storage account name
 var storageAccountName = 'sta${uniqueString(resourceGroup().id)}'
@@ -80,6 +81,33 @@ module functionappmod './funcapp.bicep' = {
   dependsOn:  [
     appinsightsmod
   ]
+}
+
+// Create Azure KeyVault
+module keyvaultmod './keyvault.bicep' = {
+  name: keyvaultName
+  params: {
+    location: location
+    vaultName: keyvaultName
+    }
+ }
+
+ module azuremapsmod './azuremaps.bicep' = {
+  name: azuremapname
+  params: {
+    location: location
+    azuremapname: azuremapname
+  }
+ }
+
+ // Create CosmosDB
+module cosmosdbmod './cosmosdb.bicep' = {
+  name: 'cosmosdbdeploy'
+  params: {
+    location: location
+    defaultTags: defaultTags
+    cosmosDBName: cosmosDBName
+  }
 }
 
 // // Create Storage Account

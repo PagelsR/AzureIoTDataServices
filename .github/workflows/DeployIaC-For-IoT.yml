@@ -10,7 +10,7 @@ on:
   workflow_dispatch:
 
 env:
-  Azure_Resource_GroupName: 'rg-IoT-Rig'
+  Azure_Resource_GroupName: 'rg-PagelsR-IoTDataServices-dev'
   Azure_Resource_GroupLocation: 'eastus'
 
 jobs:
