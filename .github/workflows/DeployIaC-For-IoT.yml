@@ -35,17 +35,27 @@ jobs:
     #     dotnet publish FunctionApps.csproj --configuration ${{ env.buildConfiguration }} --no-build --no-restore -o './FunctionApps'
     #   working-directory: ./FunctionApps
 
-    - name: Build and Publish FunctionApp
-      run: |
-        dotnet restore
-        dotnet build ./FunctionApps/FunctionApps.csproj --configuration ${{ env.buildConfiguration }} --no-restore
-        dotnet publish ./FunctionApps/FunctionApps.csproj --configuration ${{ env.buildConfiguration }} -o './FunctionApps'
+    # - name: Build and Publish FunctionApp
+    #   run: |
+    #     dotnet restore
+    #     dotnet build ./FunctionApps/FunctionApps.csproj --configuration ${{ env.buildConfiguration }} --no-restore
+    #     dotnet publish ./FunctionApps/FunctionApps.csproj --configuration ${{ env.buildConfiguration }} -o './FunctionApps'
 
+    - name: Restore dependencies
+      run: dotnet restore FunctionApps/FunctionApps.csproj
+
+    - name: Build
+      run: dotnet build FunctionApps/FunctionApps.csproj --configuration Release --no-restore
+
+    - name: Publish
+      run: dotnet publish FunctionApps/FunctionApps.csproj --configuration Release --no-build --output ./build_output
+  
+        
     - name: Upload Build Artifacts-FuncApp
       uses: actions/upload-artifact@v2
       with:
         name: FunctionApps
-        path: ${{ github.workspace }}/FunctionApps
+        path: ${{ github.workspace }}/build_output
 
     - name: Upload Infrastucture Files
       uses: actions/upload-artifact@v3
