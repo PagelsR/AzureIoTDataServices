@@ -40,7 +40,6 @@ jobs:
         dotnet restore
         dotnet build ./FunctionApps/FunctionApps.csproj --configuration ${{ env.buildConfiguration }} --no-restore
         dotnet publish ./FunctionApps/FunctionApps.csproj --configuration ${{ env.buildConfiguration }} -o './FunctionApps'
-      working-directory: ./FunctionApps
 
     - name: Upload Build Artifacts-FuncApp
       uses: actions/upload-artifact@v2
