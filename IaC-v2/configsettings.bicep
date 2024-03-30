@@ -183,9 +183,8 @@ resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2023-01-01' = {
   kind: 'string'
   parent: existing_funcAppService
   properties: {
-    AzureWebJobsStorage: KeyVault_AzureWebJobsStorageValue
-    //AzureWebJobsStorage: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_AzureWebJobsStorageName})'
-    //WebsiteContentAzureFileConnectionString: KeyVault_AzureWebJobsStorageValue
+    AzureWebJobsStorage: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_AzureWebJobsStorageName})'
+    WebsiteContentAzureFileConnectionString: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_WebsiteContentAzureFileConnectionStringName})'
     Shared_Access_Key_EVENTHUB: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_Shared_Access_Key_EVENTHUBName})'
     Shared_Access_Key_DOCUMENTDB: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_Shared_Access_Key_DOCUMENTDBName})'
     Azure_Maps_Subscription_Key: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_Azure_Maps_Subscription_KeyName})'
@@ -193,8 +192,6 @@ resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2023-01-01' = {
     APPLICATIONINSIGHTS_CONNECTION_STRING: appInsightsConnectionString
     FUNCTIONS_WORKER_RUNTIME: 'dotnet'
     FUNCTIONS_EXTENSION_VERSION: '~4'
-    //WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_AzureWebJobsStorageName})'
-    WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: KeyVault_AzureWebJobsStorageValue
     WEBSITE_CONTENTSHARE: functionAppName
   }
   dependsOn: [
