@@ -64,7 +64,10 @@ namespace simulated_device
                 await s_deviceClient.SendEventAsync(message);
                 Console.WriteLine("{0} > Sending message: {1}", DateTime.Now, json);                
 
-                await Task.Delay(500);
+                await Task.Delay(200);
+
+                // Write a blank line
+                Console.WriteLine();
             }
         }
 
