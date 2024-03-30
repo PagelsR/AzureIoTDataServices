@@ -162,7 +162,7 @@ jobs:
       continue-on-error: false
       with:
         name: FunctionApps
-        path: ${{ github.workspace }}/FunctionApps
+        path: ${{ github.workspace }}/build_output
 
     # Deploy Function Application
     - name: 'Deploy Function Application'
@@ -170,7 +170,7 @@ jobs:
       with:
         app-name: ${{ needs.Deploy_Infrastructure.outputs.output_functionAppName }}
         slot-name: 'production'
-        package: './FunctionApps'
+        package: './build_output'
       
     - name: Ensure Resource Group is Locked
       uses: Azure/CLI@v1
