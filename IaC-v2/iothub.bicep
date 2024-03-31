@@ -1,7 +1,7 @@
 param location string = resourceGroup().location
 param defaultTags object
 param iotHubName string
-param appInsightsWorkspaceName string
+//param appInsightsWorkspaceName string
 
 @secure()
 param EventHubPrimaryConnectionString string
@@ -47,7 +47,7 @@ resource iotHub 'Microsoft.Devices/IotHubs@2023-06-30' = {
   }
 }
 
-var iotSecuritySolutionName = 'appwIoT-${uniqueString(resourceGroup().id)}'
+//var iotSecuritySolutionName = 'appwIoT-${uniqueString(resourceGroup().id)}'
 
 // resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2020-03-01-preview' = {
 //   name: iotSecuritySolutionName
@@ -60,21 +60,21 @@ var iotSecuritySolutionName = 'appwIoT-${uniqueString(resourceGroup().id)}'
 //   }
 // }
 
-resource logAnalyticsWorkspaceIoT 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
-  name: iotSecuritySolutionName
-  location: location
-  properties:{
-    sku: {
-      name: 'PerGB2018'
-    }
-    retentionInDays: 30
-    features: {
-      searchVersion: 1
-      legacy: 0
-      enableLogAccessUsingOnlyResourcePermissions: true
-    }
-  }
-}
+// resource logAnalyticsWorkspaceIoT 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
+//   name: iotSecuritySolutionName
+//   location: location
+//   properties:{
+//     sku: {
+//       name: 'PerGB2018'
+//     }
+//     retentionInDays: 30
+//     features: {
+//       searchVersion: 1
+//       legacy: 0
+//       enableLogAccessUsingOnlyResourcePermissions: true
+//     }
+//   }
+// }
 
 // // Log Analytics workspace for Application Insights
 // resource existing_applicationInsightsWorkspace 'Microsoft.OperationalInsights/workspaces@2023-09-01' existing = {
@@ -82,14 +82,14 @@ resource logAnalyticsWorkspaceIoT 'Microsoft.OperationalInsights/workspaces@2023
 // }
 
 // New IoT Security Solution resource - Defender for IoT
-resource iotSecuritySolution 'Microsoft.Security/iotSecuritySolutions@2019-08-01' = {
-  name: 'default'
-  location: location
-  properties: {
-    displayName: 'IoT Hub Security Solution'
-    iotHubs: [
-      iotHub.id
-    ]
-    workspace: logAnalyticsWorkspaceIoT.id
-  }
-}
+// resource iotSecuritySolution 'Microsoft.Security/iotSecuritySolutions@2019-08-01' = {
+//   name: 'default'
+//   location: location
+//   properties: {
+//     displayName: 'IoT Hub Security Solution'
+//     iotHubs: [
+//       iotHub.id
+//     ]
+//     workspace: logAnalyticsWorkspaceIoT.id
+//   }
+// }

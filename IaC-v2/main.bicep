@@ -61,7 +61,7 @@ module iotHubmod './iothub.bicep' = {
     iotHubName: iotHubName
     defaultTags: defaultTags
     EventHubPrimaryConnectionString: eventhubmod.outputs.out_eventHubPrimaryConnectionString
-    appInsightsWorkspaceName: appInsightsWorkspaceName
+    //appInsightsWorkspaceName: appInsightsWorkspaceName
   }
   dependsOn:  [
     eventhubmod

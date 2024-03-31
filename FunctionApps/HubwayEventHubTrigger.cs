@@ -30,21 +30,21 @@ namespace FunctionApps
                 // Create the document to be written to Cosmos DB
                 outputDocument = new
                 {
-                    startTime = messageData["\"starttime\""]?.ToString(),
-                    stopTime = messageData["\"stoptime\""]?.ToString(),
-                    tripDuration = messageData["\"tripduration\""]?.ToString(),
-                    startStationID = messageData["\"start station id\""]?.ToString(),
-                    startStationName = messageData["\"start station name\""]?.ToString(),
-                    startStationLatitiude = messageData["\"start station latitude\""]?.ToString(),
-                    startStationLongitude = messageData["\"start station longitude\""]?.ToString(),
-                    endStationID = messageData["\"end station id\""]?.ToString(),
-                    endStationName = messageData["\"end station name\""]?.ToString(),
-                    endStationLatitude = messageData["\"end station latitude\""]?.ToString(),
-                    endStationLongitude = messageData["\"end station longitude\""]?.ToString(),
-                    bikeID = messageData["\"bikeid\""]?.ToString(),
-                    userType = messageData["\"usertype\""]?.ToString(),
-                    gender = messageData["\"gender\""]?.ToString()
-                };
+                    startTime = messageData["starttime"]?.ToString(),
+                    stopTime = messageData["stoptime"]?.ToString(),
+                    tripDuration = messageData["tripduration"]?.ToString(),
+                    startStationID = messageData["start station id"]?.ToString(),
+                    startStationName = messageData["start station name"]?.ToString(),
+                    startStationLatitiude = messageData["start station latitude"]?.ToString(),
+                    startStationLongitude = messageData["start station longitude"]?.ToString(),
+                    endStationID = messageData["end station id"]?.ToString(),
+                    endStationName = messageData["end station name"]?.ToString(),
+                    endStationLatitude = messageData["end station latitude"]?.ToString(),
+                    endStationLongitude = messageData["end station longitude"]?.ToString(),
+                    bikeID = messageData["bikeid"]?.ToString(),
+                    userType = messageData["usertype"]?.ToString(),
+                    gender = messageData["gender"]?.ToString()
+               };
 
                 // startTime = messageData["startTime"]?.ToString(), // Safe navigation in case of null
                 // stopTime = messageData["stopTime"]?.ToString(),
