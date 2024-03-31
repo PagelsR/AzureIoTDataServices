@@ -64,7 +64,7 @@ resource existing_applicationInsightsWorkspace 'Microsoft.OperationalInsights/wo
 }
 
 // New IoT Security Solution resource - Defender for IoT
-resource iotSecuritySolution 'Microsoft.Security/iotSecuritySolutions@2021-02-01' = {
+resource iotSecuritySolution 'Microsoft.Security/iotSecuritySolutions@2019-08-01' = {
   name: 'default'
   location: location
   properties: {
