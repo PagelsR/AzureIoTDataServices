@@ -50,6 +50,26 @@ namespace simulated_device
             var reader = new ChoCSVReader(sFilePath).WithFirstLineHeader();
             dynamic rec;
  
+            // while ((rec = reader.Read()) != null)
+            // {
+            //     string json = Newtonsoft.Json.JsonConvert.SerializeObject(rec);
+
+            //     var message = new Message(Encoding.ASCII.GetBytes(json));
+
+            //     // Add a custom application property to the message.
+            //     // An IoT hub can filter on these properties without access to the message body.
+            //     message.Properties.Add("RoutingProperty", "Hubway");
+
+            //     // Send the telemetry message
+            //     await s_deviceClient.SendEventAsync(message);
+            //     Console.WriteLine("{0} > Sending message: {1}", DateTime.Now, json);                
+
+            //     await Task.Delay(300);
+
+            //     // Write a blank line
+            //     Console.WriteLine();
+            // }
+
             while ((rec = reader.Read()) != null)
             {
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(rec);
@@ -60,9 +80,18 @@ namespace simulated_device
                 // An IoT hub can filter on these properties without access to the message body.
                 message.Properties.Add("RoutingProperty", "Hubway");
 
-                // Send the telemetry message
-                await s_deviceClient.SendEventAsync(message);
-                Console.WriteLine("{0} > Sending message: {1}", DateTime.Now, json);                
+                try
+                {
+                    // Send the telemetry message
+                    await s_deviceClient.SendEventAsync(message);
+                    Console.WriteLine("{0} > Sending message: {1}", DateTime.Now, json);
+                }
+                catch (DeviceNotFoundException ex)
+                {
+                    Console.WriteLine("The IoT Hub device was not found. Please check your device connection and try again.");
+                    Console.WriteLine("Error details: " + ex.Message);
+                    Environment.Exit(1);
+                }             
 
                 await Task.Delay(300);
 
