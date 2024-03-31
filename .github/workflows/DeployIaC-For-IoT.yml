@@ -207,12 +207,12 @@ jobs:
             az iot hub device-identity create -n ${{ needs.Deploy_Infrastructure.outputs.output_iotHubName }} -d ${{ needs.Deploy_Infrastructure.outputs.output_iotDeviceName }} --ee
 
       # Enable Azure Defender for IoT
-      - name: Enable Azure Defender for IoT
-        uses: Azure/CLI@v1
-        continue-on-error: true
-        with:
-          inlineScript: |
-            az security iot-solution create --solution-name 'default' --resource-group ${{ env.Azure_Resource_GroupName }} --iot-hubs '/subscriptions/295e777c-2a1b-456a-989e-3c9b15d52a8e/resourceGroups/${{ env.Azure_Resource_GroupName }}/providers/Microsoft.Devices/${{ needs.Deploy_Infrastructure.outputs.output_iotHubName }}' --display-name 'Default Solution' --location ${{ env.Azure_Resource_GroupLocation }}
+      # - name: Enable Azure Defender for IoT
+      #   uses: Azure/CLI@v1
+      #   continue-on-error: true
+      #   with:
+      #     inlineScript: |
+      #       az security iot-solution create --solution-name 'default' --resource-group ${{ env.Azure_Resource_GroupName }} --iot-hubs '/subscriptions/295e777c-2a1b-456a-989e-3c9b15d52a8e/resourceGroups/${{ env.Azure_Resource_GroupName }}/providers/Microsoft.Devices/${{ needs.Deploy_Infrastructure.outputs.output_iotHubName }}' --display-name 'Default Solution' --location ${{ env.Azure_Resource_GroupLocation }}
 
       - name: Logout of Azure
         run: |

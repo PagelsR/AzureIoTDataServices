@@ -1,7 +1,6 @@
 param location string = resourceGroup().location
 param defaultTags object
 param iotHubName string
-//param appInsightsWorkspaceName string
 
 @secure()
 param EventHubPrimaryConnectionString string
