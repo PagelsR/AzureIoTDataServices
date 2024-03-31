@@ -80,7 +80,7 @@ module appinsightsmod './appinsights.bicep' = {
 }
 
 // Create Function App
-module functionappmod './funcapp2.bicep' = {
+module functionappmod './funcapp.bicep' = {
   name: 'functionappdeploy'
   params: {
     location: location
@@ -122,7 +122,7 @@ module cosmosdbmod './cosmosdb.bicep' = {
 }
 
 // Create Storage Account
-module storageaccountmod './storageaccount2.bicep' = {
+module storageaccountmod './storageaccount.bicep' = {
   name: 'storageaccountdeploy'
   params: {
     location: location

@@ -184,7 +184,6 @@ resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2023-01-01' = {
   parent: existing_funcAppService
   properties: {
     AzureWebJobsStorage: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_AzureWebJobsStorageName})'
-    // WebsiteContentAzureFileConnectionString: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_WebsiteContentAzureFileConnectionStringName})'
     Shared_Access_Key_EVENTHUB: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_Shared_Access_Key_EVENTHUBName})'
     Shared_Access_Key_DOCUMENTDB: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_Shared_Access_Key_DOCUMENTDBName})'
     Azure_Maps_Subscription_Key: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_Azure_Maps_Subscription_KeyName})'
@@ -194,6 +193,7 @@ resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2023-01-01' = {
     FUNCTIONS_EXTENSION_VERSION: '~4'
     WEBSITE_CONTENTSHARE: functionAppName
     WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_WebsiteContentAzureFileConnectionStringName})'
+    'AzureWebJobs.HubwayEventHubTriggerRead.Disabled': 'true'
   }
   dependsOn: [
     secret3
