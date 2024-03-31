@@ -1,4 +1,4 @@
-tripduration,starttime,stoptime,start station id,start station name,start station latitude,start station longitude,end station id,end station name,end station latitude,end station longitude,bikeid,usertype,birth year,gender
+tripduration,starttime,stoptime,startstationid,startstationname,startstationlatitude,startstationlongitude,endstationid,endstationname,endstationlatitude,endstationlongitude,bikeid,usertype,birthyear,gender
 370,2/1/2015 0:10,2/1/2015 0:17,76,Central Sq Post Office / Cambridge City Hall at Mass Ave / Pleasant St,42.366426,-71.105495,117,Binney St / Sixth St,42.366095,-71.086388,703,Subscriber,1984,1
 444,2/1/2015 0:30,2/1/2015 0:37,67,MIT at Mass Ave / Amherst St,42.3581,-71.093198,76,Central Sq Post Office / Cambridge City Hall at Mass Ave / Pleasant St,42.366426,-71.105495,1276,Subscriber,1988,1
 484,2/1/2015 0:37,2/1/2015 0:45,73,Harvard Square at Brattle St / Eliot St,42.373231,-71.120886,87,Harvard University Housing - 115 Putnam Ave at Peabody Terrace,42.366621,-71.114214,906,Subscriber,1986,1
