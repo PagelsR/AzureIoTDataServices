@@ -12,7 +12,7 @@ resource functionApp 'Microsoft.Web/sites@2023-01-01' = {
   location: location
   tags: defaultTags
   properties: {
-    // siteConfig: {
+    siteConfig: {
     //   appSettings: [
     //     {
     //       name: 'FUNCTIONS_WORKER_RUNTIME'
@@ -27,7 +27,8 @@ resource functionApp 'Microsoft.Web/sites@2023-01-01' = {
     //       value: 'DefaultEndpointsProtocol=https;AccountName=${storageAccountName};AccountKey=${storageAccount.listKeys().keys[0].value}'
     //     }
     //   ]
-    // }
+    netFrameworkVersion: 'v4.0'
+    }
     serverFarmId: hostingPlan.id
     clientAffinityEnabled: false
   }
