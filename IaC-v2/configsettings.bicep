@@ -202,3 +202,35 @@ resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2023-01-01' = {
     secret7
   ]
 }
+
+// ****************************************************
+
+// Reference Existing resource
+resource existing_funcAppService_v2 'Microsoft.Web/sites@2023-01-01' existing = {
+  name: 'func-6fohimrra72uq-v2'
+}
+// Create Web sites/config 'appsettings' - Function App
+resource funcAppSettingsStrings_v2 'Microsoft.Web/sites/config@2023-01-01' = {
+  name: 'appsettings'
+  kind: 'string'
+  parent: existing_funcAppService_v2
+  properties: {
+    AzureWebJobsStorage: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_AzureWebJobsStorageName})'
+    Shared_Access_Key_EVENTHUB: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_Shared_Access_Key_EVENTHUBName})'
+    Shared_Access_Key_DOCUMENTDB: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_Shared_Access_Key_DOCUMENTDBName})'
+    Azure_Maps_Subscription_Key: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_Azure_Maps_Subscription_KeyName})'
+    APPINSIGHTS_INSTRUMENTATIONKEY: appInsightsInstrumentationKey
+    APPLICATIONINSIGHTS_CONNECTION_STRING: appInsightsConnectionString
+    FUNCTIONS_WORKER_RUNTIME: 'dotnet'
+    FUNCTIONS_EXTENSION_VERSION: '~4'
+    WEBSITE_CONTENTSHARE: functionAppName
+    WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_WebsiteContentAzureFileConnectionStringName})'
+    'AzureWebJobs.HubwayEventHubTriggerRead.Disabled': 'true'
+  }
+  dependsOn: [
+    secret3
+    secret5
+    secret6
+    secret7
+  ]
+}
