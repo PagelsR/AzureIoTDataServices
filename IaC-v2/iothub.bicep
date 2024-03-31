@@ -47,8 +47,10 @@ resource iotHub 'Microsoft.Devices/IotHubs@2023-06-30' = {
   }
 }
 
+var iotSecuritySolutionName = 'appwIoT-${uniqueString(resourceGroup().id)}'
+
 // resource logAnalyticsWorkspace 'Microsoft.OperationalInsights/workspaces@2020-03-01-preview' = {
-//   name: workspaceName
+//   name: iotSecuritySolutionName
 //   location: location
 //   sku: {
 //     name: 'PerGB2018'
@@ -58,10 +60,26 @@ resource iotHub 'Microsoft.Devices/IotHubs@2023-06-30' = {
 //   }
 // }
 
-// Log Analytics workspace for Application Insights
-resource existing_applicationInsightsWorkspace 'Microsoft.OperationalInsights/workspaces@2023-09-01' existing = {
-  name: appInsightsWorkspaceName
+resource logAnalyticsWorkspaceIoT 'Microsoft.OperationalInsights/workspaces@2023-09-01' = {
+  name: iotSecuritySolutionName
+  location: location
+  properties:{
+    sku: {
+      name: 'PerGB2018'
+    }
+    retentionInDays: 30
+    features: {
+      searchVersion: 1
+      legacy: 0
+      enableLogAccessUsingOnlyResourcePermissions: true
+    }
+  }
 }
+
+// // Log Analytics workspace for Application Insights
+// resource existing_applicationInsightsWorkspace 'Microsoft.OperationalInsights/workspaces@2023-09-01' existing = {
+//   name: appInsightsWorkspaceName
+// }
 
 // New IoT Security Solution resource - Defender for IoT
 resource iotSecuritySolution 'Microsoft.Security/iotSecuritySolutions@2019-08-01' = {
@@ -72,6 +90,6 @@ resource iotSecuritySolution 'Microsoft.Security/iotSecuritySolutions@2019-08-01
     iotHubs: [
       iotHub.id
     ]
-    workspace: existing_applicationInsightsWorkspace.id
+    workspace: logAnalyticsWorkspaceIoT.id
   }
 }
