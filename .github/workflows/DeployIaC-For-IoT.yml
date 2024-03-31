@@ -154,7 +154,7 @@ jobs:
     - name: 'Deploy Function Application'
       uses: Azure/functions-action@v1
       with:
-        app-name: 'func-6fohimrra72uq-v2' #${{ needs.Deploy_Infrastructure.outputs.output_functionAppName }}
+        app-name: ${{ needs.Deploy_Infrastructure.outputs.output_functionAppName }}
         slot-name: 'production'
         package: './build_output'
       
