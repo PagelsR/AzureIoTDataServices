@@ -22,7 +22,8 @@ var keyvaultName = 'kv-${uniqueString(resourceGroup().id)}'
 var cosmosDBName = 'cosmos-${uniqueString(resourceGroup().id)}'
 
 // remove dashes for storage account name
-var storageAccountName = 'sta${uniqueString(resourceGroup().id)}'
+var storageAccountNameFuncApp = 'sta${uniqueString(resourceGroup().id)}'
+var storageAccountNameBlob = 'stablob${uniqueString(resourceGroup().id)}'
 
 // KeyVault Secret Names
 // Note: Underscores Not allowed in KeyVault
@@ -79,14 +80,14 @@ module appinsightsmod './appinsights.bicep' = {
 }
 
 // Create Function App
-module functionappmod './funcapp.bicep' = {
+module functionappmod './funcapp2.bicep' = {
   name: 'functionappdeploy'
   params: {
     location: location
     functionAppServicePlanName: functionAppServicePlanName
     functionAppName: functionAppName
     defaultTags: defaultTags
-    storageAccountName: storageAccountName
+    storageAccountNameFuncApp: storageAccountNameFuncApp
   }
   dependsOn:  [
     appinsightsmod
@@ -121,12 +122,13 @@ module cosmosdbmod './cosmosdb.bicep' = {
 }
 
 // Create Storage Account
-module storageaccountmod './storageaccount.bicep' = {
+module storageaccountmod './storageaccount2.bicep' = {
   name: 'storageaccountdeploy'
   params: {
-    //location: location
-    //defaultTags: defaultTags
-    storageAccountName: storageAccountName
+    location: location
+    defaultTags: defaultTags
+    storageAccountNameBlob: storageAccountNameBlob
+
   }
   dependsOn:  [
     eventhubmod
@@ -155,7 +157,7 @@ param ADOServiceprincipalObjectId string = '1681488b-a0ee-4491-a254-728fe9e43d8c
     KeyVault_Shared_Access_Key_DOCUMENTDBValue: cosmosdbmod.outputs.out_CosmosDBConnectionString
     KeyVault_AzureWebJobsStorageName: KeyVault_AzureWebJobsStorageName
     KeyVault_WebsiteContentAzureFileConnectionStringName: KeyVault_WebsiteContentAzureFileConnectionString
-    KeyVault_AzureWebJobsStorageValue: functionappmod.outputs.out_AzureWebJobsStorage
+    KeyVault_AzureWebJobsStorageValue: functionappmod.outputs.out_AzureWebJobsStorageFuncApp
     KeyVault_Azure_Maps_Subscription_KeyName: KeyVault_Azure_Maps_Subscription_KeyName
     KeyVault_Azure_Maps_Subscription_KeyValue: azuremapsmod.outputs.out_AzureMapsSubscriptionKeyString
     azuremapname: azuremapname
