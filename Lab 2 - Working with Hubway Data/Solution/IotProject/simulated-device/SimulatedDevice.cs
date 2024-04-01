@@ -63,6 +63,7 @@ namespace simulated_device
                 // Send the telemetry message
                 await s_deviceClient.SendEventAsync(message);
                 Console.WriteLine("{0} > Sending message: {1}", DateTime.Now, json);                
+                Console.WriteLine("{0} > Sending message: {1}", DateTime.Now, message);                
 
                 await Task.Delay(300);
 
