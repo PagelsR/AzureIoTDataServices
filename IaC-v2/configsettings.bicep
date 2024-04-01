@@ -173,6 +173,9 @@ resource secret7 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
   }
 }
 
+//     'AzureWebJobs.HubwayEventHubTriggerRead.Disabled': 'true'
+
+
 // Reference Existing resource
 resource existing_funcAppService 'Microsoft.Web/sites@2023-01-01' existing = {
   name: functionAppName
@@ -193,7 +196,6 @@ resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2023-01-01' = {
     FUNCTIONS_EXTENSION_VERSION: '~4'
     WEBSITE_CONTENTSHARE: functionAppName
     WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_WebsiteContentAzureFileConnectionStringName})'
-    'AzureWebJobs.HubwayEventHubTriggerRead.Disabled': 'true'
   }
   dependsOn: [
     secret3
