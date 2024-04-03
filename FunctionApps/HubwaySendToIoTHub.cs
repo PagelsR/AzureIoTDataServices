@@ -7,6 +7,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Extensions.Logging;
 using CsvHelper;
 using System.Collections.Generic;
+using System.Globalization;
 
 public static class SendToIoTHub
 {
@@ -18,7 +19,7 @@ public static class SendToIoTHub
         log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
 
         using (var reader = new StreamReader($"{Environment.GetEnvironmentVariable("GITHUB_WORKSPACE")}/simulated-device/data/201502-hubway-tripdata.csv"))
-        using (var csv = new CsvReader(reader))
+        using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
         {
             var records = new List<dynamic>();
             int count = 0;
