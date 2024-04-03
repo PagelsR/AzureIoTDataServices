@@ -225,14 +225,14 @@ jobs:
         with:
           inlineScript: |
             conn_string=$(az iot hub device-identity connection-string show --device-id ${{ needs.Deploy_Infrastructure.outputs.output_iotDeviceName }} --hub-name ${{ needs.Deploy_Infrastructure.outputs.output_iotHubName }} --query connectionString -o tsv)
-            echo "::set-output name=conn_string::$conn_string"
+            echo "CONN_STRING=$conn_string" >> $GITHUB_ENV
 
       - name: Add secret to Azure Key Vault
         uses: Azure/CLI@v1
         with:
           inlineScript: |
-            az keyvault secret set --name "Shared_Access_Key_IOTHUB" --vault-name ${{ needs.Deploy_Infrastructure.outputs.output_keyVaultName}} --value "${{ steps.get_conn_string.outputs.conn_string }}"
-
+            az keyvault secret set --name "Shared_Access_Key_IOTHUB" --vault-name ${{ needs.Deploy_Infrastructure.outputs.output_keyVaultName}} --value "${{ env.CONN_STRING }}"
+            
       # Enable Azure Defender for IoT
       # - name: Enable Azure Defender for IoT
       #   uses: Azure/CLI@v1
