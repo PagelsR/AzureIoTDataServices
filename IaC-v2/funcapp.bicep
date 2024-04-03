@@ -37,7 +37,6 @@ resource hostingPlan 'Microsoft.Web/serverfarms@2023-01-01' = {
   }
 }
 
-
 // Windows Function App
 // resource functionApp 'Microsoft.Web/sites@2023-01-01' = {
 //   name: functionAppName

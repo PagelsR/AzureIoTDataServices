@@ -58,6 +58,7 @@ jobs:
       output_iotHubName: ${{ steps.Infra.outputs.out_iotHubName }}
       output_eventHubPrimaryConnectionString: ${{ steps.Infra.outputs.out_eventHubPrimaryConnectionString }}
       output_iotDeviceName: ${{ steps.Infra.outputs.out_iotDeviceName }}
+      output_keyVaultName: ${{ steps.Infra.outputs.out_keyvaultName }}
 
     steps:
     - name: Login to Azure
@@ -205,6 +206,20 @@ jobs:
         with:
           inlineScript: |
             az iot hub device-identity create -n ${{ needs.Deploy_Infrastructure.outputs.output_iotHubName }} -d ${{ needs.Deploy_Infrastructure.outputs.output_iotDeviceName }} --ee
+
+      - name: Get IoT device connection string
+        id: get_conn_string
+        uses: Azure/CLI@v1
+        with:
+          inlineScript: |
+            conn_string=$(az iot hub device-identity connection-string show --device-id ${{ needs.Deploy_Infrastructure.outputs.output_iotDeviceName }} --hub-name ${{ needs.Deploy_Infrastructure.outputs.output_iotHubName }} --query connectionString -o tsv)
+            echo "::set-output name=conn_string::$conn_string"
+
+      - name: Add secret to Azure Key Vault
+        uses: Azure/CLI@v1
+        with:
+          inlineScript: |
+            az keyvault secret set --name "Shared_Access_Key_IOTHUB" --vault-name ${{ needs.Deploy_Infrastructure.outputs.output_keyVaultName}} --value "${{ steps.get_conn_string.outputs.conn_string }}"
 
       # Enable Azure Defender for IoT
       # - name: Enable Azure Defender for IoT

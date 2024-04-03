@@ -177,6 +177,7 @@ param ADOServiceprincipalObjectId string = '1681488b-a0ee-4491-a254-728fe9e43d8c
 
 // Output Params used for IaC deployment in pipeline
 output out_azuremapname string = azuremapname
+output out_keyvaultName string = keyvaultName
 output out_functionAppName string = functionAppName
 output out_iotHubName string = iotHubName
 output out_iotdeviceName string = iotDeviceName
