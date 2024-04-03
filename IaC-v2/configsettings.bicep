@@ -175,11 +175,11 @@ resource secret7 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
 
 //     'AzureWebJobs.HubwayEventHubTriggerRead.Disabled': 'true'
 
-
 // Reference Existing resource
 resource existing_funcAppService 'Microsoft.Web/sites@2023-01-01' existing = {
   name: functionAppName
 }
+
 // Create Web sites/config 'appsettings' - Function App
 resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2023-01-01' = {
   name: 'appsettings'
@@ -203,4 +203,5 @@ resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2023-01-01' = {
     secret6
     secret7
   ]
+}
 }
