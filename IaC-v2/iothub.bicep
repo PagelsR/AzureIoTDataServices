@@ -18,7 +18,7 @@ resource iotHub 'Microsoft.Devices/IotHubs@2023-06-30' = {
     eventHubEndpoints: {
       events: {
         retentionTimeInDays: 1
-        partitionCount: 2
+        partitionCount: 4
       }
     }
     routing: {
