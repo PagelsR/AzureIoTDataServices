@@ -196,7 +196,7 @@ resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2023-01-01' = {
     FUNCTIONS_EXTENSION_VERSION: '~4'
     WEBSITE_CONTENTSHARE: functionAppName
     WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_WebsiteContentAzureFileConnectionStringName})'
-  }
+    'AzureWebJobs.SendToIoTHub.Disabled': 'true'
   dependsOn: [
     secret3
     secret5
@@ -204,4 +204,3 @@ resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2023-01-01' = {
     secret7
   ]
 }
-
