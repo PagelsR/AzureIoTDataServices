@@ -158,7 +158,7 @@ jobs:
         path: ${{ github.workspace }}/build_output
 
     # Deploy Function Application
-    - name: 'Deploy Function Application'
+    - name: Deploy Function Application
       uses: Azure/functions-action@v1
       with:
         app-name: ${{ needs.Deploy_Infrastructure.outputs.output_functionAppName }}
@@ -167,6 +167,7 @@ jobs:
 
     - name: Download CSV File
       uses: actions/download-artifact@v2
+      continue-on-error: true
       with:
         name: 201502-hubway-tripdata
         path: ${{ github.workspace }}/simulated-device/data/
@@ -229,10 +230,11 @@ jobs:
 
       - name: Add secret to Azure Key Vault
         uses: Azure/CLI@v1
+        continue-on-error: true
         with:
           inlineScript: |
             az keyvault secret set --name "Shared_Access_Key_IOTHUB" --vault-name ${{ needs.Deploy_Infrastructure.outputs.output_keyVaultName}} --value "${{ env.CONN_STRING }}"
-            
+
       # Enable Azure Defender for IoT
       # - name: Enable Azure Defender for IoT
       #   uses: Azure/CLI@v1
