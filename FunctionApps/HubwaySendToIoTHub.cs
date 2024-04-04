@@ -24,14 +24,19 @@ public static class SendToIoTHub
     // If the counter reaches 500, it sends the batch of records to IoT Hub, then clears the list and resets the counter.
     // After reading all lines, if there are any remaining records in the list, it sends them to IoT Hub.
 
+    // To process 20,000 records in 16 minutes, with the function running every 2 minutes, you would need to process a batch of records each time the function runs.
+    // First, calculate how many times the function will run in 16 minutes. 16 minutes / 2 minutes = 8 times.
+    // Then, divide the total number of records by the number of times the function will run. 20,000 records / 8 times = 2,500 records per batch.
+
     [FunctionName("SendToIoTHub")]
-    public static async Task Run([TimerTrigger("0 */5 * * * *")]TimerInfo myTimer, ILogger log)
+    public static async Task Run([TimerTrigger("0 */2 * * * *")]TimerInfo myTimer, ILogger log, ExecutionContext context)
     {
         log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
 
         try
         {
-            using (var reader = new StreamReader($"{Environment.GetEnvironmentVariable("GITHUB_WORKSPACE")}/simulated-device/data/201502-hubway-tripdata.csv"))
+            var csvFilePath = Path.Combine(context.FunctionAppDirectory, "simulated-device", "data", "201502-hubway-tripdata.csv");
+            using (var reader = new StreamReader(csvFilePath))
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
                 var records = new List<dynamic>();
@@ -43,7 +48,7 @@ public static class SendToIoTHub
                     records.Add(record);
                     count++;
 
-                    if (count == 500)
+                    if (count == 2500)
                     {
                         await SendBatchToIoTHub(records, log);
                         records.Clear();
