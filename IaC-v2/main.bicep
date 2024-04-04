@@ -26,7 +26,7 @@ var storageAccountNameFuncApp = 'sta${uniqueString(resourceGroup().id)}'
 var storageAccountNameBlob = 'stablob${uniqueString(resourceGroup().id)}'
 
 // KeyVault Secret Names
-// Note: Underscores Not allowed in KeyVault
+// Note: Underscores Not allowed to comply with Azure Key Vault naming rules. 
 param KeyVault_MapsClientIdName string = 'MapsClientId'
 param KeyVault_MapsSubscriptionKeyName string = 'MapsSubscriptionKey'
 param KeyVault_AzureWebJobsStorageName string = 'AzureWebJobsStorage'
