@@ -84,6 +84,7 @@ param accessPolicies array = [
       secrets: [
         'get'
         'list'
+        'set'
       ]
     }
   }
