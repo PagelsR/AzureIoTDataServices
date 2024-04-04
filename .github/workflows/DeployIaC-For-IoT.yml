@@ -221,6 +221,7 @@ jobs:
             az iot hub device-identity create -n ${{ needs.Deploy_Infrastructure.outputs.output_iotHubName }} -d ${{ needs.Deploy_Infrastructure.outputs.output_iotDeviceName }} --ee
 
       - name: Get IoT device connection string
+        continue-on-error: false
         id: get_conn_string
         uses: Azure/CLI@v1
         with:
@@ -230,7 +231,7 @@ jobs:
 
       - name: Add secret to Azure Key Vault
         uses: Azure/CLI@v1
-        continue-on-error: true
+        continue-on-error: false
         with:
           inlineScript: |
             az keyvault secret set --name "SharedAccessKeyIOTHUB" --vault-name ${{ needs.Deploy_Infrastructure.outputs.output_keyVaultName}} --value "${{ env.CONN_STRING }}"
