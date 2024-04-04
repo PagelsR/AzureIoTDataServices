@@ -233,7 +233,7 @@ jobs:
         continue-on-error: true
         with:
           inlineScript: |
-            az keyvault secret set --name "Shared_Access_Key_IOTHUB" --vault-name ${{ needs.Deploy_Infrastructure.outputs.output_keyVaultName}} --value "${{ env.CONN_STRING }}"
+            az keyvault secret set --name "SharedAccessKeyIOTHUB" --vault-name ${{ needs.Deploy_Infrastructure.outputs.output_keyVaultName}} --value "${{ env.CONN_STRING }}"
 
       # Enable Azure Defender for IoT
       # - name: Enable Azure Defender for IoT
