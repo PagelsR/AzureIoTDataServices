@@ -28,6 +28,7 @@ resource iotHubAuthorizedToSendRule 'Microsoft.EventHub/namespaces/eventhubs/aut
    properties: {
       rights: [
          'Send'
+         'Listen'
       ]
    }
 }
