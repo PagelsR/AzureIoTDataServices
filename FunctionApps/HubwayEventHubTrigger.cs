@@ -26,11 +26,12 @@ namespace FunctionApps
                 //JsonDocument msg = JsonDocument.Parse(myEventHubMessage);
                 // Parse the incoming message
                 var messageData = JsonConvert.DeserializeObject<JObject>(myEventHubMessage);
+                string tempid = Guid.NewGuid().ToString();
 
                 // Create the document to be written to Cosmos DB
                 outputDocument = new
                 {
-                    id = Guid.NewGuid().ToString(),
+                    id = tempid,
                     tripduration = messageData["tripduration"]?.ToString(),
                     starttime = messageData["starttime"]?.ToString(),
                     stoptime = messageData["stoptime"]?.ToString(),
