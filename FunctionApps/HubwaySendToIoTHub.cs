@@ -21,6 +21,7 @@ public static class SimulatedIoTDevice
     public static async Task Run([TimerTrigger("0 */2 * * * *")]TimerInfo myTimer, ILogger log, ExecutionContext context)
     {
         log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+        log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
 
         try
         {
@@ -58,28 +59,30 @@ public static class SimulatedIoTDevice
         }
     }
 
-    /// <summary>
-    /// Sends a batch of records to an IoT Hub.
-    /// </summary>
-    /// <param name="records">A list of records to be sent. Each record is a dynamic object.</param>
-    /// <param name="log">An ILogger instance used for logging information about the sent messages.</param>
-    /// <returns>A Task representing the asynchronous operation.</returns>
     private static async Task SendBatchToIoTHub(List<dynamic> records, ILogger log)
     {
-        // Iterate over each record in the list
-        foreach (var record in records)
+        try
         {
-            // Serialize the record into a JSON string
-            var messageString = Newtonsoft.Json.JsonConvert.SerializeObject(record);
+            // Iterate over each record in the list
+            foreach (var record in records)
+            {
+                // Serialize the record into a JSON string
+                var messageString = Newtonsoft.Json.JsonConvert.SerializeObject(record);
 
-            // Convert the JSON string to a byte array and create a new Message object
-            var message = new Message(Encoding.ASCII.GetBytes(messageString));
+                // Convert the JSON string to a byte array and create a new Message object
+                var message = new Message(Encoding.ASCII.GetBytes(messageString));
 
-            // Send the Message object to the IoT Hub
-            await deviceClient.SendEventAsync(message);
+                // Send the Message object to the IoT Hub
+                await deviceClient.SendEventAsync(message);
 
-            // Log information about the sent message
-            log.LogInformation($"Sent message: {messageString}");
+                // Log information about the sent message
+                log.LogInformation($"Sent message: {messageString}");
+            }
+        }
+        catch (Exception ex)
+        {
+            // Log the exception details
+            log.LogError($"An error occurred: {ex.Message}. StackTrace: {ex.StackTrace}");
         }
     }
 }
