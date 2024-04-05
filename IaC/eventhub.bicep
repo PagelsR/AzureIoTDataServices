@@ -108,14 +108,4 @@ resource iotHub 'Microsoft.Devices/IotHubs@2023-06-30' = {
 var AuthorizedeventHubNamespaceConnectionString = listKeys(iotHubAuthorizedToSendRule.id, iotHubAuthorizedToSendRule.apiVersion).primaryConnectionString
 
 // Output our variables
-
-//output eventHubNamespaceConnectionString string = eventHubNamespaceConnectionString
-
-// connectionString: iotHubAuthorizedToSendRule.listKeys().primaryConnectionString
-
-// listKeys(iotHubAuthorizedToSendRule.id, iotHubAuthorizedToSendRule.apiVersion).primaryConnectionString
-
-//output eventHubConnectionString string = listKeys('${eventHubNamespace}/authorizationRules/${authorizationRuleName}', '2017-04-01').primaryConnectionString
-
-//var AuthorizedeventHubNamespaceConnectionString = iotHubAuthorizedToSendRule.listKeys().primaryConnectionString
 output out_eventHubPrimaryConnectionString string = AuthorizedeventHubNamespaceConnectionString
