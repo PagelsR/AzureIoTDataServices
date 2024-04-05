@@ -11,7 +11,8 @@ using System.Globalization;
 
 public static class SimulatedIoTDevice
 {
-    private static readonly DeviceClient deviceClient = DeviceClient.CreateFromConnectionString("Shared_Access_Key_IOTHUB", TransportType.Mqtt);
+    // private static readonly DeviceClient deviceClient = DeviceClient.CreateFromConnectionString("Shared_Access_Key_IOTHUB", TransportType.Mqtt);
+    private static readonly DeviceClient deviceClient = DeviceClient.CreateFromConnectionString(Environment.GetEnvironmentVariable("Shared_Access_Key_IOTHUB"), TransportType.Mqtt);    
 
     // The "SendToIoTHub" function, triggered every 5 minutes,
     // logs its execution time, reads and parses a CSV file,
