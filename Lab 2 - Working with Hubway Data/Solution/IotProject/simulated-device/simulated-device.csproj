@@ -6,7 +6,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-	<PackageReference Include="ChoETL.JSON" Version="1.2.1.62" />
+	  <PackageReference Include="ChoETL.JSON" Version="1.2.1.62" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="CsvHelper" Version="30.0.1" />
     <PackageReference Include="Microsoft.Azure.Devices.Client" Version="1.*" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
