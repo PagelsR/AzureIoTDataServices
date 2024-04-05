@@ -9,7 +9,7 @@ using CsvHelper;
 using System.Collections.Generic;
 using System.Globalization;
 
-public static class SendToIoTHub
+public static class SimulatedIoTDevice
 {
     private static readonly DeviceClient deviceClient = DeviceClient.CreateFromConnectionString("Shared_Access_Key_IOTHUB", TransportType.Mqtt);
 
@@ -28,7 +28,7 @@ public static class SendToIoTHub
     // First, calculate how many times the function will run in 16 minutes. 16 minutes / 2 minutes = 8 times.
     // Then, divide the total number of records by the number of times the function will run. 20,000 records / 8 times = 2,500 records per batch.
 
-    [FunctionName("SendToIoTHub")]
+    [FunctionName("SimulatedIoTDevice")]
     public static async Task Run([TimerTrigger("0 */2 * * * *")]TimerInfo myTimer, ILogger log, ExecutionContext context)
     {
         log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
