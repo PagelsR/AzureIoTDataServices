@@ -30,7 +30,7 @@ namespace FunctionApps
                 // Create the document to be written to Cosmos DB
                 outputDocument = new
                 {
-                    id = Guid.NewGuid().ToString();
+                    id = Guid.NewGuid().ToString(),
                     tripduration = messageData["tripduration"]?.ToString(),
                     starttime = messageData["starttime"]?.ToString(),
                     stoptime = messageData["stoptime"]?.ToString(),
