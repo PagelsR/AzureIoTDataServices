@@ -7,6 +7,8 @@ param KeyVault_Shared_Access_Key_DOCUMENTDBName string
 param KeyVault_Azure_Maps_Subscription_KeyName string
 param KeyVault_WebsiteContentAzureFileConnectionStringName string
 
+var KeyVault_Shared_Access_Key_IOTHUB = 'SharedAccessKeyIOTHUB'
+
 @secure()
 param KeyVault_AzureWebJobsStorageValue string
 
@@ -190,6 +192,7 @@ resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2023-01-01' = {
     AzureWebJobsStorage: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_AzureWebJobsStorageName})'
     Shared_Access_Key_EVENTHUB: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_Shared_Access_Key_EVENTHUBName})'
     Shared_Access_Key_DOCUMENTDB: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_Shared_Access_Key_DOCUMENTDBName})'
+    Shared_Access_Key_IOTHUB: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_Shared_Access_Key_IOTHUB})'
     Azure_Maps_Subscription_Key: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_Azure_Maps_Subscription_KeyName})'
     APPINSIGHTS_INSTRUMENTATIONKEY: appInsightsInstrumentationKey
     APPLICATIONINSIGHTS_CONNECTION_STRING: appInsightsConnectionString
@@ -206,4 +209,3 @@ resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2023-01-01' = {
     secret7
   ]
 }
-
