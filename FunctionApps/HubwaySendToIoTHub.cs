@@ -35,7 +35,7 @@ public static class SendToIoTHub
 
         try
         {
-            var csvFilePath = Path.Combine(context.FunctionAppDirectory, "..", "simulated-device", "data", "201502-hubway-tripdata.csv");
+            var csvFilePath = Path.Combine(context.FunctionAppDirectory, "data", "201502-hubway-tripdata.csv");
             using (var reader = new StreamReader(csvFilePath))
             using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
             {
