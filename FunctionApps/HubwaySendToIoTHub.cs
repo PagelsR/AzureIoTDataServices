@@ -14,14 +14,22 @@ public static class SimulatedIoTDevice
     // private static readonly DeviceClient deviceClient = DeviceClient.CreateFromConnectionString("Shared_Access_Key_IOTHUB", TransportType.Mqtt);
     private static readonly DeviceClient deviceClient = DeviceClient.CreateFromConnectionString(Environment.GetEnvironmentVariable("Shared_Access_Key_IOTHUB"), TransportType.Mqtt);    
 
-    // The "SendToIoTHub" function, triggered every 5 minutes,
-    // logs its execution time, reads and parses a CSV file,
-    // and sends batches of 500 records to IoT Hub.
-    // If processing 20,000 records in 16 minutes with the function running every 2 minutes, it would need to process 2,500 records per batch.
+    // The SimulatedIoTDevice function is an Azure Function that gets triggered by
+    // an HTTP request. It reads a CSV file, processes records in batches,
+    // and sends each batch to an IoT Hub. The batch size is specified by a
+    // query parameter batchSize, defaulting to 3000 if not provided.
+    //
+    // Example URL to call the function with a batch size of 5000:
+    // https://<APP_NAME>.azurewebsites.net/api/SimulatedIoTDevice?batchSize=5000
     [FunctionName("SimulatedIoTDevice")]
-    public static async Task Run([TimerTrigger("0 */2 * * * *")]TimerInfo myTimer, ILogger log, ExecutionContext context)
+    public static async Task<IActionResult> Run(
+    [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, 
+    ILogger log, ExecutionContext context)
     {
         log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+
+        string batchSizeStr = req.Query["batchSize"];
+        int batchSize = string.IsNullOrEmpty(batchSizeStr) ? 3000 : int.Parse(batchSizeStr);
 
         try
         {
@@ -38,7 +46,7 @@ public static class SimulatedIoTDevice
                     records.Add(record);
                     count++;
 
-                    if (count == 2500)
+                    if (count == batchSize)
                     {
                         await SendBatchToIoTHub(records, log);
                         records.Clear();
@@ -77,6 +85,7 @@ public static class SimulatedIoTDevice
 
                 // Log information about the sent message
                 log.LogInformation($"Sent message: {messageString}");
+
             }
         }
         catch (Exception ex)
