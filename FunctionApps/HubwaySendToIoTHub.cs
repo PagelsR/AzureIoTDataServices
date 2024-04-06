@@ -22,7 +22,6 @@ public static class SimulatedIoTDevice
     public static async Task Run([TimerTrigger("0 */2 * * * *")]TimerInfo myTimer, ILogger log, ExecutionContext context)
     {
         log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-        log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
 
         try
         {
