@@ -1,6 +1,6 @@
 {
   "ConnectionStrings": {
 
-    "Shared_IoT_Hub_ConnnectionString": "HostName=iot-pyzs3ibljzheu.azure-devices.net;DeviceId=iot-raspberrypi-pyzs3ibljzheu;SharedAccessKey=fXuKe6uTxkk780ts4nsM3XQenVaEVOc07AIoTJ05I68="
+    "Shared_IoT_Hub_ConnnectionString": "HostName=iot-7f6lwqhjhurje.azure-devices.net;DeviceId=iot-raspberrypi-7f6lwqhjhurje;SharedAccessKey=XNBL3XMMcv+mkH0FiCCk1g6jJhpi4jYGvAIoTBRWDsA="
   }
 }
