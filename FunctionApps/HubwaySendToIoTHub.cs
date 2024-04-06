@@ -34,6 +34,10 @@ public static class SimulatedIoTDevice
         string batchSizeStr = req.Query["batchSize"];
         int batchSize = string.IsNullOrEmpty(batchSizeStr) ? 3000 : int.Parse(batchSizeStr);
 
+        log.LogInformation($"Attempting to send {batchSize} data items to IoT Hub...");
+
+        IActionResult preTryResult = new OkObjectResult($"Attempting to send {batchSize} data items to IoT Hub...");
+
         try
         {
             var csvFilePath = Path.Combine(context.FunctionAppDirectory, "data", "201502-hubway-tripdata.csv");
@@ -63,7 +67,7 @@ public static class SimulatedIoTDevice
                 }
             }
 
-            return new OkObjectResult("Data sent to IoT Hub successfully");
+            //return new OkObjectResult("Data sent to IoT Hub successfully");
         }
         catch (Exception ex)
         {
@@ -71,6 +75,11 @@ public static class SimulatedIoTDevice
             log.LogError(ex.StackTrace);
             return new StatusCodeResult(StatusCodes.Status500InternalServerError);
         }
+
+        IActionResult postTryResult = new OkObjectResult($"Data sent to IoT Hub successfully. Attempted to send {batchSize} data items.");
+
+        return postTryResult;
+
     }
 
     private static async Task SendBatchToIoTHub(List<dynamic> records, ILogger log)
