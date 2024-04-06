@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using CsvHelper;
 using System.Collections.Generic;
 using System.Globalization;
+using Microsoft.AspNetCore.Http;
 
 public static class SimulatedIoTDevice
 {
