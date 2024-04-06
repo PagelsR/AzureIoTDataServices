@@ -27,7 +27,7 @@ public static class SimulatedIoTDevice
     [FunctionName("SimulatedIoTDevice")]
     public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
-            ILogger log)
+            ILogger log, ExecutionContext context)
     {
         log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
 
@@ -62,11 +62,14 @@ public static class SimulatedIoTDevice
                     await SendBatchToIoTHub(records, log);
                 }
             }
+
+            return new OkObjectResult("Data sent to IoT Hub successfully");
         }
         catch (Exception ex)
         {
             log.LogError($"An error occurred: {ex.Message}");
             log.LogError(ex.StackTrace);
+            return new StatusCodeResult(StatusCodes.Status500InternalServerError);
         }
     }
 
