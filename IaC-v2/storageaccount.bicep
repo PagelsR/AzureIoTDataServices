@@ -15,7 +15,7 @@ resource storageAccountBlob 'Microsoft.Storage/storageAccounts@2023-01-01' = {
   kind: 'StorageV2'
   properties: {
     supportsHttpsTrafficOnly: true
-    allowBlobPublicAccess: false
+    allowBlobPublicAccess: true
     accessTier: 'Hot'
   }
 }
@@ -54,7 +54,7 @@ resource dataStorage_Blob_web 'Microsoft.Storage/storageAccounts/blobServices/co
   properties: {
     defaultEncryptionScope: '$account-encryption-key'
     denyEncryptionScopeOverride: false
-    publicAccess: 'None'
+    publicAccess: 'Blob'
     immutableStorageWithVersioning: {
       enabled: false
     }
@@ -68,7 +68,7 @@ resource dataStorage_Blob_boston_hubway_data 'Microsoft.Storage/storageAccounts/
   properties: {
     defaultEncryptionScope: '$account-encryption-key'
     denyEncryptionScopeOverride: false
-    publicAccess: 'None'
+    publicAccess: 'Blob'
     immutableStorageWithVersioning: {
       enabled: false
     }
