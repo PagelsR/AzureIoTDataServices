@@ -6,10 +6,6 @@ resource cosmosDBName_resource 'Microsoft.DocumentDB/databaseAccounts@2023-11-15
   name: cosmosDBName
   location: location
   tags: defaultTags
-  // tags: {
-  //   defaultExperience: 'Core (SQL)'
-  //   'hidden-cosmos-mmspecial': ''
-  // }
   kind: 'GlobalDocumentDB'
   identity: {
     type: 'None'
@@ -155,6 +151,7 @@ resource cosmosDBName_Hubway_Tripdata 'Microsoft.DocumentDB/databaseAccounts/sql
         mode: 'LastWriterWins'
         conflictResolutionPath: '/_ts'
       }
+      defaultTtl: 259200 // TTL for 3 days
     }
   }
 
