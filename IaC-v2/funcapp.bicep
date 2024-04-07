@@ -15,6 +15,11 @@ resource functionApp 'Microsoft.Web/sites@2023-01-01' = {
   properties: {
     siteConfig: {
     netFrameworkVersion: 'v4.0'
+    cors: {
+      allowedOrigins: [
+        '*'
+      ]
+    }
     }
     serverFarmId: hostingPlan.id
     clientAffinityEnabled: false

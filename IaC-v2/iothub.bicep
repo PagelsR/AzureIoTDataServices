@@ -10,6 +10,9 @@ resource iotHub 'Microsoft.Devices/IotHubs@2023-06-30' = {
   name: iotHubName
   tags: defaultTags
   location: location
+  identity: {
+    type: 'SystemAssigned'
+  }
   sku: {
     name: 'S1'
     capacity: 1

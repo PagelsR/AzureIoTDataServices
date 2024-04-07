@@ -8,6 +8,9 @@ resource eventHubNamespace 'Microsoft.EventHub/namespaces@2023-01-01-preview' = 
   name: eventHubNamespaceName
   tags: defaultTags
   location: location
+  identity: {
+    type: 'SystemAssigned'
+  }
   properties: {}
 }
 
@@ -29,6 +32,7 @@ resource iotHubAuthorizedToSendRule 'Microsoft.EventHub/namespaces/eventhubs/aut
       rights: [
          'Send'
          'Listen'
+         'Manage'
       ]
    }
 }
