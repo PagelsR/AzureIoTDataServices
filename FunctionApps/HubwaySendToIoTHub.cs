@@ -95,6 +95,10 @@ public static class SimulatedIoTDevice
                 // Convert the JSON string to a byte array and create a new Message object
                 var message = new Message(Encoding.ASCII.GetBytes(messageString));
 
+                // Add a custom application property to the message.
+                // An IoT hub can filter on these properties without access to the message body.
+                message.Properties.Add("RoutingProperty", "Hubway");
+
                 // Send the Message object to the IoT Hub
                 await deviceClient.SendEventAsync(message);
 
