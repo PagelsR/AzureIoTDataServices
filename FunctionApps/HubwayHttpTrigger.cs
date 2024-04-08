@@ -22,6 +22,12 @@ namespace FunctionApps
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
+            // Log the first 5 items in the list
+            foreach (var tripItem in tripItems.Take(5))
+            {
+                log.LogInformation($"Trip Item: {JsonConvert.SerializeObject(tripItem)}");
+            }
+
             // based on http://geojson.org/
             // https://tools.ietf.org/html/rfc7946#section-1.3
 
@@ -88,8 +94,10 @@ namespace FunctionApps
                     // set for comparison
                     sLastStationID = doc.startStationID;
                     sStartStationName = doc.startStationName;
-                    dStartStationLatitiude = Convert.ToDouble(doc.startStationLatitiude);
-                    dStartStationLongitude = Convert.ToDouble(doc.startStationLongitude);
+                    // dStartStationLatitiude = Convert.ToDouble(doc.startStationLatitiude);
+                    // dStartStationLongitude = Convert.ToDouble(doc.startStationLongitude);
+                    dStartStationLatitiude = doc.startStationLatitiude;
+                    dStartStationLongitude = doc.startStationLongitude;
 
                 }
             }
@@ -110,10 +118,12 @@ namespace FunctionApps
             public string startStationID { get; set; }
             public string startStationName { get; set; }
 
-            public string startStationLatitiude { get; set; }
+            // public string startStationLatitiude { get; set; }
 
-            public string startStationLongitude { get; set; }
+            // public string startStationLongitude { get; set; }
+            public double startStationLatitiude { get; set; }
 
+            public double startStationLongitude { get; set; }
         }
 
         public class LocalGeometry
