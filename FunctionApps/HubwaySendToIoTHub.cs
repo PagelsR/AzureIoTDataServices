@@ -76,7 +76,7 @@ public static class SimulatedIoTDevice
             return new StatusCodeResult(StatusCodes.Status500InternalServerError);
         }
 
-        IActionResult postTryResult = new OkObjectResult($"Data sent to IoT Hub successfully. Sent {batchSize} data items.");
+        IActionResult postTryResult = new OkObjectResult($"Success!!! A batch of {batchSize.ToString("N0")} data items sent to IoT Hub successfully. Thank you!");
 
         return postTryResult;
 
