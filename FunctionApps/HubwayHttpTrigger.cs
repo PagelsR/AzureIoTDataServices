@@ -25,10 +25,10 @@ namespace FunctionApps
             log.LogInformation("C# HTTP trigger function processed a request.");
 
             // Log the first 5 items in the list
-            foreach (var tripItem in tripItems.Take(5))
-            {
-                log.LogInformation($"Trip Item: {JsonConvert.SerializeObject(tripItem)}");
-            }
+            // foreach (var tripItem in tripItems.Take(5))
+            // {
+            //     log.LogInformation($"Trip Item: {JsonConvert.SerializeObject(tripItem)}");
+            // }
 
             // based on http://geojson.org/
             // https://tools.ietf.org/html/rfc7946#section-1.3

@@ -275,7 +275,7 @@ jobs:
         echo 'output_storageAccountNameBlob: ${{ needs.Deploy_Infrastructure.outputs.output_storageAccountNameBlob }}'
 
     # Create an IoT device
-    - name: Create an IoT device
+    - name: Enable Static Website on Blob Storage
       uses: Azure/CLI@v1
       continue-on-error: true
       with:
