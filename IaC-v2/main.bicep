@@ -122,7 +122,7 @@ module cosmosdbmod './cosmosdb.bicep' = {
 }
 
 // Create Storage Account
-module storageaccountmod './storageaccount.bicep' = {
+module storageaccountmod './storageaccount2.bicep' = {
   name: 'storageaccountdeploy'
   params: {
     location: location
