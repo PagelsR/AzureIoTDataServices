@@ -44,9 +44,15 @@ resource staticWebsiteProperties 'Microsoft.Storage/storageAccounts/blobServices
   }
 }
 
-
-
-
+resource Blob_boston_hubway_data 'Microsoft.Storage/storageAccounts/blobServices/containers@2019-06-01' = {
+  parent: staticWebsite
+  name: 'boston-hubway-data'
+  properties: {
+    defaultEncryptionScope: '$account-encryption-key'
+    denyEncryptionScopeOverride: false
+    publicAccess: 'Blob'
+  }
+}
 
 
 
