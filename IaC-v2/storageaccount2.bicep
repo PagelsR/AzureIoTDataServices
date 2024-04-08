@@ -50,7 +50,7 @@ resource Blob_boston_hubway_data 'Microsoft.Storage/storageAccounts/blobServices
   properties: {
     defaultEncryptionScope: '$account-encryption-key'
     denyEncryptionScopeOverride: false
-    publicAccess: 'Blob'
+    publicAccess: 'None'
   }
 }
 
