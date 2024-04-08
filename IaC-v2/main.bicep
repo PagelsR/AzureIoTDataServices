@@ -181,4 +181,5 @@ output out_keyvaultName string = keyvaultName
 output out_functionAppName string = functionAppName
 output out_iotHubName string = iotHubName
 output out_iotdeviceName string = iotDeviceName
+output out_storageAccountNameBlob string = storageAccountNameBlob
 output out_eventHubPrimaryConnectionString string = eventhubmod.outputs.out_eventHubPrimaryConnectionString

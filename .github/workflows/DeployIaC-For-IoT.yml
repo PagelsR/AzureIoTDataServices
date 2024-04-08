@@ -65,6 +65,7 @@ jobs:
       output_eventHubPrimaryConnectionString: ${{ steps.Infra.outputs.out_eventHubPrimaryConnectionString }}
       output_iotDeviceName: ${{ steps.Infra.outputs.out_iotDeviceName }}
       output_keyVaultName: ${{ steps.Infra.outputs.out_keyvaultName }}
+      output_storageAccountNameBlob: ${{ steps.Infra.outputs.out_storageAccountNameBlob }}
 
     steps:
     - name: Login to Azure
@@ -247,3 +248,40 @@ jobs:
       - name: Logout of Azure
         run: |
           az logout
+
+  Enable_Static_Website:
+    runs-on: ubuntu-latest
+    name: Enable Static Website
+    needs: [Deploy_Infrastructure]
+      
+    permissions:
+      contents: read
+
+    # Identify any jobs that must complete successfully before this job will run.
+    steps:
+      
+    - name: Login to Azure
+      uses: azure/login@v1
+      continue-on-error: false
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: DEBUG ONLY Display Output Variables
+      run: |
+        echo 'output_functionAppName: ${{ needs.Deploy_Infrastructure.outputs.output_functionAppName }}'
+        echo 'output_iotHubName: ${{ needs.Deploy_Infrastructure.outputs.output_iotHubName }}'
+        echo 'output_eventHubPrimaryConnectionString: ${{ needs.Deploy_Infrastructure.outputs.output_eventHubPrimaryConnectionString }}'
+        echo 'output_iotDeviceName: ${{ needs.Deploy_Infrastructure.outputs.output_iotDeviceName }}'
+        echo 'output_storageAccountNameBlob: ${{ needs.Deploy_Infrastructure.outputs.output_storageAccountNameBlob }}'
+
+    # Create an IoT device
+    - name: Create an IoT device
+      uses: Azure/CLI@v1
+      continue-on-error: true
+      with:
+        inlineScript: |
+          az storage blob service-properties update --account-name ${{ needs.Deploy_Infrastructure.outputs.output_storageAccountNameBlob }} --static-website --404-document 404.html --index-document index.html
+
+    - name: Logout of Azure
+      run: |
+        az logout
