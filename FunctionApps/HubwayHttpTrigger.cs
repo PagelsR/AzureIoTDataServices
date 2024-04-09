@@ -71,7 +71,7 @@ namespace FunctionApps
                     else
                     {
                         // they do not match
-                        log.LogInformation($"Station id's do NOT match: {sCurrentStationID}");
+                        //log.LogInformation($"Station id's do NOT match: {sCurrentStationID}");
 
                         // create the Properties object
                         Properties prop = new Properties();
