@@ -7,6 +7,7 @@ param storageAccountNameBlob string
 resource storageAccountBlob 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   name: storageAccountNameBlob
   location: location
+  tags: defaultTags
   sku: {
     name: 'Standard_LRS'
   }
