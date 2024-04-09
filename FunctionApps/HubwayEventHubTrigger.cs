@@ -24,8 +24,6 @@ namespace FunctionApps
             try
             {
                 // Parse the Event Hub message from JSON
-                //JsonDocument msg = JsonDocument.Parse(myEventHubMessage);
-                // Parse the incoming message
                 var messageData = JsonConvert.DeserializeObject<JObject>(myEventHubMessage);
                 string tempid = Guid.NewGuid().ToString();
 
