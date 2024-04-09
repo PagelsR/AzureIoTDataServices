@@ -57,6 +57,8 @@ namespace FunctionApps
                     // grab the stationID from the list
                     sCurrentStationID = doc.startStationID;
 
+                    log.LogInformation($"C# HTTP trigger function processed a request. Current Station ID: {sCurrentStationID}");
+
                     //compare station ID's
                     if (sCurrentStationID == sLastStationID)
                     {
@@ -69,7 +71,7 @@ namespace FunctionApps
                     else
                     {
                         // they do not match
-                        //log.LogInformation("Station id's do NOT match: "+ sCurrentStationID );
+                        log.LogInformation($"Station id's do NOT match: {sCurrentStationID}");
 
                         // create the Properties object
                         Properties prop = new Properties();
