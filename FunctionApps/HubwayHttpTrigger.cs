@@ -63,7 +63,7 @@ namespace FunctionApps
                     if (sCurrentStationID == sLastStationID)
                     {
                         // they are in the same array
-                        //log.LogInformation("Station id's match: "+ sCurrentStationID );
+                        log.LogInformation("Station id's match: "+ sCurrentStationID );
 
                         // increment the counter
                         iCounter += 1;
@@ -71,7 +71,7 @@ namespace FunctionApps
                     else
                     {
                         // they do not match
-                        //log.LogInformation($"Station id's do NOT match: {sCurrentStationID}");
+                        log.LogInformation($"Station id's do NOT match: {sCurrentStationID}");
 
                         // create the Properties object
                         Properties prop = new Properties();
