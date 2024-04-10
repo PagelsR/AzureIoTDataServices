@@ -33,12 +33,16 @@ namespace simulated_device
 
             // Connect to the IoT hub using the MQTT protocol
             s_deviceClient = DeviceClient.CreateFromConnectionString(s_connectionString, TransportType.Mqtt);
-            SendDeviceToCloudMessagesAsync();
+
+            // Get the maximum counter value from the command line arguments
+            int maxCounterValue = args.Length > 0 ? int.Parse(args[0]) : 101;
+
+            SendDeviceToCloudMessagesAsync(maxCounterValue);
             Console.ReadLine();
         }
 
         // Async method to send simulated telemetry
-        private static async void SendDeviceToCloudMessagesAsync()
+        private static async void SendDeviceToCloudMessagesAsync(int maxCounterValue)
         {
             string dirPath = Path.GetFullPath(Directory.GetCurrentDirectory());
             string sFilePath = dirPath+"/data/201502-hubway-tripdata.csv";
@@ -50,7 +54,9 @@ namespace simulated_device
             var reader = new ChoCSVReader(sFilePath).WithFirstLineHeader();
             dynamic rec;
  
-            while ((rec = reader.Read()) != null)
+            int counter = 1;
+
+            while ((rec = reader.Read()) != null && counter < maxCounterValue)
             {
                 string json = Newtonsoft.Json.JsonConvert.SerializeObject(rec);
 
@@ -65,40 +71,20 @@ namespace simulated_device
                 Console.WriteLine("{0} > Sending message: {1}", DateTime.Now, json);                
                 Console.WriteLine("{0} > Sending message: {1}", DateTime.Now, message);                
 
-                await Task.Delay(300);
+                // Display the counter number per loop
+                Console.WriteLine("Counter: {0}", counter);
+
+                // Increment the counter
+                counter++;
+
+                await Task.Delay(100);
 
                 // Write a blank line
                 Console.WriteLine();
             }
 
-            // while ((rec = reader.Read()) != null)
-            // {
-            //     string json = Newtonsoft.Json.JsonConvert.SerializeObject(rec);
+            Environment.Exit(0);
 
-            //     var message = new Message(Encoding.ASCII.GetBytes(json));
-
-            //     // Add a custom application property to the message.
-            //     // An IoT hub can filter on these properties without access to the message body.
-            //     message.Properties.Add("RoutingProperty", "Hubway");
-
-            //     try
-            //     {
-            //         // Send the telemetry message
-            //         await s_deviceClient.SendEventAsync(message);
-            //         Console.WriteLine("{0} > Sending message: {1}", DateTime.Now, json);
-            //     }
-            //     catch (System.Exception ex)
-            //     {
-            //         Console.WriteLine("The IoT Hub device was not found. Please check your device connection and try again.");
-            //         Console.WriteLine("Error details: " + ex.Message);
-            //         Environment.Exit(1);
-            //     }             
-
-            //     await Task.Delay(300);
-
-            //     // Write a blank line
-            //     Console.WriteLine();
-            // }
         }
 
     }

@@ -14,16 +14,10 @@ using Microsoft.AspNetCore.Mvc;
 
 public static class SimulatedIoTDevice
 {
-    // private static readonly DeviceClient deviceClient = DeviceClient.CreateFromConnectionString("Shared_Access_Key_IOTHUB", TransportType.Mqtt);
     private static readonly DeviceClient deviceClient = DeviceClient.CreateFromConnectionString(Environment.GetEnvironmentVariable("Shared_Access_Key_IOTHUB"), TransportType.Mqtt);    
 
     // The SimulatedIoTDevice function is an Azure Function that gets triggered by
-    // an HTTP request. It reads a CSV file, processes records in batches,
-    // and sends each batch to an IoT Hub. The batch size is specified by a
-    // query parameter batchSize, defaulting to 3000 if not provided.
-    //
-    // Example URL to call the function with a batch size of 5000:
-    // https://<APP_NAME>.azurewebsites.net/api/SimulatedIoTDevice?batchSize=5000
+    // an HTTP request. It reads a CSV file, processes records ...
     [FunctionName("SimulatedIoTDevice")]
     public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
