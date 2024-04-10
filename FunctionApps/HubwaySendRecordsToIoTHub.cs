@@ -53,20 +53,27 @@ public static class SimulatedIoTDeviceV4
                 try
                 {
                     string json = Newtonsoft.Json.JsonConvert.SerializeObject(rec);
-    
-                    var message = new Message(Encoding.ASCII.GetBytes(json));
-    
-                    message.Properties.Add("RoutingProperty", "Hubway");
-    
-                    await deviceClient.SendEventAsync(message);
-    
-                    counter++;
-    
-                    // Define messageString
-                    string messageString = Encoding.ASCII.GetString(message.GetBytes());
 
-                    // Log information about the sent message
-                    log.LogInformation($"Sent message: {messageString}");
+                    // Store the message body in a byte array
+                    byte[] messageBody = Encoding.ASCII.GetBytes(json);
+                            
+                    // Convert byte array to stream
+                    using (var stream = new MemoryStream(messageBody))
+                    {
+                        var message = new Message(stream);
+
+                        message.Properties.Add("RoutingProperty", "Hubway");
+
+                        await deviceClient.SendEventAsync(message);
+
+                        counter++;
+
+                        // Use the stored message body for logging
+                        string messageString = Encoding.ASCII.GetString(messageBody);
+
+                        // Log information about the sent message
+                        log.LogInformation($"Sent message: {messageString}");
+                    }
                 }
                 catch (Exception ex)
                 {
