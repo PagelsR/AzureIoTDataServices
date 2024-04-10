@@ -34,6 +34,10 @@ public static class SimulatedIoTDevice_v3
 
     private static async Task SendDeviceToCloudMessagesAsync(int recordCount, ExecutionContext context, ILogger log)
     {
+        log.LogInformation($"Starting to send {recordCount} records");
+
+        int counter = 1;
+
         var config = new CsvHelper.Configuration.CsvConfiguration(CultureInfo.InvariantCulture)
             {
                 HasHeaderRecord = true,
@@ -48,7 +52,7 @@ public static class SimulatedIoTDevice_v3
             // csv.Configuration.Delimiter = ",";
             var records = csv.GetRecords<dynamic>();
     
-            int counter = 1;
+            //int counter = 1;
     
             foreach (var rec in records)
             {
@@ -80,6 +84,10 @@ public static class SimulatedIoTDevice_v3
                     log.LogError($"An error occurred: {ex.Message}");
                 }
             }
+
+            log.LogInformation($"Success sending {counter} records");
+
         }
     }
+
 }
