@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Data-Driven Bubble Layer Styling</title>
+    <meta charset="utf-8" />
+    <script src='https://atlas.microsoft.com/sdk/javascript/mapcontrol/2/atlas.min.js'></script>
+    <style>
+        html, body, #myMap {
+            height: 100%;
+            width: 100%;
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="myMap"></div>
+    <script>
+        var subscriptionKey = 'TNoxfp3etKA8UCvwVHYRB45OgFJvTOCvC9kfDS2LoUU'; // Replace with your Azure Maps subscription key
+
+        var map = new atlas.Map('myMap', {
+            center: [-71.10, 42.4],
+            zoom: 11,
+            authOptions: {
+                authType: 'subscriptionKey',
+                subscriptionKey: subscriptionKey
+            }
+        });
+
+        map.events.add('ready', function () {
+            // Load the GeoJSON data from the output of the C# function
+            var geoJsonData = {}; // Replace with the output of the C# function
+
+            // Create a data source and add it to the map
+            var dataSource = new atlas.source.DataSource();
+            map.sources.add(dataSource);
+            dataSource.add(geoJsonData);
+
+            // Create a bubble layer using the data source and add it to the map
+            var bubbleLayer = new atlas.layer.BubbleLayer(dataSource, null, {
+                radius: [
+                    'interpolate',
+                    ['linear'],
+                    ['get', 'numberOfStations'],
+                    0, 3,
+                    100, 30
+                ],
+                color: [
+                    'interpolate',
+                    ['linear'],
+                    ['get', 'numberOfStations'],
+                    5, 'green',
+                    25, 'yellow',
+                    50, 'orange',
+                    100, 'red',
+                    150, 'purple'
+                ],
+                strokeColor: 'white',
+                strokeWidth: 2,
+                filter: ['has', 'numberOfStations']
+            });
+
+            map.layers.add(bubbleLayer);
+            
+        });
+    </script>
+</body>
+</html>
