@@ -36,6 +36,12 @@
             map.sources.add(dataSource);
             dataSource.add(geoJsonData);
 
+            //                     5, 'green',
+            // 25, 'yellow',
+            //         50, 'orange',
+            //         100, 'red',
+            //         150, 'purple'
+
             // Create a bubble layer using the data source and add it to the map
             var bubbleLayer = new atlas.layer.BubbleLayer(dataSource, null, {
                 radius: [
@@ -50,10 +56,10 @@
                     ['linear'],
                     ['get', 'numberOfStations'],
                     5, 'green',
-                    25, 'yellow',
-                    50, 'orange',
-                    100, 'red',
-                    150, 'purple'
+                    10, 'yellow',
+                    15, 'orange',
+                    20, 'red',
+                    25, 'purple'
                 ],
                 strokeColor: 'white',
                 strokeWidth: 2,
