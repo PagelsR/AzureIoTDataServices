@@ -243,7 +243,7 @@ jobs:
       #   continue-on-error: true
       #   with:
       #     inlineScript: |
-      #       az security iot-solution create --solution-name 'default' --resource-group ${{ env.Azure_Resource_GroupName }} --iot-hubs '/subscriptions/295e777c-2a1b-456a-989e-3c9b15d52a8e/resourceGroups/${{ env.Azure_Resource_GroupName }}/providers/Microsoft.Devices/${{ needs.Deploy_Infrastructure.outputs.output_iotHubName }}' --display-name 'Default Solution' --location ${{ env.Azure_Resource_GroupLocation }}
+      #       az security iot-solution create --solution-name 'default' --resource-group ${{ env.Azure_Resource_GroupName }} --iot-hubs '/subscriptions/febd7629-60bf-43ef-ab1a-db1bcb82f103/resourceGroups/${{ env.Azure_Resource_GroupName }}/providers/Microsoft.Devices/${{ needs.Deploy_Infrastructure.outputs.output_iotHubName }}' --display-name 'Default Solution' --location ${{ env.Azure_Resource_GroupLocation }}
 
       - name: Logout of Azure
         run: |
