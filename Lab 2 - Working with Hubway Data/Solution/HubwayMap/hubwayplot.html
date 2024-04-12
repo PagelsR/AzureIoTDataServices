@@ -22,12 +22,12 @@
     
     // This API endpoint provides a GeoJSON feed of data from CosmosDB.
     // GeoJSON is a format for encoding a variety of geographic data structures.
-    var hubwayFeed = "https://func-7f6lwqhjhurje.azurewebsites.net/api/HubwayHttpTrigger";
+    var hubwayFeed = "https://func-kk57wcdfxcfco.azurewebsites.net/api/HubwayHttpTrigger2";
 
     function GetMap() {
         
         //Add your Azure Maps Primary subscription key to the map SDK. Get an Azure Maps key at https://azure.com/maps
-        atlas.setSubscriptionKey('TNoxfp3etKA8UCvwVHYRB45OgFJvTOCvC9kfDS2LoUU');
+        atlas.setSubscriptionKey('-tIVJM5k2FzuDZw27e8uBi5z6hy-pXjGfj0A9nnG81U');
         
         //Initialize a map instance.
         map = new atlas.Map('myMap',
@@ -59,9 +59,9 @@
                     ['linear'],
                     ['get', 'numberOfStations'],
                     5, 'green',
-                    25, 'yellow',
-                    50, 'orange',
-                    100, 'red'
+                    10, 'yellow',
+                    15, 'orange',
+                    20, 'red'
                 ],
                 /*
                  * Radius for each data point scaled based on the value of "numberOfStations" property.

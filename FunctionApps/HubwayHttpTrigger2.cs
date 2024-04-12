@@ -32,6 +32,10 @@ namespace FunctionApps
             // Group tripItems by startStationID
             var groupedTripItems = tripItems.GroupBy(t => t.startStationID);
 
+            // Log the groupedTripItems
+            log.LogInformation($"groupedTripItems: {JsonConvert.SerializeObject(groupedTripItems)}");
+
+
             // Process each group
             foreach (var group in groupedTripItems)
             {
