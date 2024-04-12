@@ -139,7 +139,7 @@ module storageaccountmod './storageaccount2.bicep' = {
 param AzObjectIdPagels string = '0aa95253-9e37-4af9-a63a-3b35ed78e98b'
 
 // ObjectId of Service Principal "82f103_ServicePrincipal_FullAccess"
-param ADOServiceprincipalObjectId string = '2f5938c6-260a-411c-a694-43cabbc6630f'
+param ADOServiceprincipalObjectId string = 'd4e7db24-2894-4524-a78a-af95bf664dda' //'2f5938c6-260a-411c-a694-43cabbc6630f'
 
  // Create Configuration Entries
  module configsettingsmod './configsettings.bicep' = {
