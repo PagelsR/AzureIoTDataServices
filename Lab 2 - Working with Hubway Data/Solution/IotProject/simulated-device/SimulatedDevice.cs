@@ -35,7 +35,7 @@ namespace simulated_device
             s_deviceClient = DeviceClient.CreateFromConnectionString(s_connectionString, TransportType.Mqtt);
 
             // Get the maximum counter value from the command line arguments
-            int maxCounterValue = args.Length > 0 ? int.Parse(args[0]) : 101;
+            int maxCounterValue = args.Length > 0 ? int.Parse(args[0]) : 600;
 
             SendDeviceToCloudMessagesAsync(maxCounterValue);
             Console.ReadLine();

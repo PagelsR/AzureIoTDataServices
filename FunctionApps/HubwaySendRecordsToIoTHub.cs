@@ -27,15 +27,15 @@ public static class SimulatedIoTDevice
         // Log the execution time of the function.
         log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
         
-        // Get the record count from the query string or default to 550.
+        // Get the record count from the query string or default to 600.
         string recordCountStr = req.Query["recordCount"];
-        int recordCount = string.IsNullOrEmpty(recordCountStr) ? 550 : int.Parse(recordCountStr);
+        int recordCount = string.IsNullOrEmpty(recordCountStr) ? 600 : int.Parse(recordCountStr);
 
         // Log the start of the record sending process.
         log.LogInformation($"Attempting to send {recordCount} data items to IoT Hub...");
 
         // Counter for the number of records sent.
-        int counter = 1;
+        int counter = 0;
 
         // Configure the CSV reader.
         var config = new CsvHelper.Configuration.CsvConfiguration(CultureInfo.InvariantCulture)
