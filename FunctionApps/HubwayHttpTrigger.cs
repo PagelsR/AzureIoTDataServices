@@ -9,9 +9,9 @@ using Newtonsoft.Json;
 
 namespace FunctionApps
 {
-    public static class HubwayHttpTrigger2
+    public static class HubwayHttpTrigger
     {
-        [FunctionName("HubwayHttpTrigger2")]
+        [FunctionName("HubwayHttpTrigger")]
         public static TripDataGeoJson Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
         [CosmosDB(databaseName: "Hubway",
@@ -35,21 +35,22 @@ namespace FunctionApps
             // Log the groupedTripItems
             log.LogInformation($"groupedTripItems: {JsonConvert.SerializeObject(groupedTripItems)}");
 
-
-            // Process each group
+            // Loop through each group in the groupedTripItems collection
             foreach (var group in groupedTripItems)
             {
+                // Get the first item in the current group
                 var firstItem = group.First();
-
-                // Create Properties object
+            
+                // Create a new Properties object with the number of stations in the group,
+                // the ID of the start station (which is the key of the group), and the name of the start station
                 Properties prop = new Properties
                 {
                     numberOfStations = group.Count(),
                     startStationID = group.Key,
                     startStationName = firstItem.startStationName
                 };
-
-                // Create LocalGeometry object
+            
+                // Create a new LocalGeometry object with the longitude and latitude of the start station
                 LocalGeometry geo = new LocalGeometry
                 {
                     coordinates = new List<double>
@@ -58,15 +59,18 @@ namespace FunctionApps
                         firstItem.startStationLatitude
                     }
                 };
-
-                // Create LocalFeatures object and add to features list
+            
+                // Create a new LocalFeatures object with the previously created Properties and LocalGeometry objects,
+                // and add it to the features list of the tdGeoJson object
                 tdGeoJson.features.Add(new LocalFeatures
                 {
                     properties = prop,
                     geometry = geo
                 });
             }
-
+            
+            // Return the tdGeoJson object, which now contains a list of LocalFeatures objects,
+            // each representing a group of trip items
             return tdGeoJson;
         }
 
@@ -74,7 +78,7 @@ namespace FunctionApps
         {
             public string startStationID { get; set; }
             public string startStationName { get; set; }
-            public double startStationLatitude { get; set; } // Corrected spelling
+            public double startStationLatitude { get; set; }
             public double startStationLongitude { get; set; }
         }
 
