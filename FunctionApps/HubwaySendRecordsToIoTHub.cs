@@ -27,9 +27,9 @@ public static class SimulatedIoTDevice
         // Log the execution time of the function.
         log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
         
-        // Get the record count from the query string or default to 100.
+        // Get the record count from the query string or default to 550.
         string recordCountStr = req.Query["recordCount"];
-        int recordCount = string.IsNullOrEmpty(recordCountStr) ? 100 : int.Parse(recordCountStr);
+        int recordCount = string.IsNullOrEmpty(recordCountStr) ? 550 : int.Parse(recordCountStr);
 
         // Log the start of the record sending process.
         log.LogInformation($"Attempting to send {recordCount} data items to IoT Hub...");

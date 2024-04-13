@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Data-Driven Bubble Layer Styling</title>
+<title>Hubway Data on Azure Maps Implementing Data-Driven Bubble Layer Styling</title>
     <meta charset="utf-8" />
+    <meta name="author" content="Microsoft Azure Maps" />
     <!-- Add references to the Azure Maps Map control JavaScript and CSS files. -->
     <link href="https://atlas.microsoft.com/sdk/javascript/mapcontrol/3/atlas.min.css" rel="stylesheet" />
     <script src="https://atlas.microsoft.com/sdk/javascript/mapcontrol/3/atlas.min.js"></script>
@@ -14,97 +15,124 @@
             margin: 0;
         }
     </style>
-</head>
-<body>
-    <div id="myMap"></div>
-    <script>
+
+    <!-- <div id="myMap"></div> -->
+    <script type='text/javascript'>
         var subscriptionKey = 'XjfgCcq5Xsrfw_Ev0A2ORe-k4kaPixH1INQHYFkfEyE'; // Replace with your Azure Maps subscription key
         var hubwayFeed = "https://func-kk57wcdfxcfco.azurewebsites.net/api/HubwayHttpTrigger";
 
-        var map = new atlas.Map('myMap', {
-            center: [-71.10, 42.4],
-            zoom: 11,
-            authOptions: {
-                authType: 'subscriptionKey',
-                subscriptionKey: subscriptionKey
-            }
-        });
-
-        map.events.add('ready', function () {
-            // Create a data source and add it to the map
-            var dataSource = new atlas.source.DataSource();
-            map.sources.add(dataSource);
-        
-            // Load the GeoJSON data from the HubwayHttpTrigger2
-            dataSource.importDataFromUrl(hubwayFeed);
-        
-            // Create a bubble layer using the data source and add it to the map
-            var bubbleLayer = new atlas.layer.BubbleLayer(dataSource, null, {
-                // The radius of the bubbles is determined by the 'numberOfStations' property of the data points.
-                // The 'interpolate' expression is used to create a smooth transition between data values.
-                // The 'linear' keyword specifies that the interpolation should be linear.
-                // The 'get' expression is used to fetch the value of 'numberOfStations' for each data point.
-                // If 'numberOfStations' is 0, the radius of the bubble is 3.
-                // If 'numberOfStations' is 100, the radius of the bubble is 30.
-                radius: [
-                    'interpolate',
-                    ['linear'],
-                    ['get', 'numberOfStations'],
-                    0, 3,
-                    100, 30
-                ],
-                // The color of the bubbles is also determined by the 'numberOfStations' property.
-                // The color transitions are defined as follows:
-                // If 'numberOfStations' is 5 or less, the color is 'green'.
-                // If 'numberOfStations' is between 5 and 25, the color transitions from 'green' to 'yellow'.
-                // If 'numberOfStations' is between 25 and 50, the color transitions from 'yellow' to 'orange'.
-                // If 'numberOfStations' is between 50 and 100, the color transitions from 'orange' to 'purple'.
-                // If 'numberOfStations' is between 100 and 150, the color transitions from 'purple' to 'red'.
-                // If 'numberOfStations' is more than 150, the color is 'red'.
-                color: [
-                    'interpolate',
-                    ['linear'],
-                    ['get', 'numberOfStations'],
-                    5, 'green',
-                    25, 'yellow',
-                    50, 'orange',
-                    100, 'purple',
-                    150, 'red'
-                ],
-                // The color of the stroke (border) around the bubbles is white.
-                strokeColor: 'white',
-                // The width of the stroke is 2 pixels.
-                strokeWidth: 2,
-                // The 'filter' expression is used to include only data points that have a 'numberOfStations' property.
-                filter: ['has', 'numberOfStations']
-            });
-        
-            // Add the labelLayer to the map
-            map.layers.add(bubbleLayer);
-        
-            // Create a symbol layer for the labels using the data source and add it to the map
-            var labelLayer = new atlas.layer.SymbolLayer(dataSource, null, {
-                // The iconOptions object is used to customize the appearance of the icons in the symbol layer.
-                // The 'image' property is set to 'none', which means that no icon image will be displayed.
-                iconOptions: {
-                    image: 'none'
-                },
-                // The textOptions object is used to customize the appearance of the text in the symbol layer.
-                // The 'textField' property is set to a concatenation of the 'numberOfStations' property of the data points (converted to a string) and the string ' evt'.
-                // This means that each label will display the number of stations followed by ' evt'.
-                // The 'textSize' property is set to 10, which means that the text will be displayed at a size of 10 pixels.
-                textOptions: {
-                    textField: ['concat', ['to-string', ['get', 'numberOfStations']], ' evt'],
-                    textSize: 10
+        function GetMap() {
+            var map = new atlas.Map('myMap', {
+                center: [-71.10, 42.37],
+                zoom: 12.5,
+                authOptions: {
+                    authType: 'subscriptionKey',
+                    subscriptionKey: subscriptionKey
                 }
-            }, {
-                // The id of the symbol layer is set to 'hubway-labels'.
-                id: 'hubway-labels'
             });
-        
-            // Add the labelLayer to the map
-            map.layers.add(labelLayer);
+
+            map.events.add('ready', function () {
+                // Create a data source and add it to the map
+                var dataSource = new atlas.source.DataSource();
+                map.sources.add(dataSource);
+            
+        // Load the GeoJSON data from the HubwayHttpTrigger
+        dataSource.importDataFromUrl(hubwayFeed).then(function() {
+
+            // Calculate the aggregate of numberOfStations
+            var aggregate = dataSource.getShapes().reduce(function(total, shape) {
+                return total + shape.getProperties().numberOfStations;
+            }, 0);
+
+            // Format the aggregate with commas
+            var formattedAggregate = aggregate.toLocaleString();
+
+            // Display the aggregate at the bottom of the map
+            document.getElementById('aggregateDisplay').innerText = 'Total number of stations: ' + formattedAggregate;
+
+
+            map.layers.add(aggregateLayer);
         });
+            
+                // Create a bubble layer using the data source and add it to the map
+                var bubbleLayer = new atlas.layer.BubbleLayer(dataSource, null, {
+                    // The radius of the bubbles is determined by the 'numberOfStations' property of the data points.
+                    // The 'interpolate' expression is used to create a smooth transition between data values.
+                    // The 'linear' keyword specifies that the interpolation should be linear.
+                    // The 'get' expression is used to fetch the value of 'numberOfStations' for each data point.
+                    // If 'numberOfStations' is 0, the radius of the bubble is 3.
+                    // If 'numberOfStations' is 100, the radius of the bubble is 30.
+                    radius: [
+                        'interpolate',
+                        ['linear'],
+                        ['get', 'numberOfStations'],
+                        0, 3,
+                        100, 30
+                    ],
+                    // The color of the bubbles is also determined by the 'numberOfStations' property.
+                    // The color transitions are defined as follows:
+                    // If 'numberOfStations' is 5 or less, the color is 'green'.
+                    // If 'numberOfStations' is between 5 and 25, the color transitions from 'green' to 'yellow'.
+                    // If 'numberOfStations' is between 25 and 50, the color transitions from 'yellow' to 'orange'.
+                    // If 'numberOfStations' is between 50 and 100, the color transitions from 'orange' to 'purple'.
+                    // If 'numberOfStations' is between 100 and 150, the color transitions from 'purple' to 'red'.
+                    // If 'numberOfStations' is more than 150, the color is 'red'.
+                    color: [
+                        'interpolate',
+                        ['linear'],
+                        ['get', 'numberOfStations'],
+                        5, 'green',
+                        25, 'yellow',
+                        50, 'orange',
+                        100, 'purple',
+                        150, 'red'
+                    ],
+                    // The color of the stroke (border) around the bubbles is white.
+                    strokeColor: 'white',
+                    // The width of the stroke is 2 pixels.
+                    strokeWidth: 2,
+                    // The 'filter' expression is used to include only data points that have a 'numberOfStations' property.
+                    filter: ['has', 'numberOfStations']
+                });
+            
+                // Add the labelLayer to the map
+                map.layers.add(bubbleLayer);
+            
+                // Create a symbol layer for the labels using the data source and add it to the map
+                var labelLayer = new atlas.layer.SymbolLayer(dataSource, null, {
+                    // The iconOptions object is used to customize the appearance of the icons in the symbol layer.
+                    // The 'image' property is set to 'none', which means that no icon image will be displayed.
+                    iconOptions: {
+                        image: 'none'
+                    },
+                    // The textOptions object is used to customize the appearance of the text in the symbol layer.
+                    // The 'textField' property is set to a concatenation of the 'numberOfStations' property of the data points (converted to a string) and the string ' evt'.
+                    // This means that each label will display the number of stations followed by ' evt'.
+                    // The 'textSize' property is set to 10, which means that the text will be displayed at a size of 10 pixels.
+                    textOptions: {
+                        textField: ['concat', ['to-string', ['get', 'numberOfStations']], ' evt'],
+                        textSize: 10
+                    }
+                }, {
+                    // The id of the symbol layer is set to 'hubway-labels'.
+                    id: 'hubway-labels'
+                });
+            
+                // Add the labelLayer to the map
+                map.layers.add(labelLayer);
+            });
+        }
     </script>
+</head>
+<body onload="GetMap()">
+    <div id="myMap" style="position:relative;width:100%;min-width:290px;height:600px;"></div>
+    <div id="aggregateDisplay" style="position: absolute; bottom: 225px; width: 100%; text-align: center; background: rgba(255,255,255,0.8); padding: 10px; font-size: 20px;"></div>
+
+    <fieldset style="width:calc(100% - 30px);min-width:290px;margin-top:10px;">
+        <legend>Data-Driven Bubble Layer Styling</legend>
+        This sample shows how to use data-driven styles on a BubbleLayer to define the radius and color of each circle based on the number of stations of each data point. 
+        This Azure map depicts Boston Hubway data as each event is processed via an IoT > EventHub > Function App > CosmosDB process.  Azure Maps
+        Bubble Layer Styling is used to represent the number of start station events.
+    </fieldset>
 </body>
 </html>
