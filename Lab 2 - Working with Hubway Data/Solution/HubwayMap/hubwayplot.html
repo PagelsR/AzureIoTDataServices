@@ -1,105 +1,110 @@
-﻿
 <!DOCTYPE html>
 <html>
 <head>
-<title>Hubway Data on Azure Maps Implementing Data-Driven Bubble Layer Styling</title>
+    <title>Data-Driven Bubble Layer Styling</title>
+    <meta charset="utf-8" />
+    <!-- Add references to the Azure Maps Map control JavaScript and CSS files. -->
+    <link href="https://atlas.microsoft.com/sdk/javascript/mapcontrol/3/atlas.min.css" rel="stylesheet" />
+    <script src="https://atlas.microsoft.com/sdk/javascript/mapcontrol/3/atlas.min.js"></script>
+    <style>
+        html, body, #myMap {
+            height: 100%;
+            width: 100%;
+            padding: 0;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <div id="myMap"></div>
+    <script>
+        var subscriptionKey = 'XjfgCcq5Xsrfw_Ev0A2ORe-k4kaPixH1INQHYFkfEyE'; // Replace with your Azure Maps subscription key
+        var hubwayFeed = "https://func-kk57wcdfxcfco.azurewebsites.net/api/HubwayHttpTrigger";
 
-<meta charset="utf-8" />
-<meta http-equiv="x-ua-compatible" content="IE=Edge" />
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-<meta name="description" content="This sample shows how to use data-driven styles on a BubbleLayer to define the radius and color of each circle based on the magnitude of each data point." />
-<meta name="keywords" content="map, gis, API, SDK, circle, bubble, layer, data-driven, bubblelayer, geojson, data driven styling, weather, earthquakes, USGS" />
-<meta name="author" content="Microsoft Azure Maps" />
-
-<!-- Add references to the Azure Maps Map control JavaScript and CSS files. -->
-<!-- <link rel="stylesheet" href="https://atlas.microsoft.com/sdk/css/atlas.min.css?api-version=1" type="text/css" />
-<script src="https://atlas.microsoft.com/sdk/js/atlas.min.js?api-version=1"></script> -->
-<link href="https://atlas.microsoft.com/sdk/javascript/mapcontrol/3/atlas.min.css" rel="stylesheet" />
-<script src="https://atlas.microsoft.com/sdk/javascript/mapcontrol/3/atlas.min.js"></script>
-
-<script type='text/javascript'>
-    var map, datasource;
-    
-    // This API endpoint provides a GeoJSON feed of data from CosmosDB.
-    // GeoJSON is a format for encoding a variety of geographic data structures.
-    var hubwayFeed = "https://func-kk57wcdfxcfco.azurewebsites.net/api/HubwayHttpTrigger2";
-
-    function GetMap() {
-        
-        //Add your Azure Maps Primary subscription key to the map SDK. Get an Azure Maps key at https://azure.com/maps
-        atlas.setSubscriptionKey('-tIVJM5k2FzuDZw27e8uBi5z6hy-pXjGfj0A9nnG81U');
-        
-        //Initialize a map instance.
-        map = new atlas.Map('myMap',
-        {
+        var map = new atlas.Map('myMap', {
             center: [-71.10, 42.4],
             zoom: 11,
-            view: 'Auto'
+            authOptions: {
+                authType: 'subscriptionKey',
+                subscriptionKey: subscriptionKey
+            }
         });
+
+        map.events.add('ready', function () {
+            // Create a data source and add it to the map
+            var dataSource = new atlas.source.DataSource();
+            map.sources.add(dataSource);
         
-        //Wait until the map resources have fully loaded.
-        map.events.add('load', function (e) {
-
-            //Create a data source and add it to the map.
-            datasource = new atlas.source.DataSource();
-            map.sources.add(datasource);
-
-            //Load the hubway start station data.
-            datasource.importDataFromUrl(hubwayFeed);
-
-            //Create a layer that defines how to render the shapes in the data source and add it to the map.
-            map.layers.add(new atlas.layer.BubbleLayer(datasource, 'hubway-circles', {
-
-                //Bubbles are made semi-transparent.
-                opacity: 0.75,
-
-                //Color of each bubble based on the value of "numberOfStations" property using a color gradient of green, yellow, orange, and red.
+            // Load the GeoJSON data from the HubwayHttpTrigger2
+            dataSource.importDataFromUrl(hubwayFeed);
+        
+            // Create a bubble layer using the data source and add it to the map
+            var bubbleLayer = new atlas.layer.BubbleLayer(dataSource, null, {
+                // The radius of the bubbles is determined by the 'numberOfStations' property of the data points.
+                // The 'interpolate' expression is used to create a smooth transition between data values.
+                // The 'linear' keyword specifies that the interpolation should be linear.
+                // The 'get' expression is used to fetch the value of 'numberOfStations' for each data point.
+                // If 'numberOfStations' is 0, the radius of the bubble is 3.
+                // If 'numberOfStations' is 100, the radius of the bubble is 30.
+                radius: [
+                    'interpolate',
+                    ['linear'],
+                    ['get', 'numberOfStations'],
+                    0, 3,
+                    100, 30
+                ],
+                // The color of the bubbles is also determined by the 'numberOfStations' property.
+                // The color transitions are defined as follows:
+                // If 'numberOfStations' is 5 or less, the color is 'green'.
+                // If 'numberOfStations' is between 5 and 25, the color transitions from 'green' to 'yellow'.
+                // If 'numberOfStations' is between 25 and 50, the color transitions from 'yellow' to 'orange'.
+                // If 'numberOfStations' is between 50 and 100, the color transitions from 'orange' to 'purple'.
+                // If 'numberOfStations' is between 100 and 150, the color transitions from 'purple' to 'red'.
+                // If 'numberOfStations' is more than 150, the color is 'red'.
                 color: [
                     'interpolate',
                     ['linear'],
                     ['get', 'numberOfStations'],
                     5, 'green',
-                    10, 'yellow',
-                    15, 'orange',
-                    20, 'red'
+                    25, 'yellow',
+                    50, 'orange',
+                    100, 'purple',
+                    150, 'red'
                 ],
-                /*
-                 * Radius for each data point scaled based on the value of "numberOfStations" property.
-                 */
-                radius: [
-                    'interpolate',
-                    ['linear'],
-                    ['get', 'numberOfStations'],
-                    0, 2,
-                    100, 40
-                ]
-            }));
-
-            //Create a symbol layer using the same data source to render the magnitude as text above each bubble and add it to the map.
-            map.layers.add(new atlas.layer.SymbolLayer(datasource, 'hubway-labels', {
+                // The color of the stroke (border) around the bubbles is white.
+                strokeColor: 'white',
+                // The width of the stroke is 2 pixels.
+                strokeWidth: 2,
+                // The 'filter' expression is used to include only data points that have a 'numberOfStations' property.
+                filter: ['has', 'numberOfStations']
+            });
+        
+            // Add the labelLayer to the map
+            map.layers.add(bubbleLayer);
+        
+            // Create a symbol layer for the labels using the data source and add it to the map
+            var labelLayer = new atlas.layer.SymbolLayer(dataSource, null, {
+                // The iconOptions object is used to customize the appearance of the icons in the symbol layer.
+                // The 'image' property is set to 'none', which means that no icon image will be displayed.
                 iconOptions: {
-
-                    //Hide the icon image.
                     image: 'none'
                 },
+                // The textOptions object is used to customize the appearance of the text in the symbol layer.
+                // The 'textField' property is set to a concatenation of the 'numberOfStations' property of the data points (converted to a string) and the string ' evt'.
+                // This means that each label will display the number of stations followed by ' evt'.
+                // The 'textSize' property is set to 10, which means that the text will be displayed at a size of 10 pixels.
                 textOptions: {
-
-                    //An expression is used to concerte the "mag" property value into a string and appends the letter "m" to the end of it.
                     textField: ['concat', ['to-string', ['get', 'numberOfStations']], ' evt'],
-                    textSize: 12
+                    textSize: 10
                 }
-            }));
+            }, {
+                // The id of the symbol layer is set to 'hubway-labels'.
+                id: 'hubway-labels'
+            });
+        
+            // Add the labelLayer to the map
+            map.layers.add(labelLayer);
         });
-    }
-</script>
-</head>
-<body onload="GetMap()">
-<div id="myMap" style="position:relative;width:100%;min-width:350px;height:600px;"></div>
-
-<fieldset style="width:calc(100% - 30px);min-width:350px;margin-top:10px;">
-    <legend>Boston Hubway Data-Driven Bubble Layer Styling</legend>
-    This Azure map depicts Boston Hubway data as each event is processed via an IoT process.  Azure Maps
-    Bubble Layer Styling is used to represent the number of start station events.
-</fieldset>
+    </script>
 </body>
 </html>

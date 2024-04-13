@@ -9,10 +9,9 @@ using Newtonsoft.Json;
 
 namespace FunctionApps
 {
-    public static class HubwayHttpTrigger
+    public static class HubwayHttpTrigger2
     {
-        [FunctionName("HubwayHttpTrigger")]
-        //public static IActionResult Run(
+        [FunctionName("HubwayHttpTrigger2")]
         public static TripDataGeoJson Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
         [CosmosDB(databaseName: "Hubway",
@@ -24,110 +23,59 @@ namespace FunctionApps
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
-            // Log the first 5 items in the list
-            // foreach (var tripItem in tripItems.Take(5))
-            // {
-            //     log.LogInformation($"Trip Item: {JsonConvert.SerializeObject(tripItem)}");
-            // }
-
-            // based on http://geojson.org/
-            // https://tools.ietf.org/html/rfc7946#section-1.3
-
-            // return GeoJson object
-            TripDataGeoJson tdGeoJson = new TripDataGeoJson();
-
-            // create the list of features            
-            tdGeoJson.features = new List<LocalFeatures>();
-
-            LocalFeatures myFeatures = null;
-
-            string sStartStationName = null;
-            double dStartStationLatitude = 0.0;
-            double dStartStationLongitude = 0.0;
-
-            string sCurrentStationID = null;
-            string sLastStationID = null;
-            int iCounter = 1;
-
-            try
+            // Initialize GeoJson object
+            TripDataGeoJson tdGeoJson = new TripDataGeoJson
             {
-                // process each item in the list
-                foreach (var doc in tripItems)
+                features = new List<LocalFeatures>()
+            };
+
+            // Group tripItems by startStationID
+            var groupedTripItems = tripItems.GroupBy(t => t.startStationID);
+
+            // Log the groupedTripItems
+            log.LogInformation($"groupedTripItems: {JsonConvert.SerializeObject(groupedTripItems)}");
+
+
+            // Process each group
+            foreach (var group in groupedTripItems)
+            {
+                var firstItem = group.First();
+
+                // Create Properties object
+                Properties prop = new Properties
                 {
-                    // grab the stationID from the list
-                    sCurrentStationID = doc.startStationID;
+                    numberOfStations = group.Count(),
+                    startStationID = group.Key,
+                    startStationName = firstItem.startStationName
+                };
 
-                    log.LogInformation($"C# HTTP trigger function processed a request. Current Station ID: {sCurrentStationID}");
-
-                    //compare station ID's
-                    if (sCurrentStationID == sLastStationID)
+                // Create LocalGeometry object
+                LocalGeometry geo = new LocalGeometry
+                {
+                    coordinates = new List<double>
                     {
-                        // they are in the same array
-                        log.LogInformation("Station id's match: "+ sCurrentStationID );
-
-                        // increment the counter
-                        iCounter += 1;
+                        firstItem.startStationLongitude,
+                        firstItem.startStationLatitude
                     }
-                    else
-                    {
-                        // they do not match
-                        log.LogInformation($"Station id's do NOT match: {sCurrentStationID}");
+                };
 
-                        // create the Properties object
-                        Properties prop = new Properties();
-                        prop.numberOfStations = iCounter;
-                        prop.startStationID = sLastStationID;
-                        prop.startStationName = sStartStationName;
-
-                        LocalGeometry geo = new LocalGeometry();
-                        geo.coordinates = new List<double>();
-                        geo.coordinates.Add(dStartStationLongitude);
-                        geo.coordinates.Add(dStartStationLatitude);
-
-                        myFeatures = new LocalFeatures();
-                        myFeatures.properties = prop;
-                        myFeatures.geometry = geo;
-
-                        tdGeoJson.features.Add(myFeatures);
-
-                        // reset the counter
-                        iCounter = 1;
-
-                    }
-
-                    // set for comparison
-                    sLastStationID = doc.startStationID;
-                    sStartStationName = doc.startStationName;
-                    dStartStationLatitude = Convert.ToDouble(doc.startStationLatitude);
-                    dStartStationLongitude = Convert.ToDouble(doc.startStationLongitude);
-                    // dStartStationLatitude = doc.startStationLatitude;
-                    // dStartStationLongitude = doc.startStationLongitude;
-
-                }
+                // Create LocalFeatures object and add to features list
+                tdGeoJson.features.Add(new LocalFeatures
+                {
+                    properties = prop,
+                    geometry = geo
+                });
             }
-            catch (Exception ex)
-            {
-                log.LogInformation("Exception: " + ex.Message);
-            }
-
-            // remove the first record -- null references first time thru loop
-            tdGeoJson.features.RemoveAt(0);
 
             return tdGeoJson;
         }
 
         public class TripItems
         {
-
             public string startStationID { get; set; }
             public string startStationName { get; set; }
-
-            public string startStationLatitude { get; set; }
-
-            public string startStationLongitude { get; set; }
-            // public double startStationLatitude { get; set; }
-
-            // public double startStationLongitude { get; set; }
+            public double startStationLatitude { get; set; } // Corrected spelling
+            public double startStationLongitude { get; set; }
         }
 
         public class LocalGeometry
