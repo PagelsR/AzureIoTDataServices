@@ -42,7 +42,7 @@ namespace FunctionApps
             LocalFeatures myFeatures = null;
 
             string sStartStationName = null;
-            double dStartStationLatitiude = 0.0;
+            double dStartStationLatitude = 0.0;
             double dStartStationLongitude = 0.0;
 
             string sCurrentStationID = null;
@@ -82,7 +82,7 @@ namespace FunctionApps
                         LocalGeometry geo = new LocalGeometry();
                         geo.coordinates = new List<double>();
                         geo.coordinates.Add(dStartStationLongitude);
-                        geo.coordinates.Add(dStartStationLatitiude);
+                        geo.coordinates.Add(dStartStationLatitude);
 
                         myFeatures = new LocalFeatures();
                         myFeatures.properties = prop;
@@ -98,9 +98,9 @@ namespace FunctionApps
                     // set for comparison
                     sLastStationID = doc.startStationID;
                     sStartStationName = doc.startStationName;
-                    dStartStationLatitiude = Convert.ToDouble(doc.startStationLatitiude);
+                    dStartStationLatitude = Convert.ToDouble(doc.startStationLatitude);
                     dStartStationLongitude = Convert.ToDouble(doc.startStationLongitude);
-                    // dStartStationLatitiude = doc.startStationLatitiude;
+                    // dStartStationLatitude = doc.startStationLatitude;
                     // dStartStationLongitude = doc.startStationLongitude;
 
                 }
@@ -122,10 +122,10 @@ namespace FunctionApps
             public string startStationID { get; set; }
             public string startStationName { get; set; }
 
-            public string startStationLatitiude { get; set; }
+            public string startStationLatitude { get; set; }
 
             public string startStationLongitude { get; set; }
-            // public double startStationLatitiude { get; set; }
+            // public double startStationLatitude { get; set; }
 
             // public double startStationLongitude { get; set; }
         }

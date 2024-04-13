@@ -29,7 +29,7 @@ namespace Company.Function
                 foreach (var doc in input)
                 {
 
-                    lat = doc.GetPropertyValue<string>("startStationLatitiude");
+                    lat = doc.GetPropertyValue<string>("startStationLatitude");
                     lon = doc.GetPropertyValue<string>("startStationLongitude");
 
                     log.LogInformation("Start Station Latitude variable lat: " + lat);

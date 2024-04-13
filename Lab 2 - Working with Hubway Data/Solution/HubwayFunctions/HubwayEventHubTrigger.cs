@@ -24,7 +24,7 @@ namespace Company.function
                            tripDuration = msg.GetValue("tripduration").ToString(),
                            startStationID = msg.GetValue("start_station_id").ToString(),
                            startStationName = msg.GetValue("start_station_name").ToString(),
-                           startStationLatitiude = msg.GetValue("start_station_latitude").ToString(),
+                           startStationLatitude = msg.GetValue("start_station_latitude").ToString(),
                            startStationLongitude = msg.GetValue("start_station_longitude").ToString(),
                            endStationID = msg.GetValue("end_station_id").ToString(),
                            endStationName = msg.GetValue("end_station_name").ToString(),

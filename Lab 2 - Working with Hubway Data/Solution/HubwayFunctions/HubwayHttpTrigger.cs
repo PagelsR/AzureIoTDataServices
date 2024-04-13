@@ -37,7 +37,7 @@ namespace Company.Function
             LocalFeatures myFeatures = null;
 
             string sStartStationName = null;
-            double dStartStationLatitiude = 0.0;
+            double dStartStationLatitude = 0.0;
             double dStartStationLongitude = 0.0;
 
             string sCurrentStationID = null;
@@ -73,7 +73,7 @@ namespace Company.Function
                    LocalGeometry geo = new LocalGeometry();
                    geo.coordinates = new List<double>();
                    geo.coordinates.Add(dStartStationLongitude);
-                   geo.coordinates.Add(dStartStationLatitiude);
+                   geo.coordinates.Add(dStartStationLatitude);
 
                    myFeatures = new LocalFeatures();
                    myFeatures.properties = prop;
@@ -89,7 +89,7 @@ namespace Company.Function
                 // set for comparison
                 sLastStationID  = doc.startStationID;
                 sStartStationName = doc.startStationName;
-                dStartStationLatitiude = Convert.ToDouble(doc.startStationLatitiude);
+                dStartStationLatitude = Convert.ToDouble(doc.startStationLatitude);
                 dStartStationLongitude = Convert.ToDouble(doc.startStationLongitude);
                 
             }
@@ -107,7 +107,7 @@ namespace Company.Function
        public string startStationID{ get; set; }
        public string startStationName{ get; set; }
 
-        public string startStationLatitiude{ get; set; }
+        public string startStationLatitude{ get; set; }
 
         public string startStationLongitude{ get; set; }
 

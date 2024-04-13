@@ -54,8 +54,8 @@ namespace FunctionApps
                 {
                     coordinates = new List<double>
                     {
-                        Convert.ToDouble(firstItem.startStationLongitude),
-                        Convert.ToDouble(firstItem.startStationLatitiude)
+                        firstItem.startStationLongitude,
+                        firstItem.startStationLatitude
                     }
                 };
 
@@ -72,16 +72,10 @@ namespace FunctionApps
 
         public class TripItems
         {
-
             public string startStationID { get; set; }
             public string startStationName { get; set; }
-
-            public string startStationLatitiude { get; set; }
-
-            public string startStationLongitude { get; set; }
-            // public double startStationLatitiude { get; set; }
-
-            // public double startStationLongitude { get; set; }
+            public double startStationLatitude { get; set; } // Corrected spelling
+            public double startStationLongitude { get; set; }
         }
 
         public class LocalGeometry
