@@ -21,6 +21,15 @@
         //var subscriptionKey = 'XjfgCcq5Xsrfw_Ev0A2ORe-k4kaPixH1INQHYFkfEyE'; // Replace with your Azure Maps subscription key
         var hubwayFeed = "https://func-kk57wcdfxcfco.azurewebsites.net/api/HubwayHttpTrigger";
 
+        // fetch('https://your-endpoint-url')
+        //     .then(response => response.text())
+        //     .then(data => {
+        //         var hubwayFeed = data;
+        //     })
+        //     .catch((error) => {
+        //         console.error('Error:', error);
+        //     });
+
         function GetMap() {
             fetch('https://func-kk57wcdfxcfco.azurewebsites.net/api/GetAzureMapsKey')
                 .then(response => response.text())
