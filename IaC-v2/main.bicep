@@ -182,4 +182,5 @@ output out_functionAppName string = functionAppName
 output out_iotHubName string = iotHubName
 output out_iotdeviceName string = iotDeviceName
 output out_storageAccountNameBlob string = storageAccountNameBlob
+output out_storageAccountKey1 string = storageaccountmod.outputs.out_storageAccountKey1
 output out_eventHubPrimaryConnectionString string = eventhubmod.outputs.out_eventHubPrimaryConnectionString

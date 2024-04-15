@@ -71,11 +71,7 @@ namespace FunctionApps
             
             // Return the tdGeoJson object, which now contains a list of LocalFeatures objects,
             // each representing a group of trip items
-
-            // remove the first record -- null references first time thru loop
-            tdGeoJson.features.RemoveAt(0);
-
-            return tdGeoJson;
+           return tdGeoJson;
         }
 
         public class TripItems

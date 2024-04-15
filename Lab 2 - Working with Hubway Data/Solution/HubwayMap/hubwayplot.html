@@ -31,13 +31,26 @@
                 }
             });
 
+        // function GetMap() {
+        //     fetch('https://https://func-kk57wcdfxcfco.azurewebsites.net/api/GetAMapsKey')
+        //         .then(response => response.text())
+        //         .then((subscriptionKey) => {
+        //             var map = new atlas.Map('myMap', {
+        //                 center: [-71.10, 42.37],
+        //                 zoom: 12.5,
+        //                 authOptions: {
+        //                     authType: 'subscriptionKey',
+        //                     subscriptionKey: subscriptionKey
+        //                 }
+        //             });
+
             map.events.add('ready', function () {
                 // Create a data source and add it to the map
                 var dataSource = new atlas.source.DataSource();
                 map.sources.add(dataSource);
             
-        // Load the GeoJSON data from the HubwayHttpTrigger
-        dataSource.importDataFromUrl(hubwayFeed).then(function() {
+            // Load the GeoJSON data from the HubwayHttpTrigger
+            dataSource.importDataFromUrl(hubwayFeed).then(function() {
 
             // Calculate the aggregate of numberOfStations
             var aggregate = dataSource.getShapes().reduce(function(total, shape) {
