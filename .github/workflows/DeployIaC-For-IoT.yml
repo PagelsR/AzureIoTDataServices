@@ -49,11 +49,11 @@ jobs:
         name: IaC-v2
         path: ${{ github.workspace }}/IaC-v2/*.*
 
-    - name: Upload hubwayplot.html
+    - name: Upload HTML File
       uses: actions/upload-artifact@v3
       with:
         name: hubwayplot
-        path: ${{ github.workspace }}/Lab 2 - Working with Hubway Data/Solution/HubwayMap/hubwayplot.html
+        path: ${{ github.workspace }}/Lab 2 - Working with Hubway Data/Solution/HubwayMap/hubwayplotmap.html
 
   Deploy_Infrastructure:
     runs-on: ubuntu-latest
@@ -318,7 +318,7 @@ jobs:
       continue-on-error: true
       with:
         inlineScript: |
-          az storage blob upload --account-name ${{ needs.Deploy_Infrastructure.outputs.output_storageAccountNameBlob }} --account-key ${{ needs.Deploy_Infrastructure.outputs.output_storageAccountKey1 }} --name hubwayplot.html --type block --file ./hubwayplot.html --container-name web$
+          az storage blob upload --account-name ${{ needs.Deploy_Infrastructure.outputs.output_storageAccountNameBlob }} --account-key ${{ needs.Deploy_Infrastructure.outputs.output_storageAccountKey1 }} --name hubwayplotmap.html --type block --file ./hubwayplotmap.html --container-name web$
 
     - name: Logout of Azure
       run: |
