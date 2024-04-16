@@ -56,12 +56,23 @@
                                 return total + shape.getProperties().numberOfStations;
                             }, 0);
         
+                            // Calculate the aggregate of startStationID's
+                            var uniqueStartStationIDs = new Set();
+                            dataSource.getShapes().forEach(function (shape) {
+                                uniqueStartStationIDs.add(shape.getProperties().startStationID);
+                            });
+
+                            // size of the Set will be the number of unique startStationID
+                            var aggregate2 = uniqueStartStationIDs.size;
+
                             // Format the aggregate with commas
                             var formattedAggregate = aggregate.toLocaleString();
+                            var formattedAggregate2 = aggregate2.toLocaleString();
         
                             // Display the aggregate at the bottom of the map
-                            document.getElementById('aggregateDisplay').innerText = 'Total number of stations: ' + formattedAggregate;
-        
+                            document.getElementById('aggregateDisplay').innerText = 'Total number of bike pickups: ' + formattedAggregate;
+                            document.getElementById('aggregateDisplay2').innerText = 'Total number of bike stations: ' + formattedAggregate2;
+
                             map.layers.add(aggregateLayer);
                         });
         
@@ -99,7 +110,8 @@
                             },
                             textOptions: {
                                 textField: ['concat', ['to-string', ['get', 'numberOfStations']], ' evt'],
-                                textSize: 10
+                                textSize: 11,
+                                color: 'black'
                             }
                         }, {
                             id: 'hubway-labels'
@@ -114,7 +126,8 @@
 </head>
 <body onload="GetMap()">
     <div id="myMap" style="position:relative;width:100%;min-width:290px;height:600px;"></div>
-    <div id="aggregateDisplay" style="position: absolute; bottom: 225px; width: 100%; text-align: center; background: rgba(255,255,255,0.8); padding: 10px; font-size: 20px;"></div>
+    <div id="aggregateDisplay2" style="position: absolute; bottom: 200px; width: 100%; text-align: center; background: rgba(255,255,255,0.8); padding: 10px; font-size: 20px;"></div>
+    <div id="aggregateDisplay" style="position: absolute; bottom: 230px; width: 100%; text-align: center; background: rgba(255,255,255,0.8); padding: 10px; font-size: 20px;"></div>
 
     <fieldset style="width:calc(100% - 30px);min-width:290px;margin-top:10px;">
         <legend>Data-Driven Bubble Layer Styling</legend>

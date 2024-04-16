@@ -53,7 +53,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: hubwayplot
-        path: ${{ github.workspace }}/hubwayplot.html
+        path: ${{ github.workspace }}/Lab 2 - Working with Hubway Data/Solution/HubwayMap/hubwayplot.html
 
     # - name: Upload CSV File
     #   uses: actions/upload-artifact@v3
