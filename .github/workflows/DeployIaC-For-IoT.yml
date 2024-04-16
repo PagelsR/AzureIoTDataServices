@@ -124,6 +124,7 @@ jobs:
         echo 'output_iotHubName: ${{ steps.Infra.outputs.out_iotHubName }}'
         echo 'output_eventHubPrimaryConnectionString: ${{ steps.Infra.outputs.out_eventHubPrimaryConnectionString }}'
         echo 'output_iotDeviceName: ${{ steps.Infra.outputs.out_iotDeviceName }}'
+        echo 'output_storageAccountKey1: ${{ steps.Infra.outputs.out_storageAccountKey1 }}'
     
     - name: Ensure Resource Group is Locked
       uses: Azure/CLI@v1
