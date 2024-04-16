@@ -55,12 +55,6 @@ jobs:
         name: hubwayplot
         path: ${{ github.workspace }}/Lab 2 - Working with Hubway Data/Solution/HubwayMap/hubwayplot.html
 
-    # - name: Upload CSV File
-    #   uses: actions/upload-artifact@v3
-    #   with:
-    #     name: 201502-hubway-tripdata
-    #     path: "${{ github.workspace }}/Lab 2 - Working with Hubway Data/Solution/IotProject/simulated-device/data/201502-hubway-tripdata.csv"
-  
   Deploy_Infrastructure:
     runs-on: ubuntu-latest
     name: Deploy Infrastructure
@@ -173,13 +167,6 @@ jobs:
         slot-name: 'production'
         package: './build_output'
 
-    # - name: Download CSV File
-    #   uses: actions/download-artifact@v2
-    #   continue-on-error: true
-    #   with:
-    #     name: 201502-hubway-tripdata
-    #     path: ${{ github.workspace }}/simulated-device/data/
-
     - name: Ensure Resource Group is Locked
       uses: Azure/CLI@v1
       continue-on-error: true
@@ -191,7 +178,6 @@ jobs:
       run: |
         az logout
         
-
   Deploy_IoT_Device:
     runs-on: ubuntu-latest
     name: Add IoT Device
