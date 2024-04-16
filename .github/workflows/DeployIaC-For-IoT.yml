@@ -206,6 +206,7 @@ jobs:
           echo 'output_iotHubName: ${{ needs.Deploy_Infrastructure.outputs.output_iotHubName }}'
           echo 'output_eventHubPrimaryConnectionString: ${{ needs.Deploy_Infrastructure.outputs.output_eventHubPrimaryConnectionString }}'
           echo 'output_iotDeviceName: ${{ needs.Deploy_Infrastructure.outputs.output_iotDeviceName }}'
+          echo 'output_storageAccountKey1: ${{ needs.Deploy_Infrastructure.outputs.output_storageAccountKey1 }}'
 
       # Create an IoT device
       - name: Create an IoT device
@@ -267,6 +268,7 @@ jobs:
         echo 'output_eventHubPrimaryConnectionString: ${{ needs.Deploy_Infrastructure.outputs.output_eventHubPrimaryConnectionString }}'
         echo 'output_iotDeviceName: ${{ needs.Deploy_Infrastructure.outputs.output_iotDeviceName }}'
         echo 'output_storageAccountNameBlob: ${{ needs.Deploy_Infrastructure.outputs.output_storageAccountNameBlob }}'
+        echo 'output_storageAccountKey1: ${{ needs.Deploy_Infrastructure.outputs.output_storageAccountKey1 }}'
 
     # Create an IoT device
     - name: Enable Static Website on Blob Storage
