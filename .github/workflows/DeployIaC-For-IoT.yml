@@ -72,7 +72,7 @@ jobs:
     - name: Login to Azure
       uses: azure/login@v1
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALSNEW }}
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     - name: Ensure Resource Group Exists
       uses: Azure/CLI@v1
@@ -144,7 +144,7 @@ jobs:
       uses: azure/login@v1
       continue-on-error: false
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALSNEW }}
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     - name: Ensure Resource Group is UnLocked
       uses: Azure/CLI@v1
@@ -190,7 +190,7 @@ jobs:
         uses: azure/login@v1
         continue-on-error: false
         with:
-          creds: ${{ secrets.AZURE_CREDENTIALSNEW }}
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
 
       # Install Azure IoT Extension
       - name: Install Azure IoT Extension
@@ -259,7 +259,7 @@ jobs:
       uses: azure/login@v1
       continue-on-error: false
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALSNEW }}
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     - name: DEBUG ONLY Display Output Variables
       run: |
@@ -297,7 +297,7 @@ jobs:
       uses: azure/login@v1
       continue-on-error: false
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALSNEW }}
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
 
     - name: DEBUG ONLY Display Output Variables
       run: |
