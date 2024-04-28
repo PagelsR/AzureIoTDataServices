@@ -324,7 +324,7 @@ jobs:
       continue-on-error: true
       with:
         inlineScript: |
-          az storage blob upload --account-name ${{ needs.Deploy_Infrastructure.outputs.output_storageAccountNameBlob }} --account-key ${{ env.STORAGE_SECRET_KEY }} --name hubwayplotmap.html --type block --file ./hubwayplotmap.html --container-name web$
+          az storage blob upload --account-name ${{ needs.Deploy_Infrastructure.outputs.output_storageAccountNameBlob }} --account-key "${{ env.STORAGE_SECRET_KEY }}" --name hubwayplotmap.html --type block --file ./hubwayplotmap.html --container-name web$
 
     - name: Logout of Azure
       run: |
