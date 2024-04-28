@@ -4,76 +4,129 @@ param location string = resourceGroup().location
 param defaultTags object
 param storageAccountNameBlob string
 
-// Storage Account
-resource storageAccountBlob 'Microsoft.Storage/storageAccounts@2023-01-01' = {
+resource storageAccountBlob 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   name: storageAccountNameBlob
-  tags: defaultTags
   location: location
+  tags: defaultTags
   sku: {
     name: 'Standard_LRS'
   }
   kind: 'StorageV2'
   properties: {
     supportsHttpsTrafficOnly: true
-    allowBlobPublicAccess: true
     accessTier: 'Hot'
+    allowBlobPublicAccess: true
+    minimumTlsVersion: 'TLS1_2'
+    networkAcls: {
+      bypass: 'AzureServices'
+      virtualNetworkRules: []
+      ipRules: []
+      defaultAction: 'Allow'
+    }
   }
 }
 
-
-// Blob Services for Storage Account
-resource storageAccountBlobServices 'Microsoft.Storage/storageAccounts/blobServices@2023-01-01' = {
+resource staticWebsite 'Microsoft.Storage/storageAccounts/blobServices@2019-06-01' = {
   parent: storageAccountBlob
   name: 'default'
   properties: {
-    changeFeed: {
-      enabled: false
-    }
-    restorePolicy: {
-      enabled: false
-    }
-    containerDeleteRetentionPolicy: {
-      enabled: true
-      days: 7
-    }
-    cors: {
-      corsRules: []
-    }
     deleteRetentionPolicy: {
-      allowPermanentDelete: false
-      enabled: true
       days: 7
+      enabled: true
     }
-    isVersioningEnabled: false
   }
 }
 
-resource dataStorage_Blob_web 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-01-01' = {
-  parent: storageAccountBlobServices
+resource staticWebsiteProperties 'Microsoft.Storage/storageAccounts/blobServices/containers@2019-06-01' = {
+  parent: staticWebsite
   name: '$web'
   properties: {
-    defaultEncryptionScope: '$account-encryption-key'
-    denyEncryptionScopeOverride: false
     publicAccess: 'Blob'
-    immutableStorageWithVersioning: {
-      enabled: false
-    }
-  }
-
-}
-
-resource dataStorage_Blob_boston_hubway_data 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-01-01' = {
-  parent: storageAccountBlobServices
-  name: 'boston-hubway-data'
-  properties: {
-    defaultEncryptionScope: '$account-encryption-key'
-    denyEncryptionScopeOverride: false
-    publicAccess: 'Blob'
-    immutableStorageWithVersioning: {
-      enabled: false
-    }
   }
 }
+
+// resource Blob_boston_hubway_data 'Microsoft.Storage/storageAccounts/blobServices/containers@2019-06-01' = {
+//   parent: staticWebsite
+//   name: 'boston-hubway-data'
+//   properties: {
+//     defaultEncryptionScope: '$account-encryption-key'
+//     denyEncryptionScopeOverride: false
+//     publicAccess: 'Blob'
+//   }
+// }
+
+
+
+// Storage Account
+// resource storageAccountBlob 'Microsoft.Storage/storageAccounts@2023-01-01' = {
+//   name: storageAccountNameBlob
+//   tags: defaultTags
+//   location: location
+//   sku: {
+//     name: 'Standard_LRS'
+//   }
+//   kind: 'StorageV2'
+//   properties: {
+//     supportsHttpsTrafficOnly: true
+//     allowBlobPublicAccess: true
+//     accessTier: 'Hot'
+//   }
+// }
+
+
+// Blob Services for Storage Account
+// resource storageAccountBlobServices 'Microsoft.Storage/storageAccounts/blobServices@2023-01-01' = {
+//   parent: storageAccountBlob
+//   name: 'default'
+//   properties: {
+//     changeFeed: {
+//       enabled: false
+//     }
+//     restorePolicy: {
+//       enabled: false
+//     }
+//     containerDeleteRetentionPolicy: {
+//       enabled: true
+//       days: 7
+//     }
+//     cors: {
+//       corsRules: []
+//     }
+//     deleteRetentionPolicy: {
+//       allowPermanentDelete: false
+//       enabled: true
+//       days: 7
+//     }
+//     isVersioningEnabled: false
+//   }
+// }
+
+// resource dataStorage_Blob_web 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-01-01' = {
+//   parent: storageAccountBlobServices
+//   name: '$web'
+//   properties: {
+//     defaultEncryptionScope: '$account-encryption-key'
+//     denyEncryptionScopeOverride: false
+//     publicAccess: 'Blob'
+//     immutableStorageWithVersioning: {
+//       enabled: false
+//     }
+//   }
+
+// }
+
+// resource dataStorage_Blob_boston_hubway_data 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-01-01' = {
+//   parent: storageAccountBlobServices
+//   name: 'boston-hubway-data'
+//   properties: {
+//     defaultEncryptionScope: '$account-encryption-key'
+//     denyEncryptionScopeOverride: false
+//     publicAccess: 'Blob'
+//     immutableStorageWithVersioning: {
+//       enabled: false
+//     }
+//   }
+// }
 
   // output Storage Account Access Keys
 var storageAccountBlobKey1 = storageAccountBlob.listKeys().keys[0].value
@@ -84,8 +137,3 @@ var storageAccountBlobconnectionString = storageAccountBlob.listKeys().keys[1].v
 
 // Pass as output and saved in Key Vault
 output out_storageAccountBlobconnectionString string = storageAccountBlobconnectionString
-
-
-
-// var secretAzureWebJobsStorage = 'DefaultEndpointsProtocol=https;AccountName=${storageAccountBlob.name};EndpointSuffix=${environment().suffixes.storage};AccountKey=${storageAccountBlob.listKeys().keys[0].value}'
-// output out_AzureWebJobsStorage string = secretAzureWebJobsStorage

@@ -34,6 +34,7 @@ param KeyVault_WebsiteContentAzureFileConnectionString string = 'WebsiteContentA
 param KeyVault_Shared_Access_Key_EVENTHUBName string = 'SharedAccessKeyEVENTHUB'
 param KeyVault_Shared_Access_Key_DOCUMENTDBName string = 'SharedAccessKeyDOCUMENTDB'
 param KeyVault_Azure_Maps_Subscription_KeyName string = 'AzureMapsSubscriptionKey'
+param KeyVault_Azure_BlobStorage_Name string = 'BlobStorageAccountKey'
 
 // Tags
 var defaultTags = {
@@ -122,7 +123,7 @@ module cosmosdbmod './cosmosdb.bicep' = {
 }
 
 // Create Storage Account
-module storageaccountmod './storageaccount2.bicep' = {
+module storageaccountmod './storageaccount.bicep' = {
   name: 'storageaccountdeploy'
   params: {
     location: location
@@ -160,6 +161,8 @@ param ADOServiceprincipalObjectId string = 'd4e7db24-2894-4524-a78a-af95bf664dda
     KeyVault_AzureWebJobsStorageValue: functionappmod.outputs.out_AzureWebJobsStorageFuncApp
     KeyVault_Azure_Maps_Subscription_KeyName: KeyVault_Azure_Maps_Subscription_KeyName
     KeyVault_Azure_Maps_Subscription_KeyValue: azuremapsmod.outputs.out_AzureMapsSubscriptionKeyString
+    KeyVault_Azure_BlobStorage_Name: KeyVault_Azure_BlobStorage_Name
+    KeyVault_Azure_BlobStorage_Value: storageaccountmod.outputs.out_storageAccountKey1
     azuremapname: azuremapname
     funcAppServiceprincipalId: functionappmod.outputs.out_funcAppServiceprincipalId
     appInsightsInstrumentationKey: appinsightsmod.outputs.out_appInsightsInstrumentationKey

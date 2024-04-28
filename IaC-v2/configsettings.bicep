@@ -6,6 +6,7 @@ param KeyVault_Shared_Access_Key_EVENTHUBName string
 param KeyVault_Shared_Access_Key_DOCUMENTDBName string
 param KeyVault_Azure_Maps_Subscription_KeyName string
 param KeyVault_WebsiteContentAzureFileConnectionStringName string
+param KeyVault_Azure_BlobStorage_Name string
 
 var KeyVault_Shared_Access_Key_IOTHUB = 'SharedAccessKeyIOTHUB'
 
@@ -20,6 +21,9 @@ param KeyVault_Shared_Access_Key_DOCUMENTDBValue string
 
 @secure()
 param KeyVault_Azure_Maps_Subscription_KeyValue string
+
+@secure()
+param KeyVault_Azure_BlobStorage_Value string
 
 param appInsightsInstrumentationKey string
 param appInsightsConnectionString string
@@ -173,6 +177,15 @@ resource secret7 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
   properties: {
     contentType: 'text/plain'
     value: KeyVault_Azure_Maps_Subscription_KeyValue
+  }
+}
+
+resource secret8 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
+  name: KeyVault_Azure_BlobStorage_Name
+  parent: existing_keyvault
+  properties: {
+    contentType: 'text/plain'
+    value: KeyVault_Azure_BlobStorage_Value
   }
 }
 
