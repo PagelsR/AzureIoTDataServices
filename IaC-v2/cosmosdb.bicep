@@ -41,11 +41,11 @@ resource cosmosDBName_resource 'Microsoft.DocumentDB/databaseAccounts@2023-11-15
       }
     ]
     cors: []
-    capabilities: [
-      {
-        name: 'EnableServerless'
-      }
-    ]
+    // capabilities: [
+    //   {
+    //     name: 'EnableServerless'
+    //   }
+    // ]
     ipRules: []
     backupPolicy: {
       type: 'Periodic'
