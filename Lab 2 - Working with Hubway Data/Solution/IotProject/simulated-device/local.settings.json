@@ -1,6 +1,5 @@
 {
   "ConnectionStrings": {
-
-    "Shared_IoT_Hub_ConnnectionString": ""
+    "SharedAccessKeyIOTHUB": ""
   }
 }

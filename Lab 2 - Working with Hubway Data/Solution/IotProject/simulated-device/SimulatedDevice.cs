@@ -6,6 +6,8 @@ using System.IO;
 using Microsoft.Extensions.Configuration;
 using ChoETL;
 using System.Reflection;
+//using Azure.Identity;
+//using Azure.Security.KeyVault.Secrets;
 
 namespace simulated_device
 {
@@ -25,7 +27,16 @@ namespace simulated_device
                 .Build();
 
             // Access the connection string
-            string s_connectionString = configuration.GetConnectionString("Shared_IoT_Hub_ConnnectionString");
+            string s_connectionString = configuration.GetConnectionString("SharedAccessKeyIOTHUB");
+
+            // Create a new secret client using the default credential from Azure.Identity
+            //var client = new SecretClient(new Uri("https://kv-kk57wcdfxcfco.vault.azure.net/"), new DefaultAzureCredential());
+
+            // Retrieve the secret
+            //KeyVaultSecret secret = client.GetSecret("SharedAccessKeyIOTHUB");
+
+            // Access the connection string
+            //string s_connectionString = secret.Value;
 
             Console.WriteLine("******************************************************\n");
             Console.WriteLine( s_connectionString );
@@ -35,7 +46,7 @@ namespace simulated_device
             s_deviceClient = DeviceClient.CreateFromConnectionString(s_connectionString, TransportType.Mqtt);
 
             // Get the maximum counter value from the command line arguments
-            int maxCounterValue = args.Length > 0 ? int.Parse(args[0]) : 600;
+            int maxCounterValue = args.Length > 0 ? int.Parse(args[0]) : 25;
 
             SendDeviceToCloudMessagesAsync(maxCounterValue);
             Console.ReadLine();
