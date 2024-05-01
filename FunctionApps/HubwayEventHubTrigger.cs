@@ -11,6 +11,8 @@ namespace FunctionApps
 {
     public static class HubwayEventHubTrigger
     {
+        // This function is triggered by an Event Hub named hubwaytelemetry.
+        // It processes incoming messages from the Event Hub and writes them to a Cosmos DB database.
         [FunctionName("HubwayEventHubTrigger")]
         public static void Run([EventHubTrigger("hubwaytelemetry", 
             Connection = "Shared_Access_Key_EVENTHUB", 
@@ -23,11 +25,14 @@ namespace FunctionApps
 
             try
             {
-                // Parse the Event Hub message from JSON
+                // Deserialize the Event Hub message from a JSON String
                 var messageData = JsonConvert.DeserializeObject<JObject>(myEventHubMessage);
+                
+                // Cosmos DB must have a unique id within its partition.
                 string tempid = Guid.NewGuid().ToString();
 
                 // Create the document to be written to Cosmos DB
+                // Create a new anonymous object is created with properties that correspond to the expected schema of the Cosmos DB document. Each property is extracted from the JObject and converted to a string.
                 outputDocument = new
                 {
                     id = tempid,

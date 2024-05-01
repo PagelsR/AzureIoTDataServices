@@ -9,10 +9,10 @@ using Newtonsoft.Json;
 
 namespace FunctionApps
 {
-    // The function retrieves data from a CosmosDB database
-    // and processes it to generate a GeoJSON object.
     public static class HubwayHttpTrigger
     {
+        // The function retrieves data from a CosmosDB database
+        // and processes it to generate a GeoJSON object.
         [FunctionName("HubwayHttpTrigger")]
         public static TripDataGeoJson Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
