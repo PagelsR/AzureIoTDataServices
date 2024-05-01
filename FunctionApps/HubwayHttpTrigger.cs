@@ -9,6 +9,8 @@ using Newtonsoft.Json;
 
 namespace FunctionApps
 {
+    // The function retrieves data from a CosmosDB database
+    // and processes it to generate a GeoJSON object.
     public static class HubwayHttpTrigger
     {
         [FunctionName("HubwayHttpTrigger")]
@@ -24,6 +26,8 @@ namespace FunctionApps
             log.LogInformation("C# HTTP trigger function processed a request.");
 
             // Initialize GeoJson object
+            // GeoJSON is a format for encoding a variety of
+            // geographic data structures. 
             TripDataGeoJson tdGeoJson = new TripDataGeoJson
             {
                 features = new List<LocalFeatures>()
@@ -42,7 +46,8 @@ namespace FunctionApps
                 var firstItem = group.First();
             
                 // Create a new Properties object with the number of stations in the group,
-                // the ID of the start station (which is the key of the group), and the name of the start station
+                // the ID of the start station (which is the key of the group),
+                // and the name of the start station.
                 Properties prop = new Properties
                 {
                     numberOfStations = group.Count(),
@@ -50,7 +55,8 @@ namespace FunctionApps
                     startStationName = firstItem.startStationName
                 };
             
-                // Create a new LocalGeometry object with the longitude and latitude of the start station
+                // Create a new LocalGeometry object with the
+                // longitude and latitude of the start station
                 LocalGeometry geo = new LocalGeometry
                 {
                     coordinates = new List<double>
@@ -60,7 +66,8 @@ namespace FunctionApps
                     }
                 };
             
-                // Create a new LocalFeatures object with the previously created Properties and LocalGeometry objects,
+                // Create a new LocalFeatures object with the previously
+                // created Properties and LocalGeometry objects,
                 // and add it to the features list of the tdGeoJson object
                 tdGeoJson.features.Add(new LocalFeatures
                 {
@@ -69,8 +76,13 @@ namespace FunctionApps
                 });
             }
             
-            // Return the tdGeoJson object, which now contains a list of LocalFeatures objects,
-            // each representing a group of trip items
+            // Return the tdGeoJson object, which now contains a list of
+            // LocalFeatures objects, each representing a group of trip items
+
+            // This GeoJSON object can be used to visualize the trip data on a map,
+            // as GeoJSON is a standard format for encoding geographic data that
+            // can be rendered by mapping and GIS software.
+
            return tdGeoJson;
         }
 
