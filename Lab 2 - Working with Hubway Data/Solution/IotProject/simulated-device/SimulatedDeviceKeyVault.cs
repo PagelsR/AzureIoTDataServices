@@ -56,7 +56,7 @@ namespace simulated_device
         private static async void SendDeviceToCloudMessagesAsync(int maxCounterValue)
         {
             string dirPath = Path.GetFullPath(Directory.GetCurrentDirectory());
-            string sFilePath = dirPath+"/data/201502-hubway-tripdata.csv";
+            string sFilePath = dirPath+"/data/2024-Utrecht-tripdata-short.csv";
 
             Console.WriteLine("******************************************************\n");
             Console.WriteLine( sFilePath );

@@ -45,7 +45,7 @@ public static class SimulatedIoTDevice
         };
 
         // Path to the CSV file.
-        var sFilePath = Path.Combine(context.FunctionAppDirectory, "data", "201502-hubway-tripdata.csv");
+        var sFilePath = Path.Combine(context.FunctionAppDirectory, "data", "2024-Utrecht-tripdata-short.csv");
         using (var reader = new StreamReader(sFilePath))
         using (var csv = new CsvReader(reader, config))
         {
