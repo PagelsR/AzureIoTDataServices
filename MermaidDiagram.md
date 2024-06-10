@@ -20,3 +20,10 @@ graph TD;
     E[route.bicep] -->|Defines| J[IoT Hub Route ovfietsTelemetryRoute];
     J[IoT Hub Route ovfietsTelemetryRoute] -->|Filters| K[Messages based on RoutingProperty = 'ovfiets'];
     K[Messages based on RoutingProperty = 'ovfiets'] -->|Forward to| I[IoT Hub Endpoint ovfietsTelemetryRoute];
+
+    F[funcapp.bicep] -->|Creates| L[Function App ovfietsFunctionApp];
+    L[Function App ovfietsFunctionApp] -->|Uses| M[Event Hub]  ;
+    L[Function App ovfietsFunctionApp] -->|Uses| N[CosmosDB];
+    L[Function App ovfietsFunctionApp] -->|Uses| O[Key Vault];
+```
+
