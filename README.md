@@ -86,3 +86,13 @@ contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additio
 - https://guides.github.com/features/mastering-markdown/
 - https://www.webfx.com/tools/emoji-cheat-sheet/ :smile:
 
+```mermaid
+graph TD;
+    A[IoT Hub] --> B[IoT Device];
+    C[Event Hub Namespace] --> D[Event Hub];
+    E[App Insights] --> F[App Insights Workspace];
+    G[Function App] --> H[Function App Service Plan];
+    I[Key Vault] --> J[Storage Account for Func App];
+    I --> K[Storage Account for Blob];
+    L[Cosmos DB];
+```
