@@ -4,8 +4,8 @@
 param location string = resourceGroup().location
 var iotHubName = 'iot-${uniqueString(resourceGroup().id)}'
 var iotDeviceName = 'iot-raspberrypi-${uniqueString(resourceGroup().id)}'
-var eventHubName = 'hubwaytelemetry'
 var eventHubNamespaceName = 'evhns-${uniqueString(resourceGroup().id)}'
+var eventHubName = 'hubwaytelemetry'
 
 param createdBy string = 'Randy Pagels'
 param costCenter string = '74f644d3e665'
@@ -24,6 +24,7 @@ var cosmosDBName = 'cosmos-${uniqueString(resourceGroup().id)}'
 // remove dashes for storage account name
 var storageAccountNameFuncApp = 'sta${uniqueString(resourceGroup().id)}'
 var storageAccountNameBlob = 'stablob${uniqueString(resourceGroup().id)}'
+var storageAccountBlobContainerName = 'ovfietsdata'
 
 // KeyVault Secret Names
 // Note: Underscores Not allowed to comply with Azure Key Vault naming rules. 
@@ -129,7 +130,7 @@ module storageaccountmod './storageaccount.bicep' = {
     location: location
     defaultTags: defaultTags
     storageAccountNameBlob: storageAccountNameBlob
-
+    storageAccountBlobContainerName: storageAccountBlobContainerName
   }
   dependsOn:  [
     eventhubmod

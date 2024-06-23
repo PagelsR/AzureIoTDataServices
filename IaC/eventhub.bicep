@@ -28,6 +28,7 @@ param defaultTags object
 resource eventHubNamespace 'Microsoft.EventHub/namespaces@2023-01-01-preview' = {
   name: eventHubNamespaceName
   location: location
+  tags: defaultTags
   properties: {}
 }
 

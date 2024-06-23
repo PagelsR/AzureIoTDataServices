@@ -3,6 +3,7 @@
 param location string = resourceGroup().location
 param defaultTags object
 param storageAccountNameBlob string
+param storageAccountBlobContainerName string
 
 resource storageAccountBlob 'Microsoft.Storage/storageAccounts@2021-04-01' = {
   name: storageAccountNameBlob
@@ -46,9 +47,9 @@ resource staticWebsiteProperties 'Microsoft.Storage/storageAccounts/blobServices
 }
 
 // bostonhubwaydata
-resource Blob_boston_hubway_data 'Microsoft.Storage/storageAccounts/blobServices/containers@2019-06-01' = {
+resource BlobContainerData 'Microsoft.Storage/storageAccounts/blobServices/containers@2019-06-01' = {
   parent: staticWebsite
-  name: 'ovfietsdata'
+  name: storageAccountBlobContainerName
   properties: {
     defaultEncryptionScope: '$account-encryption-key'
     denyEncryptionScopeOverride: false

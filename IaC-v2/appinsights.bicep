@@ -75,7 +75,7 @@ resource emailActionGroup 'Microsoft.Insights/actionGroups@2023-01-01' = {
     emailReceivers: [
       {
         name: 'Randy Pagels'
-        emailAddress: 'rpagels@microsoft.com'
+        emailAddress: 'randy.pagels@xebia.com'
         useCommonAlertSchema: true
       }
     ]
