@@ -19,12 +19,23 @@ $endLocations = $startLocations.Clone()
 # Initialize an empty array for the data rows
 $dataRows = @()
 
+# Convert date range to ticks for random generation
+$startDateTicks = (Get-Date "2024-10-01").Ticks
+$endDateTicks = (Get-Date "2024-10-05").Ticks
+
 # Generate 50 rows of data
-1..5000 | ForEach-Object {
+1..4000 | ForEach-Object {
     $start = $startLocations | Get-Random
     $end = $endLocations | Where-Object {$_.ID -ne $start.ID} | Get-Random
     $bikeId = Get-Random -Minimum 1000 -Maximum 1999
     
+    # Generate random start and stop times within the date range
+    $randomStartTicks = Get-Random -Minimum $startDateTicks -Maximum $endDateTicks
+    $randomStopTicks = Get-Random -Minimum $randomStartTicks -Maximum $endDateTicks
+
+    $startTime = [datetime]::new($randomStartTicks)
+    $stopTime = [datetime]::new($randomStopTicks)
+
     $row = New-Object PSObject -Property @{
         startStationID = $start.ID
         startStationName = $start.Name
@@ -35,10 +46,12 @@ $dataRows = @()
         endstationlatitude = $end.Latitude
         endstationlongitude = $end.Longitude
         bikeid = $bikeId
+        starttime = $startTime.ToString("MM-dd-yyyy HH:mm:ss")
+        stoptime = $stopTime.ToString("MM-dd-yyyy HH:mm:ss")
     }
     
     $dataRows += $row
 }
 
 # Output to a CSV file
-$dataRows | Select-Object startStationID, startStationName, startstationlatitude, startstationlongitude, endstationid, endstationname, endstationlatitude, endstationlongitude, bikeid | Export-Csv -Path "OV-fietsRentalLocations.csv" -NoTypeInformation -Encoding UTF8
+$dataRows | Select-Object starttime,stoptime,startStationID, startStationName, startstationlatitude, startstationlongitude, endstationid, endstationname, endstationlatitude, endstationlongitude, bikeid | Export-Csv -Path "OV-fietsRentalLocations.csv" -NoTypeInformation -Encoding UTF8

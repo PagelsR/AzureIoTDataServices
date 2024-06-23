@@ -19,7 +19,7 @@ public static class SimulatedIoTDevice
     private static readonly DeviceClient deviceClient = DeviceClient.CreateFromConnectionString(Environment.GetEnvironmentVariable("Shared_Access_Key_IOTHUB"), TransportType.Mqtt);    
 
     // This function is triggered by an HTTP request.
-    [FunctionName("HubwaySendRecordsToIoTHub")]
+    [FunctionName("OVfietsSendRecordsToIoTHub")]
     public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
             ILogger log, ExecutionContext context)
@@ -45,7 +45,7 @@ public static class SimulatedIoTDevice
         };
 
         // Path to the CSV file.
-        var sFilePath = Path.Combine(context.FunctionAppDirectory, "data", "2024-Utrecht-tripdata-short.csv");
+        var sFilePath = Path.Combine(context.FunctionAppDirectory, "data", "OV-fiets-2024-Utrecht-tripdata.csv");
         using (var reader = new StreamReader(sFilePath))
         using (var csv = new CsvReader(reader, config))
         {
@@ -74,7 +74,7 @@ public static class SimulatedIoTDevice
                         var message = new Message(stream);
 
                         // Add a property to the message.
-                        message.Properties.Add("RoutingProperty", "Hubway");
+                        message.Properties.Add("RoutingProperty", "OVfiets");
 
                         // Send the message to the IoT Hub.
                         await deviceClient.SendEventAsync(message);

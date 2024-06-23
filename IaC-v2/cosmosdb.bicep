@@ -1,6 +1,7 @@
 param location string = resourceGroup().location
 param cosmosDBName string
 param defaultTags object
+param cosmosDBNameSQLDatabase string
 
 resource cosmosDBName_resource 'Microsoft.DocumentDB/databaseAccounts@2023-11-15' = {
   name: cosmosDBName
@@ -62,12 +63,12 @@ resource cosmosDBName_resource 'Microsoft.DocumentDB/databaseAccounts@2023-11-15
   }
 }
 
-resource cosmosDBName_Hubway 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2023-11-15' = {
+resource cosmosDBName_OVfiets 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2023-11-15' = {
   parent: cosmosDBName_resource
-  name: 'Hubway'
+  name: cosmosDBNameSQLDatabase //'OVfiets'
   properties: {
     resource: {
-      id: 'Hubway'
+      id: cosmosDBNameSQLDatabase //'OVfiets'
     }
   }
 }
@@ -117,8 +118,8 @@ resource cosmosDBName_00000000_0000_0000_0000_000000000002 'Microsoft.DocumentDB
   }
 }
 
-resource cosmosDBName_Hubway_Tripdata 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers@2023-11-15' = {
-  parent: cosmosDBName_Hubway
+resource cosmosDBName_OVfiets_Tripdata 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers@2023-11-15' = {
+  parent: cosmosDBName_OVfiets
   name: 'Tripdata'
   properties: {
     resource: {

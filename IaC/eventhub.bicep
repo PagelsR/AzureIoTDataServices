@@ -3,6 +3,7 @@ param eventHubName string
 param eventHubNamespaceName string
 param iotHubName string
 param defaultTags object
+param iotTelemetryRouteName string
 
 // Defind the Event Hub Namespace
 // resource eventHubNamespace 'Microsoft.EventHub/namespaces@2023-01-01-preview'= {
@@ -61,7 +62,7 @@ resource iotHubAuthorizedToSendRule 'Microsoft.EventHub/namespaces/authorization
  // Define the Consumer Group
 resource eventHubName_hubwaytelemetry_hubwaycg 'Microsoft.EventHub/namespaces/eventhubs/consumergroups@2021-01-01-preview' = {
   parent: eventHubName_hubwaytelemetry
-  name: 'hubwaycg'
+  name: 'OVfietscg'
   properties: {
   }
 
@@ -85,7 +86,7 @@ resource iotHub 'Microsoft.Devices/IotHubs@2023-06-30' = {
     routing: {
       routes: [
         {
-          name: 'BostonHubwayTelemetryRoute'
+          name: iotTelemetryRouteName //'BostonHubwayTelemetryRoute'
           source: 'DeviceMessages'
           condition: 'RoutingProperty = \'Hubway\''
           endpointNames: [
@@ -97,7 +98,7 @@ resource iotHub 'Microsoft.Devices/IotHubs@2023-06-30' = {
       endpoints: {
         eventHubs: [
           {
-            name: 'HubwayTelemetryRoute'
+            name: iotTelemetryRouteName //'HubwayTelemetryRoute'
             connectionString: iotHubAuthorizedToSendRule.listKeys().primaryConnectionString
           }
         ]

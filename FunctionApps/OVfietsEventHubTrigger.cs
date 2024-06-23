@@ -9,16 +9,16 @@ using System;
 
 namespace FunctionApps
 {
-    public static class HubwayEventHubTrigger
+    public static class OVfietsEventHubTrigger
     {
-        // This function is triggered by an Event Hub named hubwaytelemetry.
+        // This function is triggered by an Event Hub named OVfietstelemetry.
         // It processes incoming messages from the Event Hub and writes
         // them to a Cosmos DB database.
-        [FunctionName("HubwayEventHubTrigger")]
-        public static void Run([EventHubTrigger("hubwaytelemetry", 
+        [FunctionName("OVfietsEventHubTrigger")]
+        public static void Run([EventHubTrigger("OVfietstelemetry", 
             Connection = "Shared_Access_Key_EVENTHUB", 
-            ConsumerGroup = "hubwaycg")] string myEventHubMessage, 
-            [CosmosDB(databaseName: "Hubway", containerName: "Tripdata", 
+            ConsumerGroup = "OVfietscg")] string myEventHubMessage, 
+            [CosmosDB(databaseName: "OVfiets", containerName: "Tripdata", 
             Connection = "Shared_Access_Key_DOCUMENTDB")] out dynamic outputDocument, ILogger log)
 
         {

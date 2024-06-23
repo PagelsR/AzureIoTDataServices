@@ -10,8 +10,8 @@ namespace Company.function
         [FunctionName("HubwayEventHubTrigger")]
         public static void Run([EventHubTrigger("hubwaytelemetry",
          Connection = "Shared_Access_Key_EVENTHUB", 
-         ConsumerGroup = "hubwaycg")]string myEventHubMessage, 
-         [CosmosDB(databaseName: "Hubway",collectionName: "Tripdata", 
+         ConsumerGroup = "OVfietscg")]string myEventHubMessage, 
+         [CosmosDB(databaseName: "OVfiets",collectionName: "Tripdata", 
          ConnectionStringSetting = "Shared_Access_Key_DOCUMENTDB")] out dynamic outputDocument, ILogger log)
          
         {

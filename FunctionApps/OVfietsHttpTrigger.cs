@@ -9,14 +9,14 @@ using Newtonsoft.Json;
 
 namespace FunctionApps
 {
-    public static class HubwayHttpTrigger
+    public static class OVfietsHttpTrigger
     {
         // The function retrieves data from a CosmosDB database
         // and processes it to generate a GeoJSON object.
-        [FunctionName("HubwayHttpTrigger")]
+        [FunctionName("OVfietsHttpTrigger")]
         public static TripDataGeoJson Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
-        [CosmosDB(databaseName: "Hubway",
+        [CosmosDB(databaseName: "OVfiets",
                 containerName: "Tripdata",
                 Connection = "Shared_Access_Key_DOCUMENTDB",
                 SqlQuery = "SELECT * FROM c order by c.startStationID")]

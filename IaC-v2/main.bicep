@@ -5,7 +5,10 @@ param location string = resourceGroup().location
 var iotHubName = 'iot-${uniqueString(resourceGroup().id)}'
 var iotDeviceName = 'iot-raspberrypi-${uniqueString(resourceGroup().id)}'
 var eventHubNamespaceName = 'evhns-${uniqueString(resourceGroup().id)}'
-var eventHubName = 'hubwaytelemetry'
+var eventHubName = 'ovfietstelemetry'
+var eventHubConsumerGroup = 'ovfietscg'
+var iotTelemetryRouteName = 'ovfietsTelemetryRoute'
+// var iotTelemetryRouteProperty = 'OVfiets'
 
 param createdBy string = 'Randy Pagels'
 param costCenter string = '74f644d3e665'
@@ -20,6 +23,7 @@ var functionAppName = 'func-${uniqueString(resourceGroup().id)}'
 var functionAppServicePlanName = 'funcplan-${uniqueString(resourceGroup().id)}'
 var keyvaultName = 'kv-${uniqueString(resourceGroup().id)}'
 var cosmosDBName = 'cosmos-${uniqueString(resourceGroup().id)}'
+var cosmosDBNameSQLDatabase = 'OVfiets'
 
 // remove dashes for storage account name
 var storageAccountNameFuncApp = 'sta${uniqueString(resourceGroup().id)}'
@@ -52,6 +56,7 @@ module eventhubmod './eventhub.bicep' = {
     defaultTags: defaultTags
     eventHubName: eventHubName
     eventHubNamespaceName: eventHubNamespaceName
+    eventHubConsumerGroup: eventHubConsumerGroup
   }
 }
 
@@ -61,6 +66,7 @@ module iotHubmod './iothub.bicep' = {
   params: {
     location: location
     iotHubName: iotHubName
+    iotTelemetryRouteName: iotTelemetryRouteName
     defaultTags: defaultTags
     EventHubPrimaryConnectionString: eventhubmod.outputs.out_eventHubPrimaryConnectionString
   }
@@ -120,6 +126,7 @@ module cosmosdbmod './cosmosdb.bicep' = {
     location: location
     defaultTags: defaultTags
     cosmosDBName: cosmosDBName
+    cosmosDBNameSQLDatabase: cosmosDBNameSQLDatabase
   }
 }
 

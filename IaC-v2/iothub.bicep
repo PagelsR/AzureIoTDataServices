@@ -1,6 +1,8 @@
 param location string = resourceGroup().location
 param defaultTags object
 param iotHubName string
+param iotTelemetryRouteName string
+//param iotTelemetryRouteProperty string
 
 @secure()
 param EventHubPrimaryConnectionString string
@@ -27,11 +29,11 @@ resource iotHub 'Microsoft.Devices/IotHubs@2023-06-30' = {
     routing: {
       routes: [
         {
-          name: 'BostonHubwayTelemetryRoute'
+          name: iotTelemetryRouteName
           source: 'DeviceMessages'
-          condition: 'RoutingProperty = \'Hubway\''
+          condition: 'RoutingProperty = \'OVfiets\''
           endpointNames: [
-            'HubwayTelemetryRoute'
+            iotTelemetryRouteName
           ]
           isEnabled: true
         }
@@ -39,7 +41,7 @@ resource iotHub 'Microsoft.Devices/IotHubs@2023-06-30' = {
       endpoints: {
         eventHubs: [
           {
-            name: 'HubwayTelemetryRoute'
+            name: iotTelemetryRouteName
             connectionString: EventHubPrimaryConnectionString
           }
         ]

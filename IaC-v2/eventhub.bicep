@@ -2,6 +2,7 @@ param location string = resourceGroup().location
 param eventHubName string = 'hubwaytelemetry'
 param eventHubNamespaceName string
 param defaultTags object
+param eventHubConsumerGroup string
 
 // Define the Event Hub Namespace
 resource eventHubNamespace 'Microsoft.EventHub/namespaces@2023-01-01-preview' = {
@@ -38,9 +39,9 @@ resource iotHubAuthorizedToSendRule 'Microsoft.EventHub/namespaces/eventhubs/aut
 }
 
  // Define the Consumer Group
- resource eventHubName_hubwaytelemetry_hubwaycg 'Microsoft.EventHub/namespaces/eventhubs/consumergroups@2021-01-01-preview' = {
+ resource eventHubName_telemetry_cg 'Microsoft.EventHub/namespaces/eventhubs/consumergroups@2021-01-01-preview' = {
   parent: eventHub
-  name: 'hubwaycg'
+  name: eventHubConsumerGroup //'OVfietscg'
   properties: {
   }
 
