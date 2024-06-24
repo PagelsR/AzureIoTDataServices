@@ -14,7 +14,7 @@ env:
   buildPlatform: 'Any CPU'
   dotnet_version: '6.x.x'
   Azure_Resource_GroupName: 'rg-PagelsR-IoTDataServices'
-  Azure_Resource_GroupLocation: 'westus2'
+  Azure_Resource_GroupLocation: 'eastus'
 
 jobs:
   Build_Application:
