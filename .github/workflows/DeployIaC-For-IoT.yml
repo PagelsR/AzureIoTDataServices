@@ -81,12 +81,12 @@ jobs:
           #!/bin/bash
           az group create --name ${{ env.Azure_Resource_GroupName }} --location ${{ env.Azure_Resource_GroupLocation }}
   
-    - name: Install Bicep CLI
-      run: |
-        curl -Lo bicep https://github.com/Azure/bicep/releases/latest/download/bicep-linux-x64
-        chmod +x ./bicep
-        sudo mv ./bicep /usr/local/bin/bicep
-        bicep --help
+    # - name: Install Bicep CLI
+    #   run: |
+    #     curl -Lo bicep https://github.com/Azure/bicep/releases/latest/download/bicep-linux-x64
+    #     chmod +x ./bicep
+    #     sudo mv ./bicep /usr/local/bin/bicep
+    #     bicep --help
 
     - name: Ensure Resource Group is UnLocked
       uses: Azure/CLI@v1

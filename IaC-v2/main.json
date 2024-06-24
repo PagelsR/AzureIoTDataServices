@@ -1,0 +1,1475 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "bicep",
+      "version": "0.28.1.47646",
+      "templateHash": "8475739695937074282"
+    }
+  },
+  "parameters": {
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "createdBy": {
+      "type": "string",
+      "defaultValue": "Randy Pagels"
+    },
+    "costCenter": {
+      "type": "string",
+      "defaultValue": "74f644d3e665"
+    },
+    "KeyVault_MapsClientIdName": {
+      "type": "string",
+      "defaultValue": "MapsClientId"
+    },
+    "KeyVault_MapsSubscriptionKeyName": {
+      "type": "string",
+      "defaultValue": "MapsSubscriptionKey"
+    },
+    "KeyVault_AzureWebJobsStorageName": {
+      "type": "string",
+      "defaultValue": "AzureWebJobsStorage"
+    },
+    "KeyVault_WebsiteContentAzureFileConnectionString": {
+      "type": "string",
+      "defaultValue": "WebsiteContentAzureFileConnectionString"
+    },
+    "KeyVault_Shared_Access_Key_EVENTHUBName": {
+      "type": "string",
+      "defaultValue": "SharedAccessKeyEVENTHUB"
+    },
+    "KeyVault_Shared_Access_Key_DOCUMENTDBName": {
+      "type": "string",
+      "defaultValue": "SharedAccessKeyDOCUMENTDB"
+    },
+    "KeyVault_Azure_Maps_Subscription_KeyName": {
+      "type": "string",
+      "defaultValue": "AzureMapsSubscriptionKey"
+    },
+    "KeyVault_Azure_BlobStorage_Name": {
+      "type": "string",
+      "defaultValue": "BlobStorageAccountKey"
+    },
+    "AzObjectIdPagels": {
+      "type": "string",
+      "defaultValue": "0aa95253-9e37-4af9-a63a-3b35ed78e98b"
+    },
+    "ADOServiceprincipalObjectId": {
+      "type": "string",
+      "defaultValue": "d4e7db24-2894-4524-a78a-af95bf664dda"
+    }
+  },
+  "variables": {
+    "iotHubName": "[format('iot-{0}', uniqueString(resourceGroup().id))]",
+    "iotDeviceName": "[format('iot-raspberrypi-{0}', uniqueString(resourceGroup().id))]",
+    "eventHubNamespaceName": "[format('evhns-{0}', uniqueString(resourceGroup().id))]",
+    "eventHubName": "ovfietstelemetry",
+    "eventHubConsumerGroup": "ovfietscg",
+    "iotTelemetryRouteName": "ovfietsTelemetryRoute",
+    "appInsightsName": "[format('appi-{0}', uniqueString(resourceGroup().id))]",
+    "appInsightsWorkspaceName": "[format('appw-{0}', uniqueString(resourceGroup().id))]",
+    "appInsightsAlertName": "[format('responsetime-{0}', uniqueString(resourceGroup().id))]",
+    "azuremapname": "[format('maps-{0}', uniqueString(resourceGroup().id))]",
+    "functionAppName": "[format('func-{0}', uniqueString(resourceGroup().id))]",
+    "functionAppServicePlanName": "[format('funcplan-{0}', uniqueString(resourceGroup().id))]",
+    "keyvaultName": "[format('kv-{0}', uniqueString(resourceGroup().id))]",
+    "cosmosDBName": "[format('cosmos-{0}', uniqueString(resourceGroup().id))]",
+    "cosmosDBNameSQLDatabase": "OVfiets",
+    "storageAccountNameFuncApp": "[format('sta{0}', uniqueString(resourceGroup().id))]",
+    "storageAccountNameBlob": "[format('stablob{0}', uniqueString(resourceGroup().id))]",
+    "storageAccountBlobContainerName": "ovfietsdata",
+    "defaultTags": {
+      "App": "Azure IoT Data Services",
+      "CostCenter": "[parameters('costCenter')]",
+      "CreatedBy": "[parameters('createdBy')]"
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2022-09-01",
+      "name": "eventhubnamespacedeploy",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "defaultTags": {
+            "value": "[variables('defaultTags')]"
+          },
+          "eventHubName": {
+            "value": "[variables('eventHubName')]"
+          },
+          "eventHubNamespaceName": {
+            "value": "[variables('eventHubNamespaceName')]"
+          },
+          "eventHubConsumerGroup": {
+            "value": "[variables('eventHubConsumerGroup')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.28.1.47646",
+              "templateHash": "18425136033936365443"
+            }
+          },
+          "parameters": {
+            "location": {
+              "type": "string",
+              "defaultValue": "[resourceGroup().location]"
+            },
+            "eventHubName": {
+              "type": "string",
+              "defaultValue": "hubwaytelemetry"
+            },
+            "eventHubNamespaceName": {
+              "type": "string"
+            },
+            "defaultTags": {
+              "type": "object"
+            },
+            "eventHubConsumerGroup": {
+              "type": "string"
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.EventHub/namespaces",
+              "apiVersion": "2023-01-01-preview",
+              "name": "[parameters('eventHubNamespaceName')]",
+              "tags": "[parameters('defaultTags')]",
+              "location": "[parameters('location')]",
+              "identity": {
+                "type": "SystemAssigned"
+              },
+              "properties": {}
+            },
+            {
+              "type": "Microsoft.EventHub/namespaces/eventhubs",
+              "apiVersion": "2023-01-01-preview",
+              "name": "[format('{0}/{1}', parameters('eventHubNamespaceName'), parameters('eventHubName'))]",
+              "properties": {
+                "partitionCount": 2,
+                "messageRetentionInDays": 7
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.EventHub/namespaces', parameters('eventHubNamespaceName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.EventHub/namespaces/eventhubs/authorizationRules",
+              "apiVersion": "2017-04-01",
+              "name": "[format('{0}/{1}/{2}', parameters('eventHubNamespaceName'), parameters('eventHubName'), 'iothubCanSend')]",
+              "properties": {
+                "rights": [
+                  "Send",
+                  "Listen",
+                  "Manage"
+                ]
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.EventHub/namespaces/eventhubs', parameters('eventHubNamespaceName'), parameters('eventHubName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.EventHub/namespaces/eventhubs/consumergroups",
+              "apiVersion": "2021-01-01-preview",
+              "name": "[format('{0}/{1}/{2}', parameters('eventHubNamespaceName'), parameters('eventHubName'), parameters('eventHubConsumerGroup'))]",
+              "properties": {},
+              "dependsOn": [
+                "[resourceId('Microsoft.EventHub/namespaces/eventhubs', parameters('eventHubNamespaceName'), parameters('eventHubName'))]"
+              ]
+            }
+          ],
+          "outputs": {
+            "out_eventHubPrimaryConnectionString": {
+              "type": "string",
+              "value": "[listKeys(resourceId('Microsoft.EventHub/namespaces/eventhubs/authorizationRules', parameters('eventHubNamespaceName'), parameters('eventHubName'), 'iothubCanSend'), '2017-04-01').primaryConnectionString]"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2022-09-01",
+      "name": "iothubdeploy",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "iotHubName": {
+            "value": "[variables('iotHubName')]"
+          },
+          "iotTelemetryRouteName": {
+            "value": "[variables('iotTelemetryRouteName')]"
+          },
+          "defaultTags": {
+            "value": "[variables('defaultTags')]"
+          },
+          "EventHubPrimaryConnectionString": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'eventhubnamespacedeploy'), '2022-09-01').outputs.out_eventHubPrimaryConnectionString.value]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.28.1.47646",
+              "templateHash": "6348136400508076610"
+            }
+          },
+          "parameters": {
+            "location": {
+              "type": "string",
+              "defaultValue": "[resourceGroup().location]"
+            },
+            "defaultTags": {
+              "type": "object"
+            },
+            "iotHubName": {
+              "type": "string"
+            },
+            "iotTelemetryRouteName": {
+              "type": "string"
+            },
+            "EventHubPrimaryConnectionString": {
+              "type": "securestring"
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Devices/IotHubs",
+              "apiVersion": "2023-06-30",
+              "name": "[parameters('iotHubName')]",
+              "tags": "[parameters('defaultTags')]",
+              "location": "[parameters('location')]",
+              "identity": {
+                "type": "SystemAssigned"
+              },
+              "sku": {
+                "name": "S1",
+                "capacity": 1
+              },
+              "properties": {
+                "eventHubEndpoints": {
+                  "events": {
+                    "retentionTimeInDays": 1,
+                    "partitionCount": 4
+                  }
+                },
+                "routing": {
+                  "routes": [
+                    {
+                      "name": "[parameters('iotTelemetryRouteName')]",
+                      "source": "DeviceMessages",
+                      "condition": "RoutingProperty = 'OVfiets'",
+                      "endpointNames": [
+                        "[parameters('iotTelemetryRouteName')]"
+                      ],
+                      "isEnabled": true
+                    }
+                  ],
+                  "endpoints": {
+                    "eventHubs": [
+                      {
+                        "name": "[parameters('iotTelemetryRouteName')]",
+                        "connectionString": "[parameters('EventHubPrimaryConnectionString')]"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', 'eventhubnamespacedeploy')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2022-09-01",
+      "name": "appinsightsdeploy",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "appInsightsName": {
+            "value": "[variables('appInsightsName')]"
+          },
+          "defaultTags": {
+            "value": "[variables('defaultTags')]"
+          },
+          "appInsightsAlertName": {
+            "value": "[variables('appInsightsAlertName')]"
+          },
+          "appInsightsWorkspaceName": {
+            "value": "[variables('appInsightsWorkspaceName')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.28.1.47646",
+              "templateHash": "16810255418724267729"
+            }
+          },
+          "parameters": {
+            "location": {
+              "type": "string",
+              "defaultValue": "[resourceGroup().location]"
+            },
+            "appInsightsName": {
+              "type": "string"
+            },
+            "appInsightsWorkspaceName": {
+              "type": "string"
+            },
+            "appInsightsAlertName": {
+              "type": "string"
+            },
+            "defaultTags": {
+              "type": "object"
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.OperationalInsights/workspaces",
+              "apiVersion": "2023-09-01",
+              "name": "[parameters('appInsightsWorkspaceName')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "sku": {
+                  "name": "PerGB2018"
+                },
+                "retentionInDays": 30,
+                "features": {
+                  "searchVersion": 1,
+                  "legacy": 0,
+                  "enableLogAccessUsingOnlyResourcePermissions": true
+                }
+              }
+            },
+            {
+              "type": "Microsoft.Insights/components",
+              "apiVersion": "2020-02-02",
+              "name": "[parameters('appInsightsName')]",
+              "location": "[parameters('location')]",
+              "tags": "[parameters('defaultTags')]",
+              "kind": "web",
+              "properties": {
+                "Application_Type": "web",
+                "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('appInsightsWorkspaceName'))]"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.OperationalInsights/workspaces', parameters('appInsightsWorkspaceName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Insights/metricAlerts",
+              "apiVersion": "2018-03-01",
+              "name": "[parameters('appInsightsAlertName')]",
+              "location": "global",
+              "properties": {
+                "description": "Response time alert",
+                "severity": 0,
+                "enabled": true,
+                "scopes": [
+                  "[resourceId('Microsoft.Insights/components', parameters('appInsightsName'))]"
+                ],
+                "evaluationFrequency": "PT1M",
+                "windowSize": "PT5M",
+                "criteria": {
+                  "odata.type": "Microsoft.Azure.Monitor.SingleResourceMultipleMetricCriteria",
+                  "allOf": [
+                    {
+                      "name": "1st criterion",
+                      "metricName": "requests/duration",
+                      "operator": "GreaterThan",
+                      "threshold": 300,
+                      "timeAggregation": "Average",
+                      "criterionType": "StaticThresholdCriterion"
+                    }
+                  ]
+                },
+                "actions": [
+                  {
+                    "actionGroupId": "[resourceId('Microsoft.Insights/actionGroups', format('ag--{0}', uniqueString(resourceGroup().id)))]"
+                  }
+                ]
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Insights/components', parameters('appInsightsName'))]",
+                "[resourceId('Microsoft.Insights/actionGroups', format('ag--{0}', uniqueString(resourceGroup().id)))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Insights/actionGroups",
+              "apiVersion": "2023-01-01",
+              "name": "[format('ag--{0}', uniqueString(resourceGroup().id))]",
+              "location": "global",
+              "properties": {
+                "groupShortName": "Randy Pagels",
+                "enabled": true,
+                "emailReceivers": [
+                  {
+                    "name": "Randy Pagels",
+                    "emailAddress": "randy.pagels@xebia.com",
+                    "useCommonAlertSchema": true
+                  }
+                ]
+              }
+            }
+          ],
+          "outputs": {
+            "out_appInsightsInstrumentationKey": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appInsightsName')), '2020-02-02').InstrumentationKey]"
+            },
+            "out_appInsightsConnectionString": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.Insights/components', parameters('appInsightsName')), '2020-02-02').ConnectionString]"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2022-09-01",
+      "name": "functionappdeploy",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "functionAppServicePlanName": {
+            "value": "[variables('functionAppServicePlanName')]"
+          },
+          "functionAppName": {
+            "value": "[variables('functionAppName')]"
+          },
+          "defaultTags": {
+            "value": "[variables('defaultTags')]"
+          },
+          "storageAccountNameFuncApp": {
+            "value": "[variables('storageAccountNameFuncApp')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.28.1.47646",
+              "templateHash": "8233977546475283248"
+            }
+          },
+          "parameters": {
+            "location": {
+              "type": "string",
+              "defaultValue": "[resourceGroup().location]"
+            },
+            "functionAppName": {
+              "type": "string"
+            },
+            "functionAppServicePlanName": {
+              "type": "string"
+            },
+            "defaultTags": {
+              "type": "object"
+            },
+            "storageAccountNameFuncApp": {
+              "type": "string"
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Web/sites",
+              "apiVersion": "2023-01-01",
+              "name": "[parameters('functionAppName')]",
+              "kind": "functionapp,linux",
+              "location": "[parameters('location')]",
+              "tags": "[parameters('defaultTags')]",
+              "properties": {
+                "siteConfig": {
+                  "netFrameworkVersion": "v4.0",
+                  "cors": {
+                    "allowedOrigins": [
+                      "*"
+                    ]
+                  }
+                },
+                "serverFarmId": "[resourceId('Microsoft.Web/serverfarms', parameters('functionAppServicePlanName'))]",
+                "clientAffinityEnabled": false
+              },
+              "identity": {
+                "type": "SystemAssigned"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Web/serverfarms', parameters('functionAppServicePlanName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Web/serverfarms",
+              "apiVersion": "2023-01-01",
+              "name": "[parameters('functionAppServicePlanName')]",
+              "location": "[parameters('location')]",
+              "kind": "linux",
+              "properties": {
+                "reserved": true
+              },
+              "sku": {
+                "tier": "Standard",
+                "name": "S1"
+              }
+            },
+            {
+              "type": "Microsoft.Storage/storageAccounts",
+              "apiVersion": "2023-01-01",
+              "name": "[parameters('storageAccountNameFuncApp')]",
+              "tags": "[parameters('defaultTags')]",
+              "location": "[parameters('location')]",
+              "kind": "StorageV2",
+              "sku": {
+                "name": "Standard_LRS"
+              }
+            }
+          ],
+          "outputs": {
+            "out_funcAppServiceprincipalId": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.Web/sites', parameters('functionAppName')), '2023-01-01', 'full').identity.principalId]"
+            },
+            "out_AzureWebJobsStorageFuncApp": {
+              "type": "string",
+              "value": "[format('DefaultEndpointsProtocol=https;AccountName={0};EndpointSuffix={1};AccountKey={2}', parameters('storageAccountNameFuncApp'), environment().suffixes.storage, listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountNameFuncApp')), '2023-01-01').keys[0].value)]"
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2022-09-01",
+      "name": "[variables('keyvaultName')]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "vaultName": {
+            "value": "[variables('keyvaultName')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.28.1.47646",
+              "templateHash": "11675678956326133379"
+            }
+          },
+          "parameters": {
+            "location": {
+              "type": "string",
+              "defaultValue": "[resourceGroup().location]"
+            },
+            "vaultName": {
+              "type": "string"
+            },
+            "tenant": {
+              "type": "string",
+              "defaultValue": "[subscription().tenantId]"
+            },
+            "accessPolicies": {
+              "type": "array",
+              "defaultValue": []
+            },
+            "networkAcls": {
+              "type": "object",
+              "defaultValue": {
+                "ipRules": [],
+                "virtualNetworkRules": []
+              }
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.KeyVault/vaults",
+              "apiVersion": "2023-07-01",
+              "name": "[parameters('vaultName')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "tenantId": "[parameters('tenant')]",
+                "sku": {
+                  "family": "A",
+                  "name": "standard"
+                },
+                "enableSoftDelete": false,
+                "accessPolicies": "[parameters('accessPolicies')]",
+                "enabledForDeployment": true,
+                "enabledForDiskEncryption": true,
+                "enabledForTemplateDeployment": true,
+                "softDeleteRetentionInDays": 90,
+                "enableRbacAuthorization": false,
+                "networkAcls": "[parameters('networkAcls')]"
+              }
+            }
+          ],
+          "outputs": {
+            "proxyKey": {
+              "type": "object",
+              "value": "[reference(resourceId('Microsoft.KeyVault/vaults', parameters('vaultName')), '2023-07-01', 'full')]"
+            },
+            "keyvaultName": {
+              "type": "string",
+              "value": "[parameters('vaultName')]"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2022-09-01",
+      "name": "[variables('azuremapname')]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "azuremapname": {
+            "value": "[variables('azuremapname')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.28.1.47646",
+              "templateHash": "7188016363517033142"
+            }
+          },
+          "parameters": {
+            "azuremapname": {
+              "type": "string"
+            },
+            "location": {
+              "type": "string",
+              "defaultValue": "[resourceGroup().location]"
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Maps/accounts",
+              "apiVersion": "2023-06-01",
+              "name": "[parameters('azuremapname')]",
+              "location": "[parameters('location')]",
+              "sku": {
+                "name": "G2"
+              },
+              "kind": "Gen2",
+              "identity": {
+                "type": "None"
+              },
+              "properties": {
+                "disableLocalAuth": false,
+                "cors": {
+                  "corsRules": [
+                    {
+                      "allowedOrigins": []
+                    }
+                  ]
+                }
+              }
+            }
+          ],
+          "outputs": {
+            "out_AzureMapsSubscriptionKeyString": {
+              "type": "string",
+              "value": "[listKeys(resourceId('Microsoft.Maps/accounts', parameters('azuremapname')), '2023-06-01').primaryKey]"
+            },
+            "out_AzureMapsAppKey": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.Maps/accounts', parameters('azuremapname'))]"
+            },
+            "out_AzureMapsClientId": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.Maps/accounts', parameters('azuremapname')), '2023-06-01').uniqueId]"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2022-09-01",
+      "name": "cosmosdbdeploy",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "defaultTags": {
+            "value": "[variables('defaultTags')]"
+          },
+          "cosmosDBName": {
+            "value": "[variables('cosmosDBName')]"
+          },
+          "cosmosDBNameSQLDatabase": {
+            "value": "[variables('cosmosDBNameSQLDatabase')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.28.1.47646",
+              "templateHash": "14130395248305901919"
+            }
+          },
+          "parameters": {
+            "location": {
+              "type": "string",
+              "defaultValue": "[resourceGroup().location]"
+            },
+            "cosmosDBName": {
+              "type": "string"
+            },
+            "defaultTags": {
+              "type": "object"
+            },
+            "cosmosDBNameSQLDatabase": {
+              "type": "string"
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.DocumentDB/databaseAccounts",
+              "apiVersion": "2023-11-15",
+              "name": "[parameters('cosmosDBName')]",
+              "location": "[parameters('location')]",
+              "tags": "[parameters('defaultTags')]",
+              "kind": "GlobalDocumentDB",
+              "identity": {
+                "type": "None"
+              },
+              "properties": {
+                "publicNetworkAccess": "Enabled",
+                "enableAutomaticFailover": false,
+                "enableMultipleWriteLocations": false,
+                "isVirtualNetworkFilterEnabled": false,
+                "virtualNetworkRules": [],
+                "disableKeyBasedMetadataWriteAccess": false,
+                "enableFreeTier": false,
+                "enableAnalyticalStorage": false,
+                "analyticalStorageConfiguration": {
+                  "schemaType": "WellDefined"
+                },
+                "databaseAccountOfferType": "Standard",
+                "defaultIdentity": "FirstPartyIdentity",
+                "networkAclBypass": "None",
+                "disableLocalAuth": false,
+                "enablePartitionMerge": false,
+                "minimalTlsVersion": "Tls12",
+                "consistencyPolicy": {
+                  "defaultConsistencyLevel": "Session",
+                  "maxIntervalInSeconds": 5,
+                  "maxStalenessPrefix": 100
+                },
+                "locations": [
+                  {
+                    "locationName": "East US",
+                    "failoverPriority": 0,
+                    "isZoneRedundant": false
+                  }
+                ],
+                "cors": [],
+                "ipRules": [],
+                "backupPolicy": {
+                  "type": "Periodic",
+                  "periodicModeProperties": {
+                    "backupIntervalInMinutes": 240,
+                    "backupRetentionIntervalInHours": 8,
+                    "backupStorageRedundancy": "Geo"
+                  }
+                },
+                "networkAclBypassResourceIds": [],
+                "capacity": {
+                  "totalThroughputLimit": 4000
+                }
+              }
+            },
+            {
+              "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases",
+              "apiVersion": "2023-11-15",
+              "name": "[format('{0}/{1}', parameters('cosmosDBName'), parameters('cosmosDBNameSQLDatabase'))]",
+              "properties": {
+                "resource": {
+                  "id": "[parameters('cosmosDBNameSQLDatabase')]"
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('cosmosDBName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions",
+              "apiVersion": "2023-11-15",
+              "name": "[format('{0}/{1}', parameters('cosmosDBName'), '00000000-0000-0000-0000-000000000001')]",
+              "properties": {
+                "roleName": "Cosmos DB Built-in Data Reader",
+                "type": "BuiltInRole",
+                "assignableScopes": [
+                  "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('cosmosDBName'))]"
+                ],
+                "permissions": [
+                  {
+                    "dataActions": [
+                      "Microsoft.DocumentDB/databaseAccounts/readMetadata",
+                      "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/executeQuery",
+                      "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/readChangeFeed",
+                      "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/items/read"
+                    ],
+                    "notDataActions": []
+                  }
+                ]
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('cosmosDBName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.DocumentDB/databaseAccounts/sqlRoleDefinitions",
+              "apiVersion": "2023-11-15",
+              "name": "[format('{0}/{1}', parameters('cosmosDBName'), '00000000-0000-0000-0000-000000000002')]",
+              "properties": {
+                "roleName": "Cosmos DB Built-in Data Contributor",
+                "type": "BuiltInRole",
+                "assignableScopes": [
+                  "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('cosmosDBName'))]"
+                ],
+                "permissions": [
+                  {
+                    "dataActions": [
+                      "Microsoft.DocumentDB/databaseAccounts/readMetadata",
+                      "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/*",
+                      "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers/items/*"
+                    ],
+                    "notDataActions": []
+                  }
+                ]
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('cosmosDBName'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers",
+              "apiVersion": "2023-11-15",
+              "name": "[format('{0}/{1}/{2}', parameters('cosmosDBName'), parameters('cosmosDBNameSQLDatabase'), 'Tripdata')]",
+              "properties": {
+                "resource": {
+                  "id": "Tripdata",
+                  "indexingPolicy": {
+                    "indexingMode": "consistent",
+                    "automatic": true,
+                    "includedPaths": [
+                      {
+                        "path": "/*"
+                      }
+                    ],
+                    "excludedPaths": [
+                      {
+                        "path": "/\"_etag\"/?"
+                      }
+                    ]
+                  },
+                  "partitionKey": {
+                    "paths": [
+                      "/startstationid"
+                    ],
+                    "kind": "Hash",
+                    "version": 2
+                  },
+                  "uniqueKeyPolicy": {
+                    "uniqueKeys": []
+                  },
+                  "conflictResolutionPolicy": {
+                    "mode": "LastWriterWins",
+                    "conflictResolutionPath": "/_ts"
+                  },
+                  "defaultTtl": 259200
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.DocumentDB/databaseAccounts/sqlDatabases', parameters('cosmosDBName'), parameters('cosmosDBNameSQLDatabase'))]"
+              ]
+            }
+          ],
+          "outputs": {
+            "out_CosmosDB_URI": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('cosmosDBName')), '2023-11-15').documentEndpoint]"
+            },
+            "out_CosmosPrimaryKey": {
+              "type": "string",
+              "value": "[listKeys(resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('cosmosDBName')), '2023-11-15').primaryMasterKey]"
+            },
+            "out_CosmosDBConnectionString": {
+              "type": "string",
+              "value": "[listConnectionStrings(resourceId('Microsoft.DocumentDB/databaseAccounts', parameters('cosmosDBName')), '2023-11-15').connectionStrings[0].connectionString]"
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2022-09-01",
+      "name": "storageaccountdeploy",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
+          },
+          "defaultTags": {
+            "value": "[variables('defaultTags')]"
+          },
+          "storageAccountNameBlob": {
+            "value": "[variables('storageAccountNameBlob')]"
+          },
+          "storageAccountBlobContainerName": {
+            "value": "[variables('storageAccountBlobContainerName')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.28.1.47646",
+              "templateHash": "11424213843984154538"
+            }
+          },
+          "parameters": {
+            "location": {
+              "type": "string",
+              "defaultValue": "[resourceGroup().location]"
+            },
+            "defaultTags": {
+              "type": "object"
+            },
+            "storageAccountNameBlob": {
+              "type": "string"
+            },
+            "storageAccountBlobContainerName": {
+              "type": "string"
+            }
+          },
+          "resources": [
+            {
+              "type": "Microsoft.Storage/storageAccounts",
+              "apiVersion": "2021-04-01",
+              "name": "[parameters('storageAccountNameBlob')]",
+              "location": "[parameters('location')]",
+              "tags": "[parameters('defaultTags')]",
+              "sku": {
+                "name": "Standard_LRS"
+              },
+              "kind": "StorageV2",
+              "properties": {
+                "supportsHttpsTrafficOnly": true,
+                "accessTier": "Hot",
+                "allowBlobPublicAccess": true,
+                "minimumTlsVersion": "TLS1_2",
+                "networkAcls": {
+                  "bypass": "AzureServices",
+                  "virtualNetworkRules": [],
+                  "ipRules": [],
+                  "defaultAction": "Allow"
+                }
+              }
+            },
+            {
+              "type": "Microsoft.Storage/storageAccounts/blobServices",
+              "apiVersion": "2019-06-01",
+              "name": "[format('{0}/{1}', parameters('storageAccountNameBlob'), 'default')]",
+              "properties": {
+                "deleteRetentionPolicy": {
+                  "days": 7,
+                  "enabled": true
+                }
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountNameBlob'))]"
+              ]
+            },
+            {
+              "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+              "apiVersion": "2019-06-01",
+              "name": "[format('{0}/{1}/{2}', parameters('storageAccountNameBlob'), 'default', '$web')]",
+              "properties": {
+                "publicAccess": "Blob"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccountNameBlob'), 'default')]"
+              ]
+            },
+            {
+              "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+              "apiVersion": "2019-06-01",
+              "name": "[format('{0}/{1}/{2}', parameters('storageAccountNameBlob'), 'default', parameters('storageAccountBlobContainerName'))]",
+              "properties": {
+                "defaultEncryptionScope": "$account-encryption-key",
+                "denyEncryptionScopeOverride": false,
+                "publicAccess": "Blob"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Storage/storageAccounts/blobServices', parameters('storageAccountNameBlob'), 'default')]"
+              ]
+            }
+          ],
+          "outputs": {
+            "out_storageAccountKey1": {
+              "type": "string",
+              "value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountNameBlob')), '2021-04-01').keys[0].value]"
+            },
+            "out_storageAccountBlobconnectionString": {
+              "type": "string",
+              "value": "[listKeys(resourceId('Microsoft.Storage/storageAccounts', parameters('storageAccountNameBlob')), '2021-04-01').keys[1].value]"
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', 'eventhubnamespacedeploy')]"
+      ]
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2022-09-01",
+      "name": "configSettings",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "keyvaultName": {
+            "value": "[variables('keyvaultName')]"
+          },
+          "functionAppName": {
+            "value": "[variables('functionAppName')]"
+          },
+          "tenant": {
+            "value": "[subscription().tenantId]"
+          },
+          "KeyVault_MapsSubscriptionKeyName": {
+            "value": "[parameters('KeyVault_MapsSubscriptionKeyName')]"
+          },
+          "KeyVault_ClientIdName": {
+            "value": "[parameters('KeyVault_MapsClientIdName')]"
+          },
+          "KeyVault_ClientIdValue": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('azuremapname')), '2022-09-01').outputs.out_AzureMapsClientId.value]"
+          },
+          "KeyVault_Shared_Access_Key_EVENTHUBName": {
+            "value": "[parameters('KeyVault_Shared_Access_Key_EVENTHUBName')]"
+          },
+          "KeyVault_Shared_Access_Key_EVENTHUBValue": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'eventhubnamespacedeploy'), '2022-09-01').outputs.out_eventHubPrimaryConnectionString.value]"
+          },
+          "KeyVault_Shared_Access_Key_DOCUMENTDBName": {
+            "value": "[parameters('KeyVault_Shared_Access_Key_DOCUMENTDBName')]"
+          },
+          "KeyVault_Shared_Access_Key_DOCUMENTDBValue": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'cosmosdbdeploy'), '2022-09-01').outputs.out_CosmosDBConnectionString.value]"
+          },
+          "KeyVault_AzureWebJobsStorageName": {
+            "value": "[parameters('KeyVault_AzureWebJobsStorageName')]"
+          },
+          "KeyVault_WebsiteContentAzureFileConnectionStringName": {
+            "value": "[parameters('KeyVault_WebsiteContentAzureFileConnectionString')]"
+          },
+          "KeyVault_AzureWebJobsStorageValue": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'functionappdeploy'), '2022-09-01').outputs.out_AzureWebJobsStorageFuncApp.value]"
+          },
+          "KeyVault_Azure_Maps_Subscription_KeyName": {
+            "value": "[parameters('KeyVault_Azure_Maps_Subscription_KeyName')]"
+          },
+          "KeyVault_Azure_Maps_Subscription_KeyValue": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', variables('azuremapname')), '2022-09-01').outputs.out_AzureMapsSubscriptionKeyString.value]"
+          },
+          "KeyVault_Azure_BlobStorage_Name": {
+            "value": "[parameters('KeyVault_Azure_BlobStorage_Name')]"
+          },
+          "KeyVault_Azure_BlobStorage_Value": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'storageaccountdeploy'), '2022-09-01').outputs.out_storageAccountKey1.value]"
+          },
+          "azuremapname": {
+            "value": "[variables('azuremapname')]"
+          },
+          "funcAppServiceprincipalId": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'functionappdeploy'), '2022-09-01').outputs.out_funcAppServiceprincipalId.value]"
+          },
+          "appInsightsInstrumentationKey": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy'), '2022-09-01').outputs.out_appInsightsInstrumentationKey.value]"
+          },
+          "appInsightsConnectionString": {
+            "value": "[reference(resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy'), '2022-09-01').outputs.out_appInsightsConnectionString.value]"
+          },
+          "ADOServiceprincipalObjectId": {
+            "value": "[parameters('ADOServiceprincipalObjectId')]"
+          },
+          "AzObjectIdPagels": {
+            "value": "[parameters('AzObjectIdPagels')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.28.1.47646",
+              "templateHash": "9389972569059221280"
+            }
+          },
+          "parameters": {
+            "keyvaultName": {
+              "type": "string"
+            },
+            "azuremapname": {
+              "type": "string"
+            },
+            "functionAppName": {
+              "type": "string"
+            },
+            "KeyVault_AzureWebJobsStorageName": {
+              "type": "string"
+            },
+            "KeyVault_Shared_Access_Key_EVENTHUBName": {
+              "type": "string"
+            },
+            "KeyVault_Shared_Access_Key_DOCUMENTDBName": {
+              "type": "string"
+            },
+            "KeyVault_Azure_Maps_Subscription_KeyName": {
+              "type": "string"
+            },
+            "KeyVault_WebsiteContentAzureFileConnectionStringName": {
+              "type": "string"
+            },
+            "KeyVault_Azure_BlobStorage_Name": {
+              "type": "string"
+            },
+            "KeyVault_AzureWebJobsStorageValue": {
+              "type": "securestring"
+            },
+            "KeyVault_Shared_Access_Key_EVENTHUBValue": {
+              "type": "securestring"
+            },
+            "KeyVault_Shared_Access_Key_DOCUMENTDBValue": {
+              "type": "securestring"
+            },
+            "KeyVault_Azure_Maps_Subscription_KeyValue": {
+              "type": "securestring"
+            },
+            "KeyVault_Azure_BlobStorage_Value": {
+              "type": "securestring"
+            },
+            "appInsightsInstrumentationKey": {
+              "type": "string"
+            },
+            "appInsightsConnectionString": {
+              "type": "string"
+            },
+            "KeyVault_ClientIdName": {
+              "type": "string"
+            },
+            "KeyVault_ClientIdValue": {
+              "type": "securestring"
+            },
+            "KeyVault_MapsSubscriptionKeyName": {
+              "type": "string"
+            },
+            "AzObjectIdPagels": {
+              "type": "securestring"
+            },
+            "ADOServiceprincipalObjectId": {
+              "type": "securestring"
+            },
+            "funcAppServiceprincipalId": {
+              "type": "securestring"
+            },
+            "tenant": {
+              "type": "string"
+            },
+            "accessPolicies": {
+              "type": "array",
+              "defaultValue": [
+                {
+                  "tenantId": "[parameters('tenant')]",
+                  "objectId": "[parameters('funcAppServiceprincipalId')]",
+                  "permissions": {
+                    "keys": [
+                      "Get",
+                      "List"
+                    ],
+                    "secrets": [
+                      "Get",
+                      "List"
+                    ]
+                  }
+                },
+                {
+                  "tenantId": "[parameters('tenant')]",
+                  "objectId": "[parameters('AzObjectIdPagels')]",
+                  "permissions": {
+                    "keys": [
+                      "get",
+                      "list"
+                    ],
+                    "secrets": [
+                      "get",
+                      "list",
+                      "set",
+                      "delete"
+                    ]
+                  }
+                },
+                {
+                  "tenantId": "[parameters('tenant')]",
+                  "objectId": "[parameters('ADOServiceprincipalObjectId')]",
+                  "permissions": {
+                    "keys": [
+                      "get",
+                      "list"
+                    ],
+                    "secrets": [
+                      "get",
+                      "list",
+                      "set"
+                    ]
+                  }
+                }
+              ]
+            }
+          },
+          "variables": {
+            "KeyVault_Shared_Access_Key_IOTHUB": "SharedAccessKeyIOTHUB"
+          },
+          "resources": [
+            {
+              "type": "Microsoft.KeyVault/vaults/accessPolicies",
+              "apiVersion": "2023-07-01",
+              "name": "[format('{0}/{1}', parameters('keyvaultName'), 'add')]",
+              "properties": {
+                "accessPolicies": "[parameters('accessPolicies')]"
+              }
+            },
+            {
+              "type": "Microsoft.KeyVault/vaults/secrets",
+              "apiVersion": "2023-07-01",
+              "name": "[format('{0}/{1}', parameters('keyvaultName'), parameters('KeyVault_ClientIdName'))]",
+              "properties": {
+                "value": "[parameters('KeyVault_ClientIdValue')]"
+              }
+            },
+            {
+              "type": "Microsoft.KeyVault/vaults/secrets",
+              "apiVersion": "2023-07-01",
+              "name": "[format('{0}/{1}', parameters('keyvaultName'), parameters('KeyVault_MapsSubscriptionKeyName'))]",
+              "properties": {
+                "value": "[listKeys(resourceId('Microsoft.Maps/accounts', parameters('azuremapname')), '2023-06-01').primaryKey]"
+              }
+            },
+            {
+              "type": "Microsoft.KeyVault/vaults/secrets",
+              "apiVersion": "2023-07-01",
+              "name": "[format('{0}/{1}', parameters('keyvaultName'), parameters('KeyVault_AzureWebJobsStorageName'))]",
+              "properties": {
+                "contentType": "text/plain",
+                "value": "[parameters('KeyVault_AzureWebJobsStorageValue')]"
+              }
+            },
+            {
+              "type": "Microsoft.KeyVault/vaults/secrets",
+              "apiVersion": "2023-07-01",
+              "name": "[format('{0}/{1}', parameters('keyvaultName'), parameters('KeyVault_WebsiteContentAzureFileConnectionStringName'))]",
+              "properties": {
+                "contentType": "text/plain",
+                "value": "[parameters('KeyVault_AzureWebJobsStorageValue')]"
+              }
+            },
+            {
+              "type": "Microsoft.KeyVault/vaults/secrets",
+              "apiVersion": "2023-07-01",
+              "name": "[format('{0}/{1}', parameters('keyvaultName'), parameters('KeyVault_Shared_Access_Key_EVENTHUBName'))]",
+              "properties": {
+                "contentType": "text/plain",
+                "value": "[parameters('KeyVault_Shared_Access_Key_EVENTHUBValue')]"
+              }
+            },
+            {
+              "type": "Microsoft.KeyVault/vaults/secrets",
+              "apiVersion": "2023-07-01",
+              "name": "[format('{0}/{1}', parameters('keyvaultName'), parameters('KeyVault_Shared_Access_Key_DOCUMENTDBName'))]",
+              "properties": {
+                "contentType": "text/plain",
+                "value": "[parameters('KeyVault_Shared_Access_Key_DOCUMENTDBValue')]"
+              }
+            },
+            {
+              "type": "Microsoft.KeyVault/vaults/secrets",
+              "apiVersion": "2023-07-01",
+              "name": "[format('{0}/{1}', parameters('keyvaultName'), parameters('KeyVault_Azure_Maps_Subscription_KeyName'))]",
+              "properties": {
+                "contentType": "text/plain",
+                "value": "[parameters('KeyVault_Azure_Maps_Subscription_KeyValue')]"
+              }
+            },
+            {
+              "type": "Microsoft.KeyVault/vaults/secrets",
+              "apiVersion": "2023-07-01",
+              "name": "[format('{0}/{1}', parameters('keyvaultName'), parameters('KeyVault_Azure_BlobStorage_Name'))]",
+              "properties": {
+                "contentType": "text/plain",
+                "value": "[parameters('KeyVault_Azure_BlobStorage_Value')]"
+              }
+            },
+            {
+              "type": "Microsoft.Web/sites/config",
+              "apiVersion": "2023-01-01",
+              "name": "[format('{0}/{1}', parameters('functionAppName'), 'appsettings')]",
+              "kind": "string",
+              "properties": {
+                "AzureWebJobsStorage": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('KeyVault_AzureWebJobsStorageName'))]",
+                "Shared_Access_Key_EVENTHUB": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('KeyVault_Shared_Access_Key_EVENTHUBName'))]",
+                "Shared_Access_Key_DOCUMENTDB": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('KeyVault_Shared_Access_Key_DOCUMENTDBName'))]",
+                "Shared_Access_Key_IOTHUB": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), variables('KeyVault_Shared_Access_Key_IOTHUB'))]",
+                "Azure_Maps_Subscription_Key": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('KeyVault_Azure_Maps_Subscription_KeyName'))]",
+                "APPINSIGHTS_INSTRUMENTATIONKEY": "[parameters('appInsightsInstrumentationKey')]",
+                "APPLICATIONINSIGHTS_CONNECTION_STRING": "[parameters('appInsightsConnectionString')]",
+                "FUNCTIONS_WORKER_RUNTIME": "dotnet",
+                "FUNCTIONS_EXTENSION_VERSION": "~4",
+                "WEBSITE_CONTENTSHARE": "[parameters('functionAppName')]",
+                "WEBSITE_CONTENTAZUREFILECONNECTIONSTRING": "[format('@Microsoft.KeyVault(VaultName={0};SecretName={1})', parameters('keyvaultName'), parameters('KeyVault_WebsiteContentAzureFileConnectionStringName'))]"
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.KeyVault/vaults/secrets', parameters('keyvaultName'), parameters('KeyVault_AzureWebJobsStorageName'))]",
+                "[resourceId('Microsoft.KeyVault/vaults/secrets', parameters('keyvaultName'), parameters('KeyVault_Shared_Access_Key_EVENTHUBName'))]",
+                "[resourceId('Microsoft.KeyVault/vaults/secrets', parameters('keyvaultName'), parameters('KeyVault_Shared_Access_Key_DOCUMENTDBName'))]",
+                "[resourceId('Microsoft.KeyVault/vaults/secrets', parameters('keyvaultName'), parameters('KeyVault_Azure_Maps_Subscription_KeyName'))]"
+              ]
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Resources/deployments', 'appinsightsdeploy')]",
+        "[resourceId('Microsoft.Resources/deployments', variables('azuremapname'))]",
+        "[resourceId('Microsoft.Resources/deployments', 'cosmosdbdeploy')]",
+        "[resourceId('Microsoft.Resources/deployments', 'eventhubnamespacedeploy')]",
+        "[resourceId('Microsoft.Resources/deployments', 'functionappdeploy')]",
+        "[resourceId('Microsoft.Resources/deployments', variables('keyvaultName'))]",
+        "[resourceId('Microsoft.Resources/deployments', 'storageaccountdeploy')]"
+      ]
+    }
+  ],
+  "outputs": {
+    "out_azuremapname": {
+      "type": "string",
+      "value": "[variables('azuremapname')]"
+    },
+    "out_keyvaultName": {
+      "type": "string",
+      "value": "[variables('keyvaultName')]"
+    },
+    "out_functionAppName": {
+      "type": "string",
+      "value": "[variables('functionAppName')]"
+    },
+    "out_iotHubName": {
+      "type": "string",
+      "value": "[variables('iotHubName')]"
+    },
+    "out_iotdeviceName": {
+      "type": "string",
+      "value": "[variables('iotDeviceName')]"
+    },
+    "out_storageAccountNameBlob": {
+      "type": "string",
+      "value": "[variables('storageAccountNameBlob')]"
+    },
+    "out_storageAccountKey1": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', 'storageaccountdeploy'), '2022-09-01').outputs.out_storageAccountKey1.value]"
+    },
+    "out_eventHubPrimaryConnectionString": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Resources/deployments', 'eventhubnamespacedeploy'), '2022-09-01').outputs.out_eventHubPrimaryConnectionString.value]"
+    }
+  }
+}
