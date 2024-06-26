@@ -24,6 +24,7 @@ var functionAppServicePlanName = 'funcplan-${uniqueString(resourceGroup().id)}'
 var keyvaultName = 'kv-${uniqueString(resourceGroup().id)}'
 var cosmosDBName = 'cosmos-${uniqueString(resourceGroup().id)}'
 var cosmosDBNameSQLDatabase = 'OVfiets'
+var cosmosDBLocation = 'centralus'
 
 // remove dashes for storage account name
 var storageAccountNameFuncApp = 'sta${uniqueString(resourceGroup().id)}'
@@ -127,6 +128,7 @@ module cosmosdbmod './cosmosdb.bicep' = {
     defaultTags: defaultTags
     cosmosDBName: cosmosDBName
     cosmosDBNameSQLDatabase: cosmosDBNameSQLDatabase
+    cosmosDBLocation: cosmosDBLocation
   }
 }
 
