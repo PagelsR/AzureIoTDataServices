@@ -324,7 +324,7 @@ jobs:
       continue-on-error: true
       with:
         inlineScript: |
-          az storage blob upload --account-name "${{ needs.Deploy_Infrastructure.outputs.output_storageAccountNameBlob }}" --account-key "${{ env.STORAGE_SECRET_KEY }}" --name OVfietsmapUtrecht.html --type block --file ./hOVfietsmapUtrecht.html --container-name ovfietsdata
+          az storage blob upload --account-name "${{ needs.Deploy_Infrastructure.outputs.output_storageAccountNameBlob }}" --account-key "${{ env.STORAGE_SECRET_KEY }}" --name OVfietsplotmapUtrecht.html --type block --file ./OVfietsplotmapUtrecht.html --container-name ovfietsdata
 
     - name: Logout of Azure
       run: |

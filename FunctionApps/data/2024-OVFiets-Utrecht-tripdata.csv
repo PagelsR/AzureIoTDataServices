@@ -1,4 +1,4 @@
-starttime,stoptime,startStationID,startStationName,startstationlatitude,startstationlongitude,endstationid,endstationname,endstationlatitude,endstationlongitude,bikeid
+starttime,stoptime,startstationid,startstationname,startstationlatitude,startstationlongitude,endstationid,endstationname,endstationlatitude,endstationlongitude,bikeid
 10-03-2024 19:16:17,10-03-2024 22:32:59,Ams,Amsterdam Amstel,52.346587,4.918684,GV,The Hague Hollands Spoor,52.070833,4.322222,1501
 10-01-2024 00:25:15,10-03-2024 20:55:00,Asd,Amsterdam Centraal,52.379189,4.899431,Uto,Utrecht Overvecht,52.113333,5.111111,1387
 10-03-2024 18:19:04,10-04-2024 08:31:43,GV,The Hague Hollands Spoor,52.070833,4.322222,Ams,Amsterdam Amstel,52.346587,4.918684,1548

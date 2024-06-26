@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="data\OV-fiets-2024-Utrecht-tripdata.csv">
+    <None Update="data\2024-OVFiets-Utrecht-tripdata.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="local.settings.json">

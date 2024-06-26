@@ -50,10 +50,7 @@ namespace FunctionApps
                     endstationname = messageData["endstationname"]?.ToString(),
                     endstationlatitude = messageData["endstationlatitude"]?.ToString(),
                     endstationlongitude = messageData["endstationlongitude"]?.ToString(),
-                    bikeid = messageData["bikeid"]?.ToString(),
-                    usertype = messageData["usertype"]?.ToString(),
-                    birthyear = messageData["birthyear"]?.ToString(),
-                    gender = messageData["gender"]?.ToString()
+                    bikeid = messageData["bikeid"]?.ToString()
                 };
 
                 // Serialize the document to a JSON string
