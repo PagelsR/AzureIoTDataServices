@@ -1,5 +1,6 @@
 param location string = resourceGroup().location
-param eventHubName string = 'hubwaytelemetry'
+//param eventHubName string = 'hubwaytelemetry'
+param eventHubName string
 param eventHubNamespaceName string
 param defaultTags object
 param eventHubConsumerGroup string
