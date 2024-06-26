@@ -37,7 +37,7 @@ resource cosmosDBName_resource 'Microsoft.DocumentDB/databaseAccounts@2023-11-15
     }
     locations: [
       {
-        locationName: 'East US'
+        locationName: cosmosDBLocation //'East US'
         failoverPriority: 0
         isZoneRedundant: false
       }
