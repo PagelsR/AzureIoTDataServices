@@ -20,7 +20,7 @@ namespace FunctionApps
 
         [FunctionName("OVfietsCosmosDBTrigger")]
         public static async Task Run([CosmosDBTrigger(
-            databaseName: "OVfiets",
+            databaseName: "ovfiets",
             containerName: "Tripdata",
             Connection = "Shared_Access_Key_DOCUMENTDB",
             LeaseContainerName = "leases",

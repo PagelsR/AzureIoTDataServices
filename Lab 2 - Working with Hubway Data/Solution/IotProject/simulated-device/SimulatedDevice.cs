@@ -45,7 +45,7 @@ namespace simulated_device
         private static async void SendDeviceToCloudMessagesAsync(int maxCounterValue)
         {
             string dirPath = Path.GetFullPath(Directory.GetCurrentDirectory());
-            string sFilePath = dirPath+"/data/2024-Utrecht-tripdata-short.csv";
+            string sFilePath = dirPath+"/data/2024-OVFiets-Utrecht-tripdata.csv";
 
             Console.WriteLine("******************************************************\n");
             Console.WriteLine( sFilePath );
@@ -64,7 +64,7 @@ namespace simulated_device
 
                 // Add a custom application property to the message.
                 // An IoT hub can filter on these properties without access to the message body.
-                message.Properties.Add("RoutingProperty", "Hubway");
+                message.Properties.Add("RoutingProperty", "OVfiets");
 
                 // Send the telemetry message
                 await s_deviceClient.SendEventAsync(message);

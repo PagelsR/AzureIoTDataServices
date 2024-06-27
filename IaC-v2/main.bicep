@@ -23,7 +23,7 @@ var functionAppName = 'func-${uniqueString(resourceGroup().id)}'
 var functionAppServicePlanName = 'funcplan-${uniqueString(resourceGroup().id)}'
 var keyvaultName = 'kv-${uniqueString(resourceGroup().id)}'
 var cosmosDBName = 'cosmos-${uniqueString(resourceGroup().id)}'
-var cosmosDBNameSQLDatabase = 'OVfiets'
+var cosmosDBNameSQLDatabase = 'ovfiets'
 var cosmosDBLocation = 'centralus'
 
 // remove dashes for storage account name

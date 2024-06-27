@@ -17,8 +17,8 @@ namespace FunctionApps
         [FunctionName("OVfietsEventHubTrigger")]
         public static void Run([EventHubTrigger("OVfietstelemetry", 
             Connection = "Shared_Access_Key_EVENTHUB", 
-            ConsumerGroup = "OVfietscg")] string myEventHubMessage, 
-            [CosmosDB(databaseName: "OVfiets", containerName: "Tripdata", 
+            ConsumerGroup = "ovfietscg")] string myEventHubMessage, 
+            [CosmosDB(databaseName: "ovfiets", containerName: "Tripdata", 
             Connection = "Shared_Access_Key_DOCUMENTDB")] out dynamic outputDocument, ILogger log)
 
         {

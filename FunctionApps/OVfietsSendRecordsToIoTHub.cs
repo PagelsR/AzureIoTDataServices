@@ -25,8 +25,10 @@ public static class SimulatedIoTDevice
             ILogger log, ExecutionContext context)
     {
         // Log the execution time of the function.
-        log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+        log.LogInformation($"C# HTTP trigger function executed at: {DateTime.Now}");
         
+        log.LogInformation($"Shared_Access_Key_IOTHUB: {Environment.GetEnvironmentVariable("Shared_Access_Key_IOTHUB")}");
+
         // Get the record count from the query string or default to 600.
         string recordCountStr = req.Query["recordCount"];
         int recordCount = string.IsNullOrEmpty(recordCountStr) ? 600 : int.Parse(recordCountStr);
