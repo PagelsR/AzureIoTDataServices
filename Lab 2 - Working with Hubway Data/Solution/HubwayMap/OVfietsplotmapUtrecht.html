@@ -18,15 +18,15 @@
 
     <!-- <div id="myMap"></div> -->
     <script type='text/javascript'>
-        var hubwayFeed = "https://func-kk57wcdfxcfco.azurewebsites.net/api/HubwayHttpTrigger";
+        var hubwayFeed = "https://func-kk57wcdfxcfco.azurewebsites.net/api/OVfietsHttpTrigger";
 
         function GetMap() {
             fetch('https://func-kk57wcdfxcfco.azurewebsites.net/api/GetAzureMapsKey')
                 .then(response => response.text())
                 .then((subscriptionKey) => {
                     var map = new atlas.Map('myMap', {
-                        center: [52.089444, 5.110278],
-                        zoom: 12.5,
+                        center: [5.1214201, 52.0907374], // Coordinates for Utrecht, Netherlands (longitude, latitude)
+                        zoom: 9,
                         authOptions: {
                             authType: 'subscriptionKey',
                             subscriptionKey: subscriptionKey
