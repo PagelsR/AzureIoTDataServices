@@ -1,4 +1,4 @@
-param location string = resourceGroup().location
+// param location string = resourceGroup().location
 param cosmosDBLocation string
 param cosmosDBName string
 param defaultTags object
@@ -6,7 +6,7 @@ param cosmosDBNameSQLDatabase string
 
 resource cosmosDBName_resource 'Microsoft.DocumentDB/databaseAccounts@2023-11-15' = {
   name: cosmosDBName
-  location: cosmosDBLocation //location
+  location: cosmosDBLocation
   tags: defaultTags
   kind: 'GlobalDocumentDB'
   identity: {

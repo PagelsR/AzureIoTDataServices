@@ -124,7 +124,7 @@ module keyvaultmod './keyvault.bicep' = {
 module cosmosdbmod './cosmosdb.bicep' = {
   name: 'cosmosdbdeploy'
   params: {
-    location: location
+    //location: location
     defaultTags: defaultTags
     cosmosDBName: cosmosDBName
     cosmosDBNameSQLDatabase: cosmosDBNameSQLDatabase
