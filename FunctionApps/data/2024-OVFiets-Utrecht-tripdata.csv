@@ -15,6 +15,7 @@ starttime,stoptime,startstationid,startstationname,startstationlatitude,startsta
 10/2/2024 23:43,10/4/2024 15:51,Ut,Utrecht Centraal,52.089444,5.110278,GV,The Hague Hollands Spoor,52.070833,4.322222,1878
 10/1/2024 17:27,10/2/2024 18:09,Ams,Amsterdam Amstel,52.346587,4.918684,Asd,Amsterdam Centraal,52.379189,4.899431,1987
 10/4/2024 1:13,10/4/2024 3:05,Asd,Amsterdam Centraal,52.379189,4.899431,Nm,Nijmegen Station,51.841111,5.854167,1099
+10/1/2024 0:25,10/3/2024 20:55,Asd,Amsterdam Centraal,52.379189,4.899431,Uto,Utrecht Overvecht,52.113333,5.111111,1387
 10/2/2024 0:42,10/3/2024 7:39,Ams,Amsterdam Amstel,52.346587,4.918684,Uto,Utrecht Overvecht,52.113333,5.111111,1693
 10/4/2024 13:52,10/4/2024 21:55,Rtb,Rotterdam Blaak,51.920582,4.486082,Ut,Utrecht Centraal,52.089444,5.110278,1252
 10/2/2024 1:36,10/4/2024 23:09,Nm,Nijmegen Station,51.841111,5.854167,GV,The Hague Hollands Spoor,52.070833,4.322222,1069
@@ -59,6 +60,8 @@ starttime,stoptime,startstationid,startstationname,startstationlatitude,startsta
 10/1/2024 2:34,10/3/2024 16:09,GV,The Hague Hollands Spoor,52.070833,4.322222,Ut,Utrecht Centraal,52.089444,5.110278,1978
 10/3/2024 4:51,10/3/2024 9:24,Ut,Utrecht Centraal,52.089444,5.110278,Rtd,Rotterdam Centraal,51.9225,4.467167,1456
 10/3/2024 21:17,10/4/2024 21:46,Asd,Amsterdam Centraal,52.379189,4.899431,Ams,Amsterdam Amstel,52.346587,4.918684,1074
+10/4/2024 1:13,10/4/2024 3:05,Asd,Amsterdam Centraal,52.379189,4.899431,Nm,Nijmegen Station,51.841111,5.854167,1099
+10/1/2024 0:25,10/3/2024 20:55,Asd,Amsterdam Centraal,52.379189,4.899431,Uto,Utrecht Overvecht,52.113333,5.111111,1387
 10/1/2024 8:14,10/3/2024 11:20,Ut,Utrecht Centraal,52.089444,5.110278,Rtb,Rotterdam Blaak,51.920582,4.486082,1990
 10/2/2024 2:38,10/4/2024 13:55,Nm,Nijmegen Station,51.841111,5.854167,Rtd,Rotterdam Centraal,51.9225,4.467167,1316
 10/3/2024 14:15,10/3/2024 18:00,Uto,Utrecht Overvecht,52.113333,5.111111,Ut,Utrecht Centraal,52.089444,5.110278,1923
@@ -107,6 +110,9 @@ starttime,stoptime,startstationid,startstationname,startstationlatitude,startsta
 10/3/2024 17:34,10/4/2024 2:25,Asd,Amsterdam Centraal,52.379189,4.899431,Ah,Arnhem Centraal,51.985,5.898611,1818
 10/1/2024 15:40,10/1/2024 21:07,Nm,Nijmegen Station,51.841111,5.854167,Ams,Amsterdam Amstel,52.346587,4.918684,1045
 10/4/2024 15:37,10/4/2024 16:03,Asd,Amsterdam Centraal,52.379189,4.899431,Uto,Utrecht Overvecht,52.113333,5.111111,1566
+10/3/2024 21:17,10/4/2024 21:46,Asd,Amsterdam Centraal,52.379189,4.899431,Ams,Amsterdam Amstel,52.346587,4.918684,1074
+10/4/2024 1:13,10/4/2024 3:05,Asd,Amsterdam Centraal,52.379189,4.899431,Nm,Nijmegen Station,51.841111,5.854167,1099
+10/1/2024 0:25,10/3/2024 20:55,Asd,Amsterdam Centraal,52.379189,4.899431,Uto,Utrecht Overvecht,52.113333,5.111111,1387
 10/4/2024 12:22,10/4/2024 14:23,Ut,Utrecht Centraal,52.089444,5.110278,Ams,Amsterdam Amstel,52.346587,4.918684,1988
 10/1/2024 14:57,10/4/2024 12:50,Rtd,Rotterdam Centraal,51.9225,4.467167,Uto,Utrecht Overvecht,52.113333,5.111111,1099
 10/2/2024 18:28,10/3/2024 8:34,GV,The Hague Hollands Spoor,52.070833,4.322222,Asdz,Amsterdam Zuid,52.338602,4.871978,1704
