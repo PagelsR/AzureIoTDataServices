@@ -29,6 +29,8 @@ resource functionApp 'Microsoft.Web/sites@2023-01-01' = {
   }
 }
 
+// Changed on July 29, 2024
+// Standard - S1
 resource hostingPlan 'Microsoft.Web/serverfarms@2023-01-01' = {
   name: functionAppServicePlanName
   location: location
@@ -37,8 +39,8 @@ resource hostingPlan 'Microsoft.Web/serverfarms@2023-01-01' = {
     reserved: true
   }
   sku: {
-    tier: 'Standard'
-    name: 'S1'
+    tier: 'Basic'
+    name: 'B1'
   }
 }
 
