@@ -1,0 +1,170 @@
+{
+    "type": "FeatureCollection",
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "numberOfStations": 66,
+                "startStationID": "Rtb",
+                "startStationName": "Rotterdam Blaak"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    4.486082,
+                    51.920582
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "numberOfStations": 60,
+                "startStationID": "Nm",
+                "startStationName": "Nijmegen Station"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    5.854167,
+                    51.841111
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "numberOfStations": 62,
+                "startStationID": "Rtd",
+                "startStationName": "Rotterdam Centraal"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    4.467167,
+                    51.9225
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "numberOfStations": 69,
+                "startStationID": "Ams",
+                "startStationName": "Amsterdam Amstel"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    4.918684,
+                    52.346587
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "numberOfStations": 64,
+                "startStationID": "Uto",
+                "startStationName": "Utrecht Overvecht"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    5.111111,
+                    52.113333
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "numberOfStations": 64,
+                "startStationID": "Ah",
+                "startStationName": "Arnhem Centraal"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    5.898611,
+                    51.985
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "numberOfStations": 54,
+                "startStationID": "Asdz",
+                "startStationName": "Amsterdam Zuid"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    4.871978,
+                    52.338602
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "numberOfStations": 66,
+                "startStationID": "GV",
+                "startStationName": "The Hague Hollands Spoor"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    4.322222,
+                    52.070833
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "numberOfStations": 69,
+                "startStationID": "Gvc",
+                "startStationName": "The Hague Centraal"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    4.324722,
+                    52.084167
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "numberOfStations": 63,
+                "startStationID": "Asd",
+                "startStationName": "Amsterdam Centraal"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    4.899431,
+                    52.379189
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "numberOfStations": 74,
+                "startStationID": "Ut",
+                "startStationName": "Utrecht Centraal"
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    5.110278,
+                    52.089444
+                ]
+            }
+        }
+    ]
+}

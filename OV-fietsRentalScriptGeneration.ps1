@@ -23,7 +23,7 @@ $dataRows = @()
 $startDateTicks = (Get-Date "2024-10-01").Ticks
 $endDateTicks = (Get-Date "2024-10-05").Ticks
 
-# Generate 50 rows of data
+# Generate 4,000 rows of data
 1..4000 | ForEach-Object {
     $start = $startLocations | Get-Random
     $end = $endLocations | Where-Object {$_.ID -ne $start.ID} | Get-Random
