@@ -1,34 +1,27 @@
-// using System;
-// using System.IO;
-// using System.Text;
-// using System.Threading.Tasks;
-// using Microsoft.Azure.Devices.Client;
-// using Microsoft.Azure.WebJobs;
-// using Microsoft.Azure.WebJobs.Extensions.Http;
-// using Microsoft.Extensions.Logging;
-// using CsvHelper;
-// using System.Collections.Generic;
-// using System.Globalization;
-// using Microsoft.AspNetCore.Http;
-// using Microsoft.AspNetCore.Mvc;
 using System;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Azure.Devices.Client;
 using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 using CsvHelper;
 using System.Collections.Generic;
 using System.Globalization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 
 // This class simulates an IoT device sending data to Azure IoT Hub.
-public static class SimulatedIoTDevice
+public static class SimulatedIoTDeviceRandom
 {
     // Create a device client using the connection string from the environment variable.
     private static readonly DeviceClient deviceClient = DeviceClient.CreateFromConnectionString(Environment.GetEnvironmentVariable("Shared_Access_Key_IOTHUB"), TransportType.Mqtt);    
 
+    // Define the random variable
+    private static readonly Random random = new Random();
+    
     // This function is triggered by an HTTP request.
     [FunctionName("OVfietsSendRecordsToIoTHubRandom")]
     public static async Task Run(
