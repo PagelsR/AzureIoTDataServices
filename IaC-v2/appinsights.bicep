@@ -52,7 +52,7 @@ resource metricAlert 'Microsoft.Insights/metricAlerts@2018-03-01' = {
           name: '1st criterion'
           metricName: 'requests/duration'
           operator: 'GreaterThan'
-          threshold: 300
+          threshold: 800
           timeAggregation: 'Average'
           criterionType: 'StaticThresholdCriterion'
         }
