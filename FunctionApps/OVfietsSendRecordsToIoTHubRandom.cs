@@ -35,8 +35,8 @@ public static class SimulatedIoTDeviceRandom
         // Get the record count from the query string or default to 600.
         // string recordCountStr = req.Query["recordCount"];
 
-        // Randomly select a number between 200 and 800
-        int recordCount = random.Next(200, 801); 
+        // Randomly select a number between 50 and 900
+        int recordCount = random.Next(50, 901); 
 
         // Log the start of the record sending process.
         log.LogInformation($"Attempting to send {recordCount} data items to IoT Hub...");
