@@ -53,7 +53,7 @@ namespace FunctionApps
             log.LogInformation($"groupedTripItems: {JsonConvert.SerializeObject(groupedTripItems)}");
 
             // Get Azure Maps key from environment variables
-            var azureMapsKey = Environment.GetEnvironmentVariable("AzureMapsKey");
+            var azureMapsKey = Environment.GetEnvironmentVariable("Azure_Maps_Subscription_Key");
 
             // Loop through each group in the groupedTripItems collection
             foreach (var group in groupedTripItems)
