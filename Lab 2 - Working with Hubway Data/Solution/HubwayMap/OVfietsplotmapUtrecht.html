@@ -93,24 +93,54 @@
                         // Add the bubbleLayer to the map
                         map.layers.add(bubbleLayer);
         
-                        // textField: ['concat', ['to-string', ['get', 'numberOfStations']], ' evt'],
+                        // // textField: ['concat', ['to-string', ['get', 'numberOfStations']], ' evt'],
                         
-                        // Create a symbol layer for the labels using the data source and add it to the map
-                        var labelLayer = new atlas.layer.SymbolLayer(dataSource, null, {
+                        // // Create a symbol layer for the labels using the data source and add it to the map
+                        // var labelLayer = new atlas.layer.SymbolLayer(dataSource, null, {
+                        //     iconOptions: {
+                        //         image: 'none'
+                        //     },
+                        //     textOptions: {
+                        //         textField: ['concat', ['to-string', ['get', 'numberOfStations']], ' evt\n', ['get', 'address']],
+                        //         textSize: 11,
+                        //         color: 'black'
+                        //     }
+                        // }, {
+                        //     id: 'hubway-labels'
+                        // });
+
+                        // Create a symbol layer for the number of stations
+                        var numberOfStationsLayer = new atlas.layer.SymbolLayer(dataSource, null, {
                             iconOptions: {
                                 image: 'none'
                             },
                             textOptions: {
-                                textField: ['concat', ['to-string', ['get', 'numberOfStations']], ' evt\n', ['get', 'address']],
-                                textSize: 11,
+                                textField: ['concat', ['to-string', ['get', 'numberOfStations']], ' evt'],
+                                textSize: 12,
                                 color: 'black'
                             }
                         }, {
-                            id: 'hubway-labels'
+                            id: 'number-of-stations-labels'
                         });
-        
-                        // Add the labelLayer to the map
-                        map.layers.add(labelLayer);
+
+                        // Create a symbol layer for the address
+                        var addressLayer = new atlas.layer.SymbolLayer(dataSource, null, {
+                            iconOptions: {
+                                image: 'none'
+                            },
+                            textOptions: {
+                                textField: ['get', 'address'],
+                                textSize: 8,
+                                color: 'black',
+                                offset: [0, 1.5] // Adjust the offset to position the address below the number of stations
+                            }
+                        }, {
+                            id: 'address-labels'
+                        });
+
+                        // Add the layers to the map
+                        map.layers.add(numberOfStationsLayer);
+                        map.layers.add(addressLayer);
                     });
                 });
         }
