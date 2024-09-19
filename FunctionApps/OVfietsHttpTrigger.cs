@@ -6,6 +6,8 @@ using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
 using Newtonsoft.Json;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace FunctionApps
 {
@@ -14,14 +16,25 @@ namespace FunctionApps
         // The function retrieves data from a CosmosDB database
         // and processes it to generate a GeoJSON object.
         [FunctionName("OVfietsHttpTrigger")]
-        public static TripDataGeoJson Run(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+        public static async Task<TripDataGeoJson> Run(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
         [CosmosDB(databaseName: "ovfiets",
                 containerName: "Tripdata",
                 Connection = "Shared_Access_Key_DOCUMENTDB",
                 SqlQuery = "SELECT * FROM c order by c.startStationID")]
                 IEnumerable<TripItems> tripItems,
-            ILogger log)
+        ILogger log)
+
+        // [FunctionName("OVfietsHttpTrigger")]
+        // public static TripDataGeoJson Run(
+        //     [HttpTrigger(AuthorizationLevel.Anonymous, "get", "post", Route = null)] HttpRequest req,
+        // [CosmosDB(databaseName: "ovfiets",
+        //         containerName: "Tripdata",
+        //         Connection = "Shared_Access_Key_DOCUMENTDB",
+        //         SqlQuery = "SELECT * FROM c order by c.startStationID")]
+        //         IEnumerable<TripItems> tripItems,
+        //     ILogger log)
+
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
@@ -39,12 +52,18 @@ namespace FunctionApps
             // Log the groupedTripItems
             log.LogInformation($"groupedTripItems: {JsonConvert.SerializeObject(groupedTripItems)}");
 
+            // Get Azure Maps key from environment variables
+            var azureMapsKey = Environment.GetEnvironmentVariable("AzureMapsKey");
+
             // Loop through each group in the groupedTripItems collection
             foreach (var group in groupedTripItems)
             {
                 // Get the first item in the current group
                 var firstItem = group.First();
             
+                // Perform reverse address lookup
+                var address = await GetAddressFromCoordinates(firstItem.startStationLatitude, firstItem.startStationLongitude, azureMapsKey);
+
                 // Create a new Properties object with the number of stations in the group,
                 // the ID of the start station (which is the key of the group),
                 // and the name of the start station.
@@ -52,7 +71,8 @@ namespace FunctionApps
                 {
                     numberOfStations = group.Count(),
                     startStationID = group.Key,
-                    startStationName = firstItem.startStationName
+                    startStationName = firstItem.startStationName,
+                    address = address
                 };
             
                 // Create a new LocalGeometry object with the
@@ -86,6 +106,18 @@ namespace FunctionApps
            return tdGeoJson;
         }
 
+        // Perform reverse address lookup
+        public static async Task<string> GetAddressFromCoordinates(double latitude, double longitude, string azureMapsKey)
+        {
+            using (var client = new HttpClient())
+            {
+                var url = $"https://atlas.microsoft.com/search/address/reverse/json?api-version=1.0&subscription-key={azureMapsKey}&query={latitude},{longitude}";
+                var response = await client.GetStringAsync(url);
+                dynamic jsonResponse = JsonConvert.DeserializeObject(response);
+                return jsonResponse.addresses[0].address.freeformAddress;
+            }
+        }
+
         public class TripItems
         {
             public string startStationID { get; set; }
@@ -111,6 +143,7 @@ namespace FunctionApps
 
             public string startStationID { get; set; }
             public string startStationName { get; set; }
+            public string address { get; set; }
         }
 
         public class LocalFeatures
@@ -125,7 +158,6 @@ namespace FunctionApps
             public LocalGeometry geometry { get; set; }
 
         }
-
         public class TripDataGeoJson
         {
             private string _type = "FeatureCollection";

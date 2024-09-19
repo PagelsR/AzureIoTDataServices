@@ -93,13 +93,15 @@
                         // Add the bubbleLayer to the map
                         map.layers.add(bubbleLayer);
         
+                        // textField: ['concat', ['to-string', ['get', 'numberOfStations']], ' evt'],
+                        
                         // Create a symbol layer for the labels using the data source and add it to the map
                         var labelLayer = new atlas.layer.SymbolLayer(dataSource, null, {
                             iconOptions: {
                                 image: 'none'
                             },
                             textOptions: {
-                                textField: ['concat', ['to-string', ['get', 'numberOfStations']], ' evt'],
+                                textField: ['concat', ['to-string', ['get', 'numberOfStations']], ' evt\n', ['get', 'address']],
                                 textSize: 11,
                                 color: 'black'
                             }

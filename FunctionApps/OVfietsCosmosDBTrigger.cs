@@ -17,7 +17,18 @@ namespace FunctionApps
     public static class OVfietsCosmosDBTrigger
     {
         private static string AzureMapsSubscriptionKey = System.Environment.GetEnvironmentVariable("Azure_Maps_Subscription_Key");
+        
+        // =================================================================================================
+        // This Azure Function is strictly used for demonstration purposes to showcase
+        // how to perform a reverse address lookup using Azure Maps. It is not needed
+        // for the overall process.
+        // =================================================================================================
 
+        // This Azure Function is triggered by changes in a Cosmos DB container
+        // named "Tripdata" within the "ovfiets" database. It processes incoming
+        // documents, logs their details, and performs a reverse address lookup
+        // using Azure Maps based on the latitude and longitude of the start station.
+        // The results of the lookup are then logged.
         [FunctionName("OVfietsCosmosDBTrigger")]
         public static async Task Run([CosmosDBTrigger(
             databaseName: "ovfiets",
@@ -46,7 +57,8 @@ namespace FunctionApps
                     // Create a New HttpClient object and dispose it when done, so the app doesn't leak resources
                     using (HttpClient http = new HttpClient())
 
-                    // Perform the Azure Map Search passing lat/lon
+                    // Perform the reverse address lookup using Azure Maps
+                    // based on the latitude and longitude of the start station
                     try
                     {
 

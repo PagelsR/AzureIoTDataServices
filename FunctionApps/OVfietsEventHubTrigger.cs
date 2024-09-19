@@ -11,9 +11,9 @@ namespace FunctionApps
 {
     public static class OVfietsEventHubTrigger
     {
-        // This function is triggered by an Event Hub named OVfietstelemetry.
+        // This function is triggered by an Event Hub named "OVfietstelemetry".
         // It processes incoming messages from the Event Hub and writes
-        // them to a Cosmos DB database.
+        // them to a Cosmos DB database named "ovfiets" and container named "Tripdata".
         [FunctionName("OVfietsEventHubTrigger")]
         public static void Run([EventHubTrigger("OVfietstelemetry", 
             Connection = "Shared_Access_Key_EVENTHUB", 
