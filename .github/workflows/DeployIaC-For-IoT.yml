@@ -38,19 +38,19 @@ jobs:
       run: dotnet publish FunctionApps/FunctionApps.csproj --configuration Release --no-build --output ./build_output
         
     - name: Upload Build Artifacts-FuncApp
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: FunctionApps
         path: ${{ github.workspace }}/build_output
 
     - name: Upload Infrastucture Files
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: IaC-v2
         path: ${{ github.workspace }}/IaC-v2/*.*
 
     - name: Upload HTML File
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: OVfietsplot
         path: ${{ github.workspace }}/Lab 2 - Working with Hubway Data/Solution/HubwayMap/OVfietsplotmapUtrecht.html
