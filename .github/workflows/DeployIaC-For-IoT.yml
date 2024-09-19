@@ -96,7 +96,7 @@ jobs:
           az group lock delete --name DontDeleteMe --resource-group ${{ env.Azure_Resource_GroupName }}
   
     - name: Download Build Artifact-Infrastructure
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v4
       continue-on-error: false
       with:
         name: IaC-v2
@@ -152,7 +152,7 @@ jobs:
           az group lock delete --name DontDeleteMe --resource-group ${{ env.Azure_Resource_GroupName }} && sleep 10
 
     - name: Download Build Artifacts-Function Application
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v4
       continue-on-error: false
       with:
         name: FunctionApps
@@ -305,7 +305,7 @@ jobs:
 
     # In the "Upload_HTML_Static_Website" job
     - name: Download HTML file
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v4
       with:
         name: OVfietsplot
         path: ${{ github.workspace }}
