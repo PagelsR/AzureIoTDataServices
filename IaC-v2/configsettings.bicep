@@ -217,6 +217,7 @@ resource funcAppSettingsStrings 'Microsoft.Web/sites/config@2023-01-01' = {
     WEBSITE_CONTENTSHARE: functionAppName
     WEBSITE_CONTENTAZUREFILECONNECTIONSTRING: '@Microsoft.KeyVault(VaultName=${keyvaultName};SecretName=${KeyVault_WebsiteContentAzureFileConnectionStringName})'
     'AzureWebJobs.OVfietsCosmosDBTrigger.Disabled': 'true'
+    'AzureWebJobs.OVfietsSendRecordsToIoTHubRandom.Disabled': 'true'
   }
   dependsOn: [
     secret3

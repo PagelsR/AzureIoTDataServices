@@ -81,9 +81,9 @@
                                 ['get', 'numberOfStations'],
                                 5, 'green',
                                 25, 'cyan',
-                                50, 'yellow',
-                                75, 'red',
-                                100, '#00FF00'
+                                150, 'yellow',
+                                175, 'red',
+                                250, '#00FF00'
                             ],
                             strokeColor: 'white',
                             strokeWidth: 2,
@@ -95,8 +95,8 @@
         
                         // // textField: ['concat', ['to-string', ['get', 'numberOfStations']], ' evt'],
                         
-                        // // Create a symbol layer for the labels using the data source and add it to the map
-                        // var labelLayer = new atlas.layer.SymbolLayer(dataSource, null, {
+                        // Create a symbol layer for the labels using the data source and add it to the map
+                        // var numberOfStationsLayer = new atlas.layer.SymbolLayer(dataSource, null, {
                         //     iconOptions: {
                         //         image: 'none'
                         //     },
@@ -115,10 +115,12 @@
                                 image: 'none'
                             },
                             textOptions: {
-                                textField: ['concat', ['to-string', ['get', 'numberOfStations']], ' evt'],
-                                textSize: 12,
+                                textField: ['to-string', ['get', 'numberOfStations']],
+                                textSize: 14,
                                 color: 'black'
-                            }
+                            },
+                            minZoom: 8.5, // Ensure the layer is visible at all zoom levels
+                            maxZoom: 10
                         }, {
                             id: 'number-of-stations-labels'
                         });
@@ -130,10 +132,12 @@
                             },
                             textOptions: {
                                 textField: ['get', 'address'],
-                                textSize: 8,
+                                textSize: 10,
                                 color: 'black',
                                 offset: [0, 1.5] // Adjust the offset to position the address below the number of stations
-                            }
+                            },
+                            minZoom: 9.5, // Ensure the layer is visible at all zoom levels
+                            maxZoom: 22
                         }, {
                             id: 'address-labels'
                         });
