@@ -189,11 +189,6 @@ resource secret8 'Microsoft.KeyVault/vaults/secrets@2023-07-01' = {
   }
 }
 
-//'AzureWebJobs.OVfietsCosmosDBTrigger.Disabled': 'true'
-
-//     'AzureWebJobs.HubwayEventHubTriggerRead.Disabled': 'true'
-//     'AzureWebJobs.SimulatedIoTDevice.Disabled': 'true'
-
 // Reference Existing resource
 resource existing_funcAppService 'Microsoft.Web/sites@2023-01-01' existing = {
   name: functionAppName
